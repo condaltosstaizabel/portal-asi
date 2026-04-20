@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Portal ASI">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Portal — Altos de Santa Izabel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--azul:#1a3a5c;--azul2:#2a5298;--ok:#2d7a3a;--warn:#b8630a;--bad:#c0392b;--bg:#f4f4ef;--card:#fff;--border:#e4e4dc;--txt:#1a1a1a;--txt2:#666;--txt3:#999}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg);color:var(--txt);min-height:100vh}
+.hdr{background:var(--azul);color:#fff;padding:14px 16px 12px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px}
+.hdr-logo{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hdr-title{flex:1}
+.hdr-title h1{font-size:15px;font-weight:700}
+.hdr-title p{font-size:11px;opacity:.65;margin-top:1px}
+.hdr-bell{width:34px;height:34px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;position:relative}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:#e74c3c;border-radius:50%;border:2px solid var(--azul)}
+.nav-wrap{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav{display:flex;padding:0 8px;min-width:max-content}
+.nb{font-size:13px;padding:11px 14px;border:none;background:transparent;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;white-space:nowrap;transition:color .15s}
+.nb.on{color:var(--azul);border-bottom-color:var(--azul)}
+.pg{display:none;padding:14px;max-width:900px;margin:0 auto;padding-bottom:80px}
+.pg.on{display:block}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:14px}
+.mc{background:var(--card);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
+.mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.mc-val{font-size:20px;font-weight:700;color:var(--azul)}
+.mc-val.ok{color:var(--ok)}.mc-val.warn{color:var(--warn)}.mc-val.bad{color:var(--bad)}
+.sec{font-size:10px;font-weight:700;color:var(--txt3);letter-spacing:.08em;text-transform:uppercase;margin:16px 0 8px;display:flex;align-items:center;justify-content:space-between}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:8px}
+.card.clickable{cursor:pointer;transition:transform .1s}
+.card.clickable:active{transform:scale(.98)}
+.row{display:flex;align-items:center;gap:10px}
+.badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600;flex-shrink:0}
+.badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
+.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}
+.badge.gray{background:#f0efe8;color:#555}
+.pl{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-bottom:3px}
+.bw{height:7px;background:#f0efe8;border-radius:99px;overflow:hidden}
+.br{height:100%;border-radius:99px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;background:#f8f8f4;font-weight:600;color:#555;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid #f4f4ef;color:#333;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.gcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .1s}
+.gcard:active{background:#f4f4ef}
+.gico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.alert{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;border:1px solid;display:flex;gap:10px;align-items:flex-start}
+.alert.bad{background:#fdecea;border-color:#ffcdd2;color:#c0392b}
+.alert.warn{background:#fff3e0;border-color:#ffe0b2;color:#b8630a}
+.alert.ok{background:#e8f5e9;border-color:#c8e6c9;color:#2d7a3a}
+.alert.blue{background:#e3f0fb;border-color:#bbdefb;color:#1565c0}
+.fl{display:block;font-size:12px;color:var(--txt2);font-weight:600;margin-bottom:3px}
+.fi{width:100%;padding:9px 11px;border:1px solid #ddd;border-radius:9px;font-size:13px;font-family:inherit;background:#fafafa;margin-bottom:11px}
+textarea.fi{height:75px;resize:vertical}
+.btn{padding:10px 18px;border-radius:9px;border:none;font-size:13px;cursor:pointer;font-weight:600}
+.btn:active{opacity:.8}
+.btn.primary{background:var(--azul);color:#fff}
+.btn.success{background:#25D366;color:#fff}
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200}
+.bnav-items{display:flex;justify-content:space-around}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;border:none;background:transparent;color:var(--txt3);font-size:10px;font-weight:500;min-width:56px}
+.bni.on{color:var(--azul)}
+.bni-ico{font-size:20px}
+.tag{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--border);color:var(--txt2);display:inline-block;margin:2px 2px 0 0}
+.file-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4ef}
+.file-row:last-child{border-bottom:none}
+.file-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.chamado{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4ef}
+.chamado:last-child{border-bottom:none}
+.sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+@media(max-width:600px){
+  .bnav{display:block}
+  .pg{padding:12px 12px 90px}
+  .metrics{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr 1fr}
+  .mc-val{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-logo">🏢</div>
+  <div class="hdr-title"><h1>Altos de Santa Izabel</h1><p>Portal da Transparência</p></div>
+  <div class="hdr-bell" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
+</div>
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nb on" onclick="nav('inicio')">Início</button>
+    <button class="nb" onclick="nav('projetos')">Projetos</button>
+    <button class="nb" onclick="nav('orcamentos')">Orçamentos</button>
+    <button class="nb" onclick="nav('contratos')">Contratos</button>
+    <button class="nb" onclick="nav('churrasqueira')">Churrasqueira</button>
+    <button class="nb" onclick="nav('financeiro')">Financeiro</button>
+    <button class="nb" onclick="nav('documentos')">Documentos</button>
+    <button class="nb" onclick="nav('assembleias')">Assembleias</button>
+    <button class="nb" onclick="nav('defeitos')">Defeitos</button>
+  </div>
+</div>
+
+<div id="pg-inicio" class="pg on">
+  <div class="alert bad"><span>🚨</span><div><strong>AVCB vencido</strong> — Renovar com urgência (venceu Mar/2026).</div></div>
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Projetos ativos</div><div class="mc-val warn">3</div></div>
+    <div class="mc"><div class="mc-lbl">Orçamentos 2026</div><div class="mc-val">20</div></div>
+    <div class="mc"><div class="mc-lbl">Contratos</div><div class="mc-val">3</div></div>
+    <div class="mc"><div class="mc-lbl">Assembleias</div><div class="mc-val ok">9</div></div>
+  </div>
+  <div class="sec">Acesso rápido</div>
+  <div class="grid2">
+    <div class="gcard" onclick="nav('projetos')"><div class="gico" style="background:#fff3e0">🔨</div><div><div style="font-weight:600;font-size:13px">Projetos</div><div style="font-size:11px;color:var(--txt3)">3 em andamento</div></div></div>
+    <div class="gcard" onclick="nav('orcamentos')"><div class="gico" style="background:#e8f5e9">💰</div><div><div style="font-weight:600;font-size:13px">Orçamentos</div><div style="font-size:11px;color:var(--txt3)">20 mapeados</div></div></div>
+    <div class="gcard" onclick="nav('contratos')"><div class="gico" style="background:#e3f0fb">📋</div><div><div style="font-weight:600;font-size:13px">Contratos</div><div style="font-size:11px;color:var(--txt3)">3 vigentes</div></div></div>
+    <div class="gcard" onclick="nav('churrasqueira')"><div class="gico" style="background:#fdecea">🍖</div><div><div style="font-weight:600;font-size:13px">Churrasqueira</div><div style="font-size:11px;color:var(--txt3)">Reservas e histórico</div></div></div>
+    <div class="gcard" onclick="nav('financeiro')"><div class="gico" style="background:#f0eeff">📊</div><div><div style="font-weight:600;font-size:13px">Financeiro</div><div style="font-size:11px;color:var(--txt3)">Histórico anual</div></div></div>
+    <div class="gcard" onclick="nav('documentos')"><div class="gico" style="background:#e8f5e9">📁</div><div><div style="font-weight:600;font-size:13px">Documentos</div><div style="font-size:11px;color:var(--txt3)">Plantas, regimento...</div></div></div>
+    <div class="gcard" onclick="nav('assembleias')"><div class="gico" style="background:#e3f0fb">🏛</div><div><div style="font-weight:600;font-size:13px">Assembleias</div><div style="font-size:11px;color:var(--txt3)">9 atas registradas</div></div></div>
+    <div class="gcard" onclick="nav('defeitos')"><div class="gico" style="background:#fdecea">🔧</div><div><div style="font-weight:600;font-size:13px">Reportar defeito</div><div style="font-size:11px;color:var(--txt3)">Formulário rápido</div></div></div>
+  </div>
+  <div class="sec">Alertas e pendências</div>
+  <div class="card">
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">🔴</div><div style="flex:1"><div style="font-weight:600">AVCB — renovação urgente</div><div style="font-size:12px;color:var(--txt3)">Venceu Mar/2026</div></div><span class="badge bad">Urgente</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fff3e0">🟡</div><div style="flex:1"><div style="font-weight:600">Reforma do Quiosque</div><div style="font-size:12px;color:var(--txt3)">R$ 121.604 · Aguarda aprovação</div></div><span class="badge warn">Pendente</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fff3e0">🟡</div><div style="flex:1"><div style="font-weight:600">Seguro do condomínio</div><div style="font-size:12px;color:var(--txt3)">Validade não verificada</div></div><span class="badge warn">Verificar</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🔵</div><div style="flex:1"><div style="font-weight:600">Pintura predial</div><div style="font-size:12px;color:var(--txt3)">Orçamento pendente</div></div><span class="badge blue">Em cotação</span></div>
+  </div>
+  <div class="sec">Realizações recentes</div>
+  <div class="card">
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Fev/2026</div><div style="flex:1">Projeto do Quiosque finalizado</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Jan/2026</div><div style="flex:1">Compra das redes da Quadra</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Out/2025</div><div style="flex:1">Festa das Crianças</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Jul/2025</div><div style="flex:1">Cinema na Quadra</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Liberação câmeras para o conselho</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Alteração abertura do portão</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Troca de LED nas coberturas</div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Acesso e-mail do condomínio (Priscila)</div><span class="badge ok">✓</span></div>
+  </div>
+  <div class="sec">Contato da administração</div>
+  <div class="card row">
+    <div class="gico" style="background:#e8f5e9">📞</div>
+    <div style="flex:1"><div style="font-weight:600">Síndico / Administração</div><div style="font-size:12px;color:var(--txt3)">Número a definir</div></div>
+    <button class="btn success" onclick="chamarWA()">WhatsApp</button>
+  </div>
+</div>
+
+<div id="pg-projetos" class="pg">
+  <input class="fi" id="busca-proj" placeholder="🔍  Buscar projeto ou tarefa..." oninput="filtrarLista('proj-lista','busca-proj')" style="margin-bottom:12px">
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Total ações</div><div class="mc-val">26</div></div>
+    <div class="mc"><div class="mc-lbl">Concluídas</div><div class="mc-val ok">6</div></div>
+    <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val warn">20</div></div>
+    <div class="mc"><div class="mc-lbl">Valor est.</div><div class="mc-val">R$ 154k</div></div>
+  </div>
+  <div class="sec">Projetos maiores 2026</div>
+  <div class="card clickable">
+    <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Reforma do Quiosque</div><div style="font-size:12px;color:var(--txt3)">R$ 121.604 · Quiosque</div></div><span class="badge warn">Em Projeto</span></div>
+    <div class="pl"><span>Andamento</span><span>25%</span></div>
+    <div class="bw"><div class="br" style="width:25%;background:var(--warn)"></div></div>
+    <div style="margin-top:8px"><span class="tag">Projeto entregue Fev/26</span><span class="tag">Aguarda aprovação</span></div>
+  </div>
+  <div class="card clickable">
+    <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Criação Car Wash</div><div style="font-size:12px;color:var(--txt3)">R$ 17.080 · Garagem</div></div><span class="badge warn">Em Projeto</span></div>
+    <div class="pl"><span>Andamento</span><span>15%</span></div>
+    <div class="bw"><div class="br" style="width:15%;background:var(--warn)"></div></div>
+    <div style="margin-top:8px"><span class="tag">Cotação realizada</span><span class="tag">Aguarda deliberação</span></div>
+  </div>
+  <div class="card clickable">
+    <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Paisagismo — áreas comuns</div><div style="font-size:12px;color:var(--txt3)">R$ 15.575 · Play, Sacadas, Entrada</div></div><span class="badge blue">Em Orçamento</span></div>
+    <div class="pl"><span>Andamento</span><span>10%</span></div>
+    <div class="bw"><div class="br" style="width:10%;background:#1565c0"></div></div>
+  </div>
+  <div class="sec">Todas as ações / tarefas</div>
+  <div id="proj-lista"><div class="card" style="padding:0 15px">
+    <div class="file-row" data-search="regra bloqueio facial controle"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Regra de bloqueio facial / controle</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil · Confirmado 30 dias sem uso</div></div><span class="badge gray">Andamento</span></div>
+    <div class="file-row" data-search="ajustar cargo marcos"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Ajustar cargo Marcos</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio · Aux Serv Gerais, acúmulo 40%</div></div><span class="badge gray">Andamento</span></div>
+    <div class="file-row" data-search="revisar tarefas zeladoria"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar tarefas Zeladoria</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio · Não concluído</div></div><span class="badge warn">Parcial</span></div>
+    <div class="file-row" data-search="revisar câmeras"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar câmeras</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
+    <div class="file-row" data-search="liberar acesso câmeras conselho"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Liberar acesso câmeras — conselho</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge ok">Concluído</span></div>
+    <div class="file-row" data-search="avaliar árvores quadra"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Avaliar árvores da Quadra</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
+    <div class="file-row" data-search="alterar abertura portão"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Alterar abertura do portão</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Fácil</div></div><span class="badge ok">Concluído</span></div>
+    <div class="file-row" data-search="comprar bebedouro quadra"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Comprar bebedouro da Quadra</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Médio</div></div><span class="badge gray">Pendente</span></div>
+    <div class="file-row" data-search="avaliar infiltração robson edvaldo"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Avaliar infiltrações — Ap Robson e Edvaldo</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
+    <div class="file-row" data-search="revisar contrato garbens concierge jardinagem elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar contratos: Garbens, Concierge, Jardinagem, Elevador</div><div style="font-size:11px;color:var(--txt3)">Jan–Mar/2025 · Médio</div></div><span class="badge warn">Andamento</span></div>
+    <div class="file-row" data-search="orçamento pintura portaria quiosque espelho elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Orçamentos: Pintura, Portaria Presencial, Quiosque, Espelho Elevador T2</div><div style="font-size:11px;color:var(--txt3)">Fev–Jul/2025</div></div><span class="badge warn">Andamento</span></div>
+    <div class="file-row" data-search="troca led coberturas"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Troca de LED nas coberturas</div><div style="font-size:11px;color:var(--txt3)">Fácil · Resolvido</div></div><span class="badge ok">Concluído</span></div>
+    <div class="file-row" data-search="vistoria noturna condomínio"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Vistoria noturna no condomínio</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
+    <div class="file-row" data-search="reenvio regras moradores disponibilizar"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Disponibilizar regras do condômino aos moradores</div><div style="font-size:11px;color:var(--txt3)">Enviado parcialmente</div></div><span class="badge warn">Parcial</span></div>
+    <div class="file-row" data-search="acesso email condomínio priscila"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Acesso ao e-mail do condomínio</div><div style="font-size:11px;color:var(--txt3)">Priscila acompanhando</div></div><span class="badge ok">Concluído</span></div>
+  </div></div>
+</div>
+
+<div id="pg-orcamentos" class="pg">
+  <input class="fi" id="busca-orc" placeholder="🔍  Buscar orçamento..." oninput="filtrarTabela('orc-tbody','busca-orc')" style="margin-bottom:12px">
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Total itens</div><div class="mc-val">20</div></div>
+    <div class="mc"><div class="mc-lbl">Realizados</div><div class="mc-val ok">1</div></div>
+    <div class="mc"><div class="mc-lbl">Em análise</div><div class="mc-val warn">19</div></div>
+    <div class="mc"><div class="mc-lbl">Valor mapeado</div><div class="mc-val">R$ 207k+</div></div>
+  </div>
+  <div class="sec">Pastas no Drive</div>
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Projeto Quiosque</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Car Wash</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Facial ADM</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">TAG Veicular</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Portaria Virtual</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Jardinagem</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Pintura Predial</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Câmeras</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores</div></div></div>
+  </div>
+  <div class="sec">Todos os orçamentos 2026</div>
+  <div class="card" style="padding:0"><div class="tw"><table>
+    <thead><tr><th>Item</th><th>Área</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody id="orc-tbody">
+      <tr><td>Projeto Quiosque</td><td>Quiosque</td><td>R$ 3.500</td><td><span class="badge ok">Realizado</span></td></tr>
+      <tr><td>Reforma Quiosque</td><td>Quiosque</td><td>R$ 121.604</td><td><span class="badge warn">Em análise</span></td></tr>
+      <tr><td>Criação Car Wash</td><td>Car Wash</td><td>R$ 17.080</td><td><span class="badge warn">Em análise</span></td></tr>
+      <tr><td>Manutenção Placa Solar</td><td>Placa Solar</td><td>R$ 1.380</td><td><span class="badge gray">Pendente</span></td></tr>
+      <tr><td>Facial ADM — Concierge</td><td>Portaria</td><td>R$ 7.004</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Facial ADM — MTC</td><td>Portaria</td><td>R$ 4.319</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>TAG Veicular — Concierge</td><td>Portaria</td><td>R$ 19.989</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>TAG Veicular — MTC</td><td>Portaria</td><td>R$ 9.253</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Portaria Remota — MTC</td><td>Portaria</td><td>R$ 8.263</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Portaria Remota — Concierge</td><td>Portaria</td><td>R$ 8.593</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Funcionários — MTC</td><td>Portaria</td><td>R$ 12.200</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Funcionários — Concierge</td><td>Portaria</td><td>R$ 13.695</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Paisagismo — Play</td><td>Paisagismo</td><td>R$ 2.194</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Paisagismo — 4 Sacadas</td><td>Paisagismo</td><td>R$ 6.400</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Paisagismo — Entrada</td><td>Paisagismo</td><td>R$ 3.338</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Paisagismo — Frente</td><td>Paisagismo</td><td>R$ 2.153</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>Paisagismo — Manutenção</td><td>Paisagismo</td><td>R$ 1.890</td><td><span class="badge gray">Cotação</span></td></tr>
+      <tr><td>AVCB — Renovação</td><td>Documentação</td><td>—</td><td><span class="badge bad">Urgente</span></td></tr>
+      <tr><td>Pintura Predial</td><td>Pintura</td><td>—</td><td><span class="badge gray">Pendente</span></td></tr>
+      <tr><td>Limpeza Caixa d'Água</td><td>Limpeza</td><td>—</td><td><span class="badge gray">Pendente</span></td></tr>
+    </tbody>
+  </table></div></div>
+</div>
+
+<div id="pg-contratos" class="pg">
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Vigentes</div><div class="mc-val ok">3</div></div>
+    <div class="mc"><div class="mc-lbl">A revisar</div><div class="mc-val warn">1</div></div>
+    <div class="mc"><div class="mc-lbl">Docs vencidos</div><div class="mc-val bad">1</div></div>
+  </div>
+  <div class="sec">Contratos ativos</div>
+  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div><div style="margin-top:4px"><span class="tag">PDF assinado disponível</span></div></div>
+  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo · Pasta Contratos</div></div><span class="badge warn">Revisar</span></div><div style="margin-top:4px"><span class="tag">Marcar agenda com Roberto</span><span class="tag">Contrato aditivo incluído</span></div></div>
+  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Jardinagem</div><div style="font-size:12px;color:var(--txt3)">PDF assinado + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div><div style="margin-top:4px"><span class="tag">Versão atualizada assinada</span></div></div>
+  <div class="sec">Prazos e vencimentos</div>
+  <div class="card" style="padding:0"><div class="tw"><table>
+    <thead><tr><th>Documento</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>AVCB</td><td>Mar/2021</td><td>Mar/2026</td><td><span class="badge bad">Vencido</span></td></tr>
+      <tr><td>Seguro</td><td>—</td><td>—</td><td><span class="badge warn">Verificar</span></td></tr>
+      <tr><td>Contrato Concierge</td><td>—</td><td>A verificar</td><td><span class="badge warn">Revisar</span></td></tr>
+      <tr><td>Contrato Jardinagem</td><td>—</td><td>A verificar</td><td><span class="badge ok">OK</span></td></tr>
+    </tbody>
+  </table></div></div>
+  <div class="sec">Documentos legais</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">Registrada</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">OK</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">OK</span></div>
+  </div>
+</div>
+
+<div id="pg-churrasqueira" class="pg">
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Reservas 2025</div><div class="mc-val">47</div></div>
+    <div class="mc"><div class="mc-lbl">Receita 2025</div><div class="mc-val ok">R$ 1.470</div></div>
+    <div class="mc"><div class="mc-lbl">Média/mês</div><div class="mc-val">R$ 122</div></div>
+    <div class="mc"><div class="mc-lbl">Mês top</div><div class="mc-val">Fev/Jun</div></div>
+  </div>
+  <div class="sec">Fazer nova reserva</div>
+  <div class="card">
+    <label class="fl">Apartamento</label><input class="fi" id="res-apto" placeholder="Ex: Ap. 1121">
+    <label class="fl">Data desejada</label><input class="fi" type="date" id="res-data">
+    <label class="fl">Horário</label>
+    <select class="fi" id="res-hora"><option>12h–18h (tarde)</option><option>18h–23h (noite)</option><option>Dia todo</option></select>
+    <label class="fl">Número de pessoas</label><input class="fi" type="number" id="res-pessoas" placeholder="Ex: 20" min="1">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" onclick="fazerReserva()">Confirmar reserva</button>
+      <button class="btn success" onclick="reservaWA()">Solicitar pelo WhatsApp</button>
+    </div>
+  </div>
+  <div class="sec">Histórico de uso 2025</div>
+  <div class="card" style="padding:0"><div class="tw"><table>
+    <thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead>
+    <tbody>
+      <tr><td>Janeiro</td><td>1</td><td>R$ 30</td></tr><tr><td>Fevereiro</td><td>7</td><td>R$ 210</td></tr>
+      <tr><td>Março</td><td>1</td><td>R$ 30</td></tr><tr><td>Abril</td><td>3</td><td>R$ 90</td></tr>
+      <tr><td>Maio</td><td>1</td><td>R$ 30</td></tr><tr><td>Junho</td><td>7</td><td>R$ 210</td></tr>
+      <tr><td>Julho</td><td>5</td><td>R$ 150</td></tr><tr><td>Agosto</td><td>5</td><td>R$ 150</td></tr>
+      <tr><td>Setembro</td><td>3</td><td>R$ 90</td></tr><tr><td>Outubro</td><td>6</td><td>R$ 180</td></tr>
+      <tr><td>Novembro</td><td>3</td><td>R$ 90</td></tr><tr><td>Dezembro</td><td>5</td><td>R$ 150</td></tr>
+      <tr style="font-weight:700"><td>Total 2025</td><td>47</td><td>R$ 1.470</td></tr>
+    </tbody>
+  </table></div></div>
+  <div class="sec">Reservas registradas nesta sessão</div>
+  <div class="card" id="lista-reservas"><div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div></div>
+</div>
+
+<div id="pg-financeiro" class="pg">
+  <div class="alert blue"><span>ℹ️</span><div>Dados 2025. Adicione demonstrativos de outros anos para comparativos históricos.</div></div>
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Receita quiosque 2025</div><div class="mc-val ok">R$ 1.470</div></div>
+    <div class="mc"><div class="mc-lbl">Elevador 2025</div><div class="mc-val warn">R$ 32.437</div></div>
+    <div class="mc"><div class="mc-lbl">Dedetização 2025</div><div class="mc-val">R$ 2.125</div></div>
+    <div class="mc"><div class="mc-lbl">Desentupimento 2025</div><div class="mc-val">R$ 2.000</div></div>
+  </div>
+  <div class="sec">Maiores custos 2025</div>
+  <div class="card">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div><div class="pl"><span>Manutenção Elevador</span><span>R$ 32.437</span></div><div class="bw"><div class="br" style="width:100%;background:#c0392b"></div></div></div>
+      <div><div class="pl"><span>Luz Mercadinho</span><span>R$ 7.815</span></div><div class="bw"><div class="br" style="width:24%;background:#1565c0"></div></div></div>
+      <div><div class="pl"><span>Dedetização</span><span>R$ 2.125</span></div><div class="bw"><div class="br" style="width:7%;background:#b8630a"></div></div></div>
+      <div><div class="pl"><span>Desentupimento</span><span>R$ 2.000</span></div><div class="bw"><div class="br" style="width:6%;background:#b8630a"></div></div></div>
+    </div>
+  </div>
+  <div class="sec">Detalhamento mensal 2025</div>
+  <div class="card" style="padding:0"><div class="tw"><table>
+    <thead><tr><th>Mês</th><th>Luz Merc.</th><th>Aluguel Chur.</th><th>Locações</th><th>Elevador</th><th>Dedetiz.</th><th>Desentup.</th></tr></thead>
+    <tbody>
+      <tr><td>Jan</td><td>R$ 1.011</td><td>R$ 30</td><td>1×</td><td>R$ 3.199</td><td>—</td><td>—</td></tr>
+      <tr><td>Fev</td><td>R$ 401</td><td>R$ 210</td><td>7×</td><td>R$ 2.961</td><td>—</td><td>—</td></tr>
+      <tr><td>Mar</td><td>R$ 686</td><td>R$ 30</td><td>1×</td><td>R$ 3.167</td><td>—</td><td>—</td></tr>
+      <tr><td>Abr</td><td>R$ 1.130</td><td>R$ 90</td><td>3×</td><td>R$ 4.037</td><td>—</td><td>—</td></tr>
+      <tr><td>Mai</td><td>R$ 370</td><td>R$ 30</td><td>1×</td><td>R$ 2.402</td><td>R$ 700</td><td>—</td></tr>
+      <tr><td>Jun</td><td>R$ 890</td><td>R$ 210</td><td>7×</td><td>R$ 2.476</td><td>—</td><td>—</td></tr>
+      <tr><td>Jul</td><td>R$ 560</td><td>R$ 150</td><td>5×</td><td>R$ 2.522</td><td>R$ 525</td><td>—</td></tr>
+      <tr><td>Ago</td><td>R$ 447</td><td>R$ 150</td><td>5×</td><td>R$ 2.405</td><td>—</td><td>R$ 2.000</td></tr>
+      <tr><td>Set</td><td>R$ 0</td><td>R$ 90</td><td>3×</td><td>R$ 2.405</td><td>—</td><td>—</td></tr>
+      <tr><td>Out</td><td>R$ 1.169</td><td>R$ 180</td><td>6×</td><td>R$ 2.280</td><td>—</td><td>—</td></tr>
+      <tr><td>Nov</td><td>R$ 924</td><td>R$ 90</td><td>3×</td><td>R$ 2.280</td><td>—</td><td>—</td></tr>
+      <tr><td>Dez</td><td>R$ 227</td><td>R$ 150</td><td>5×</td><td>R$ 2.280</td><td>R$ 900</td><td>—</td></tr>
+      <tr style="font-weight:700;background:#f8f8f4"><td>Total</td><td>R$ 7.815</td><td>R$ 1.470</td><td>47×</td><td>R$ 32.437</td><td>R$ 2.125</td><td>R$ 2.000</td></tr>
+    </tbody>
+  </table></div></div>
+  <div class="sec">Multas 2025</div>
+  <div class="card" style="padding:0"><div class="tw"><table>
+    <thead><tr><th>Mês</th><th>Valor</th><th>Infração</th><th>Apto</th></tr></thead>
+    <tbody>
+      <tr><td>Set/25</td><td>R$ 365,95</td><td>Roupas na grade</td><td>2113</td></tr>
+      <tr><td>Nov/25</td><td>R$ 365,95</td><td>Estacionar indevido</td><td>2013</td></tr>
+    </tbody>
+  </table></div></div>
+</div>
+
+<div id="pg-documentos" class="pg">
+  <div class="alert bad"><span>🚨</span><div>AVCB vencido em Mar/2026 — renovar urgentemente.</div></div>
+  <div class="sec">Documentos obrigatórios</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:600">AVCB — Auto de Vistoria Bombeiros</div><div style="font-size:11px;color:var(--txt3)">Emitido Mar/2021 · Válido até Mar/2026</div></div><span class="badge bad">Vencido</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:600">Seguro do Condomínio</div><div style="font-size:11px;color:var(--txt3)">Validade não verificada</div></div><span class="badge warn">Verificar</span></div>
+  </div>
+  <div class="sec">Documentos importantes</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:500">Controle de Vagas — Torre 1</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">✓</span></div>
+  </div>
+  <div class="sec">Plantas e projetos técnicos</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🏛</div><div style="flex:1"><div style="font-weight:500">Arquitetura — implantação + 5 folhas</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">💧</div><div style="flex:1"><div style="font-weight:500">Hidráulica — 11 folhas completas</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:500">Elétrica — 22 folhas completas</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🚗</div><div style="flex:1"><div style="font-weight:500">Projeto de Tráfego + Abrigo de Gás</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
+  </div>
+  <div class="sec">Prestadores de serviço</div>
+  <div class="card" style="padding:0"><div class="tw"><table>
+    <thead><tr><th>Nome</th><th>Atividade</th><th>Contato</th><th>Indicação</th></tr></thead>
+    <tbody>
+      <tr><td>Jeová</td><td>Eletricista</td><td>(19) 99228-3082</td><td>—</td></tr>
+      <tr><td>Wendel</td><td>Eletricista</td><td>(19) 98166-3208</td><td>Ap 1121 – Wilson</td></tr>
+    </tbody>
+  </table></div></div>
+</div>
+
+<div id="pg-assembleias" class="pg">
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Atas registradas</div><div class="mc-val ok">9</div></div>
+    <div class="mc"><div class="mc-lbl">Última</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
+    <div class="mc"><div class="mc-lbl">Síndico eleito</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
+  </div>
+  <div class="sec">Atas disponíveis</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">AGE — Eleição de Síndico</div><div style="font-size:11px;color:var(--txt3)">Dez/2024 · Registrada</div></div><span class="badge ok">Registrada</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 16/01/2024</div><div style="font-size:11px;color:var(--txt3)">Jan/2024 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/04/2023</div><div style="font-size:11px;color:var(--txt3)">Abr/2023 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 29/11/2022</div><div style="font-size:11px;color:var(--txt3)">Nov/2022 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 23/06/2022</div><div style="font-size:11px;color:var(--txt3)">Jun/2022 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/11/2020</div><div style="font-size:11px;color:var(--txt3)">Nov/2020 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">AGO — Eleição (por e-mail)</div><div style="font-size:11px;color:var(--txt3)">Ago/2020 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#f0efe8">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia Abril 2019</div><div style="font-size:11px;color:var(--txt3)">Abr/2019 · PPTX</div></div><span class="badge gray">PPTX</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Retificação AGI 27/10/2018</div><div style="font-size:11px;color:var(--txt3)">Out/2018 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">Registrada</span></div>
+  </div>
+</div>
+
+<div id="pg-defeitos" class="pg">
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Abertos</div><div class="mc-val bad" id="cnt-ab">0</div></div>
+    <div class="mc"><div class="mc-lbl">Em análise</div><div class="mc-val warn" id="cnt-an">0</div></div>
+    <div class="mc"><div class="mc-lbl">Resolvidos</div><div class="mc-val ok" id="cnt-re">0</div></div>
+  </div>
+  <div class="sec">Registrar defeito</div>
+  <div class="card">
+    <label class="fl">Apartamento / local</label><input class="fi" id="f-apto" placeholder="Ex: Ap. 1121 ou Garagem B">
+    <label class="fl">Categoria</label>
+    <select class="fi" id="f-cat"><option>Hidráulica</option><option>Elétrica</option><option>Estrutural</option><option>Portões / acessos</option><option>Iluminação</option><option>Área de lazer</option><option>Outro</option></select>
+    <label class="fl">Descrição detalhada</label>
+    <textarea class="fi" id="f-desc" placeholder="Descreva o problema..."></textarea>
+    <label class="fl">Urgência</label>
+    <select class="fi" id="f-urg"><option>Normal</option><option>Urgente</option><option>Emergência</option></select>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" onclick="registrar()">Registrar no portal</button>
+      <button class="btn success" onclick="abrirWA()">Enviar pelo WhatsApp</button>
+    </div>
+  </div>
+  <div class="sec">Chamados registrados</div>
+  <div class="card" id="lista-chamados"><div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div></div>
+</div>
+
+<div class="bnav">
+  <div class="bnav-items">
+    <button class="bni on" onclick="nav('inicio')"><span class="bni-ico">🏠</span>Início</button>
+    <button class="bni" onclick="nav('projetos')"><span class="bni-ico">🔨</span>Projetos</button>
+    <button class="bni" onclick="nav('contratos')"><span class="bni-ico">📋</span>Contratos</button>
+    <button class="bni" onclick="nav('churrasqueira')"><span class="bni-ico">🍖</span>Reservas</button>
+    <button class="bni" onclick="nav('defeitos')"><span class="bni-ico">🔧</span>Defeitos</button>
+  </div>
+</div>
+
+<script>
+var WA_NUMBER='SUBSTITUIR_NUMERO';
+var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','assembleias','defeitos'];
+var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
+
+function nav(id){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on')});
+  document.querySelectorAll('.bni').forEach(function(b){b.classList.remove('on')});
+  document.getElementById('pg-'+id).classList.add('on');
+  var idx=NAV_IDS.indexOf(id);
+  if(idx>=0) document.querySelectorAll('.nb')[idx].classList.add('on');
+  var bidx=BNAV_IDS.indexOf(id);
+  if(bidx>=0) document.querySelectorAll('.bni')[bidx].classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function filtrarLista(listId,inputId){
+  var q=document.getElementById(inputId).value.toLowerCase();
+  document.querySelectorAll('#'+listId+' .file-row').forEach(function(r){
+    r.style.display=(r.dataset.search||r.innerText).toLowerCase().includes(q)?'flex':'none';
+  });
+}
+
+function filtrarTabela(tbodyId,inputId){
+  var q=document.getElementById(inputId).value.toLowerCase();
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(function(r){
+    r.style.display=r.innerText.toLowerCase().includes(q)?'':'none';
+  });
+}
+
+function chamarWA(){
+  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal da Transparência do Condomínio Altos de Santa Izabel.'));
+}
+
+var reservas=[];
+function fazerReserva(){
+  var apto=document.getElementById('res-apto').value.trim();
+  var data=document.getElementById('res-data').value;
+  if(!apto||!data){alert('Preencha apartamento e data');return;}
+  reservas.push({apto:apto,data:data,hora:document.getElementById('res-hora').value,pess:document.getElementById('res-pessoas').value});
+  document.getElementById('res-apto').value='';
+  document.getElementById('res-data').value='';
+  document.getElementById('res-pessoas').value='';
+  renderReservas();
+  alert('Reserva registrada!');
+}
+function renderReservas(){
+  var el=document.getElementById('lista-reservas');
+  if(!reservas.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div>';return;}
+  el.innerHTML=reservas.slice().reverse().map(function(r){
+    return '<div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Ap. '+r.apto+'</div><div style="font-size:11px;color:var(--txt3)">'+r.data+' · '+r.hora+(r.pess?' · '+r.pess+' pessoas':'')+'</div></div><span class="badge ok">Reservado</span></div>';
+  }).join('');
+}
+function reservaWA(){
+  var msg='*Reserva Churrasqueira — Altos de Santa Izabel*\n\nApartamento: '+(document.getElementById('res-apto').value||'(não informado)')+'\nData: '+(document.getElementById('res-data').value||'(não informada)')+'\nHorário: '+document.getElementById('res-hora').value+(document.getElementById('res-pessoas').value?'\nPessoas: '+document.getElementById('res-pessoas').value:'');
+  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
+}
+
+var chamados=[];
+function registrar(){
+  var apto=document.getElementById('f-apto').value.trim();
+  if(!apto){alert('Informe o apartamento ou local');return;}
+  chamados.push({apto:apto,cat:document.getElementById('f-cat').value,desc:document.getElementById('f-desc').value.trim()||'Sem descrição',urg:document.getElementById('f-urg').value,data:new Date().toLocaleDateString('pt-BR'),status:'Aberto'});
+  document.getElementById('f-apto').value='';
+  document.getElementById('f-desc').value='';
+  renderChamados();
+  alert('Chamado registrado!');
+}
+function renderChamados(){
+  document.getElementById('cnt-ab').textContent=chamados.filter(function(c){return c.status==='Aberto'}).length;
+  document.getElementById('cnt-an').textContent=chamados.filter(function(c){return c.status==='Em análise'}).length;
+  document.getElementById('cnt-re').textContent=chamados.filter(function(c){return c.status==='Resolvido'}).length;
+  var lista=document.getElementById('lista-chamados');
+  if(!chamados.length){lista.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div>';return;}
+  lista.innerHTML=chamados.slice().reverse().map(function(c){
+    var cor=c.status==='Aberto'?'#c0392b':c.status==='Em análise'?'#b8630a':'#2d7a3a';
+    var bg=c.status==='Aberto'?'bad':c.status==='Em análise'?'warn':'ok';
+    return '<div class="chamado"><div class="sdot" style="background:'+cor+'"></div><div style="flex:1"><div style="font-weight:600">'+c.cat+' — '+c.apto+'</div><div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+' · '+c.data+' · '+c.urg+'</div></div><span class="badge '+bg+'">'+c.status+'</span></div>';
+  }).join('');
+}
+function abrirWA(){
+  var msg='*Defeito — Altos de Santa Izabel*\n\nLocal: '+(document.getElementById('f-apto').value||'(não informado)')+'\nCategoria: '+document.getElementById('f-cat').value+'\nUrgência: '+document.getElementById('f-urg').value+'\nDescrição: '+(document.getElementById('f-desc').value||'(sem descrição)');
+  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
+}
+
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function(){});
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();deferredPrompt=e;
+  var btn=document.createElement('button');
+  btn.textContent='📲 Instalar app';
+  btn.style='position:fixed;bottom:80px;right:14px;z-index:999;font-size:12px;padding:8px 14px;border-radius:99px;background:#1a3a5c;color:#fff;border:none;cursor:pointer;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.25)';
+  btn.onclick=function(){deferredPrompt.prompt();btn.remove()};
+  document.body.appendChild(btn);
+});
+</script>
+</body>
+</html>

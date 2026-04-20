@@ -1,7 +1,7 @@
 {
-  "name": "Portal Altos de Santa Izabel",
+  "name": "Portal Altos Santa Izabel",
   "short_name": "Portal ASI",
-  "description": "Portal da Transparência do Condomínio Altos de Santa Izabel",
+  "description": "Portal da Transparência do Condomínio Altos Santa Izabel",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f5f5f0",

@@ -102,6 +102,7 @@ textarea.fi{height:75px;resize:vertical}
     <button class="nb" onclick="nav('churrasqueira')">Churrasqueira</button>
     <button class="nb" onclick="nav('financeiro')">Financeiro</button>
     <button class="nb" onclick="nav('documentos')">Documentos</button>
+    <button class="nb" onclick="nav('prestadores')">Prestadores</button>
     <button class="nb" onclick="nav('assembleias')">Assembleias</button>
     <button class="nb" onclick="nav('defeitos')">Defeitos</button>
   </div>
@@ -199,52 +200,89 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <div id="pg-orcamentos" class="pg">
-  <input class="fi" id="busca-orc" placeholder="🔍  Buscar orçamento..." oninput="filtrarTabela('orc-tbody','busca-orc')" style="margin-bottom:12px">
-  <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Total itens</div><div class="mc-val">20</div></div>
-    <div class="mc"><div class="mc-lbl">Realizados</div><div class="mc-val ok">1</div></div>
-    <div class="mc"><div class="mc-lbl">Em análise</div><div class="mc-val warn">19</div></div>
-    <div class="mc"><div class="mc-lbl">Valor mapeado</div><div class="mc-val">R$ 207k+</div></div>
+  <div class="alert blue"><span>📁</span><div>Orçamentos organizados por categoria conforme pastas no Google Drive. Para adicionar novos, salve na pasta correspondente e avise para atualizar o portal.</div></div>
+
+  <a href="https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj" target="_blank" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:10px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
+    <span style="font-size:20px">📂</span>
+    <div style="flex:1"><div style="font-weight:600;color:#2d7a3a;font-size:13px">Abrir pasta Orçamentos no Google Drive</div><div style="font-size:11px;color:#388e3c">Ver todos os orçamentos e propostas</div></div>
+    <span style="font-size:13px;color:#2d7a3a;font-weight:600">Abrir →</span>
+  </a>
+
+  <div class="sec">2026 — Projetos em andamento</div>
+
+  <div class="card" style="margin-bottom:8px">
+    <div class="row" style="margin-bottom:10px">
+      <div class="gico" style="background:#f0eeff">🍖</div>
+      <div style="flex:1"><div style="font-weight:600">Projeto Quiosque / Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Projeto Quiosque</div></div>
+      <span class="badge warn">Em análise</span>
+    </div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 151225-00</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Relatório de Orçamento — Quiosque Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Reforma Área Gourmet (assinado)</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02240 — Altos de Santa Izabel</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
   </div>
-  <div class="sec">Pastas no Drive</div>
-  <div class="grid2" style="margin-bottom:14px">
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Projeto Quiosque</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Car Wash</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Facial ADM</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">TAG Veicular</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Portaria Virtual</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Jardinagem</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Pintura Predial</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Câmeras</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores</div></div></div>
+
+  <div class="card" style="margin-bottom:8px">
+    <div class="row" style="margin-bottom:10px">
+      <div class="gico" style="background:#f0eeff">🚗</div>
+      <div style="flex:1"><div style="font-weight:600">Car Wash</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Car Wash</div></div>
+      <span class="badge warn">Em análise</span>
+    </div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Relatório de Orçamento — Car Wash</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Car Wash (assinado)</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
   </div>
-  <div class="sec">Todos os orçamentos 2026</div>
-  <div class="card" style="padding:0"><div class="tw"><table>
-    <thead><tr><th>Item</th><th>Área</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody id="orc-tbody">
-      <tr><td>Projeto Quiosque</td><td>Quiosque</td><td>R$ 3.500</td><td><span class="badge ok">Realizado</span></td></tr>
-      <tr><td>Reforma Quiosque</td><td>Quiosque</td><td>R$ 121.604</td><td><span class="badge warn">Em análise</span></td></tr>
-      <tr><td>Criação Car Wash</td><td>Car Wash</td><td>R$ 17.080</td><td><span class="badge warn">Em análise</span></td></tr>
-      <tr><td>Manutenção Placa Solar</td><td>Placa Solar</td><td>R$ 1.380</td><td><span class="badge gray">Pendente</span></td></tr>
-      <tr><td>Facial ADM — Concierge</td><td>Portaria</td><td>R$ 7.004</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Facial ADM — MTC</td><td>Portaria</td><td>R$ 4.319</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>TAG Veicular — Concierge</td><td>Portaria</td><td>R$ 19.989</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>TAG Veicular — MTC</td><td>Portaria</td><td>R$ 9.253</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Portaria Remota — MTC</td><td>Portaria</td><td>R$ 8.263</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Portaria Remota — Concierge</td><td>Portaria</td><td>R$ 8.593</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Funcionários — MTC</td><td>Portaria</td><td>R$ 12.200</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Funcionários — Concierge</td><td>Portaria</td><td>R$ 13.695</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Paisagismo — Play</td><td>Paisagismo</td><td>R$ 2.194</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Paisagismo — 4 Sacadas</td><td>Paisagismo</td><td>R$ 6.400</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Paisagismo — Entrada</td><td>Paisagismo</td><td>R$ 3.338</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Paisagismo — Frente</td><td>Paisagismo</td><td>R$ 2.153</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>Paisagismo — Manutenção</td><td>Paisagismo</td><td>R$ 1.890</td><td><span class="badge gray">Cotação</span></td></tr>
-      <tr><td>AVCB — Renovação</td><td>Documentação</td><td>—</td><td><span class="badge bad">Urgente</span></td></tr>
-      <tr><td>Pintura Predial</td><td>Pintura</td><td>—</td><td><span class="badge gray">Pendente</span></td></tr>
-      <tr><td>Limpeza Caixa d'Água</td><td>Limpeza</td><td>—</td><td><span class="badge gray">Pendente</span></td></tr>
-    </tbody>
-  </table></div></div>
+
+  <div class="card" style="margin-bottom:8px">
+    <div class="row" style="margin-bottom:10px">
+      <div class="gico" style="background:#f0eeff">🎨</div>
+      <div style="flex:1"><div style="font-weight:600">Pintura Predial</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Pintura Predial</div></div>
+      <span class="badge gray">Cotação</span>
+    </div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Pintura — Altos Santa Isabel (assinado)</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02239</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta 02239 — Predial + Quiosque</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Técnica Comercial — Abr/2026</div><div style="font-size:11px;color:var(--txt3)">PDF · Mais recente</div></div><span class="badge blue">Novo</span></div>
+  </div>
+
+  <div class="card" style="margin-bottom:8px">
+    <div class="row" style="margin-bottom:10px">
+      <div class="gico" style="background:#f0eeff">📷</div>
+      <div style="flex:1"><div style="font-weight:600">Facial ADM — Portaria</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Facial ADM</div></div>
+      <span class="badge gray">Cotação</span>
+    </div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Facial Porta ADM — Concierge</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Facial — MTC</div><div style="font-size:11px;color:var(--txt3)">PDF · Jan/2026</div></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:8px">
+    <div class="row" style="margin-bottom:10px">
+      <div class="gico" style="background:#f0eeff">🏷</div>
+      <div style="flex:1"><div style="font-weight:600">TAG Veicular</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › TAG Veicular</div></div>
+      <span class="badge gray">Cotação</span>
+    </div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Antena TAG Veicular — Concierge</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento TAG Veicular — MTC</div><div style="font-size:11px;color:var(--txt3)">PDF · Jan/2026</div></div></div>
+  </div>
+
+  <div class="sec">2026 — Demais categorias</div>
+  <div class="grid2">
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div><div style="font-size:11px;color:var(--txt3)">1 orçamento</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Jardinagem</div><div style="font-size:11px;color:var(--txt3)">Orçamentos</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Portaria Virtual</div><div style="font-size:11px;color:var(--txt3)">Orçamentos</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Manutenção Câmeras</div><div style="font-size:11px;color:var(--txt3)">Orçamentos</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores Serviço</div><div style="font-size:11px;color:var(--txt3)">Referências</div></div></div>
+  </div>
+
+  <div class="sec">Anteriores</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta CRM V1 e V2 (2022)</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Portaria Virtual</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta IK Safety</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Portaria Virtual</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">AVCB — Orçamento 043/2020</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Reforma Playground (2020)</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Play — 2 orçamentos recebidos</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Módulo Padrão 8413</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Apresentação ALTEC Sombra</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
+  </div>
 </div>
 
 <div id="pg-contratos" class="pg">
@@ -253,6 +291,11 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">A revisar</div><div class="mc-val warn">1</div></div>
     <div class="mc"><div class="mc-lbl">Docs vencidos</div><div class="mc-val bad">1</div></div>
   </div>
+  <a href="https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4" target="_blank" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:10px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
+    <span style="font-size:20px">📂</span>
+    <div style="flex:1"><div style="font-weight:600;color:#2d7a3a;font-size:13px">Abrir pasta Contratos no Google Drive</div><div style="font-size:11px;color:#388e3c">Ver e baixar todos os contratos</div></div>
+    <span style="font-size:13px;color:#2d7a3a;font-weight:600">Abrir →</span>
+  </a>
   <div class="sec">Contratos ativos</div>
   <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div><div style="margin-top:4px"><span class="tag">PDF assinado disponível</span></div></div>
   <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo · Pasta Contratos</div></div><span class="badge warn">Revisar</span></div><div style="margin-top:4px"><span class="tag">Marcar agenda com Roberto</span><span class="tag">Contrato aditivo incluído</span></div></div>
@@ -312,53 +355,34 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <div id="pg-financeiro" class="pg">
-  <div class="alert blue"><span>ℹ️</span><div>Dados 2025. Adicione demonstrativos de outros anos para comparativos históricos.</div></div>
-  <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Receita quiosque 2025</div><div class="mc-val ok">R$ 1.470</div></div>
-    <div class="mc"><div class="mc-lbl">Elevador 2025</div><div class="mc-val warn">R$ 32.437</div></div>
-    <div class="mc"><div class="mc-lbl">Dedetização 2025</div><div class="mc-val">R$ 2.125</div></div>
-    <div class="mc"><div class="mc-lbl">Desentupimento 2025</div><div class="mc-val">R$ 2.000</div></div>
+  <div class="alert blue"><span>📂</span><div>Os demonstrativos financeiros serão carregados em breve. Envie os arquivos ao síndico para popular esta tela com histórico anual, comparativos de despesas e análise de custos.</div></div>
+
+  <div class="sec">O que será exibido aqui</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📊</div><div style="flex:1"><div style="font-weight:500">Histórico anual de despesas</div><div style="font-size:11px;color:var(--txt3)">Comparativo por ano — elevador, limpeza, manutenção...</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📈</div><div style="flex:1"><div style="font-weight:500">Maiores e menores custos por período</div><div style="font-size:11px;color:var(--txt3)">Identificação de gargalos financeiros</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por ano</div><div style="font-size:11px;color:var(--txt3)">Locações, valores arrecadados, meses mais movimentados</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">⚠️</div><div style="flex:1"><div style="font-weight:500">Multas aplicadas por período</div><div style="font-size:11px;color:var(--txt3)">Histórico de infrações e valores</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">Demonstrativos mensais detalhados</div><div style="font-size:11px;color:var(--txt3)">Receitas x despesas por categoria</div></div><span class="badge gray">Em breve</span></div>
   </div>
-  <div class="sec">Maiores custos 2025</div>
+
+  <div class="sec">Como alimentar esta tela</div>
   <div class="card">
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div><div class="pl"><span>Manutenção Elevador</span><span>R$ 32.437</span></div><div class="bw"><div class="br" style="width:100%;background:#c0392b"></div></div></div>
-      <div><div class="pl"><span>Luz Mercadinho</span><span>R$ 7.815</span></div><div class="bw"><div class="br" style="width:24%;background:#1565c0"></div></div></div>
-      <div><div class="pl"><span>Dedetização</span><span>R$ 2.125</span></div><div class="bw"><div class="br" style="width:7%;background:#b8630a"></div></div></div>
-      <div><div class="pl"><span>Desentupimento</span><span>R$ 2.000</span></div><div class="bw"><div class="br" style="width:6%;background:#b8630a"></div></div></div>
+    <div style="font-size:13px;color:var(--txt2);line-height:1.7">
+      <div style="margin-bottom:8px">1. Reúna os demonstrativos financeiros de cada ano (planilhas ou PDFs)</div>
+      <div style="margin-bottom:8px">2. Salve na pasta <strong>H:\Meu Drive\Orcamentos</strong> ou em uma nova pasta <strong>Financeiro</strong></div>
+      <div>3. Avise no chat — os dados serão lidos e o painel será montado automaticamente</div>
     </div>
   </div>
-  <div class="sec">Detalhamento mensal 2025</div>
-  <div class="card" style="padding:0"><div class="tw"><table>
-    <thead><tr><th>Mês</th><th>Luz Merc.</th><th>Aluguel Chur.</th><th>Locações</th><th>Elevador</th><th>Dedetiz.</th><th>Desentup.</th></tr></thead>
-    <tbody>
-      <tr><td>Jan</td><td>R$ 1.011</td><td>R$ 30</td><td>1×</td><td>R$ 3.199</td><td>—</td><td>—</td></tr>
-      <tr><td>Fev</td><td>R$ 401</td><td>R$ 210</td><td>7×</td><td>R$ 2.961</td><td>—</td><td>—</td></tr>
-      <tr><td>Mar</td><td>R$ 686</td><td>R$ 30</td><td>1×</td><td>R$ 3.167</td><td>—</td><td>—</td></tr>
-      <tr><td>Abr</td><td>R$ 1.130</td><td>R$ 90</td><td>3×</td><td>R$ 4.037</td><td>—</td><td>—</td></tr>
-      <tr><td>Mai</td><td>R$ 370</td><td>R$ 30</td><td>1×</td><td>R$ 2.402</td><td>R$ 700</td><td>—</td></tr>
-      <tr><td>Jun</td><td>R$ 890</td><td>R$ 210</td><td>7×</td><td>R$ 2.476</td><td>—</td><td>—</td></tr>
-      <tr><td>Jul</td><td>R$ 560</td><td>R$ 150</td><td>5×</td><td>R$ 2.522</td><td>R$ 525</td><td>—</td></tr>
-      <tr><td>Ago</td><td>R$ 447</td><td>R$ 150</td><td>5×</td><td>R$ 2.405</td><td>—</td><td>R$ 2.000</td></tr>
-      <tr><td>Set</td><td>R$ 0</td><td>R$ 90</td><td>3×</td><td>R$ 2.405</td><td>—</td><td>—</td></tr>
-      <tr><td>Out</td><td>R$ 1.169</td><td>R$ 180</td><td>6×</td><td>R$ 2.280</td><td>—</td><td>—</td></tr>
-      <tr><td>Nov</td><td>R$ 924</td><td>R$ 90</td><td>3×</td><td>R$ 2.280</td><td>—</td><td>—</td></tr>
-      <tr><td>Dez</td><td>R$ 227</td><td>R$ 150</td><td>5×</td><td>R$ 2.280</td><td>R$ 900</td><td>—</td></tr>
-      <tr style="font-weight:700;background:#f8f8f4"><td>Total</td><td>R$ 7.815</td><td>R$ 1.470</td><td>47×</td><td>R$ 32.437</td><td>R$ 2.125</td><td>R$ 2.000</td></tr>
-    </tbody>
-  </table></div></div>
-  <div class="sec">Multas 2025</div>
-  <div class="card" style="padding:0"><div class="tw"><table>
-    <thead><tr><th>Mês</th><th>Valor</th><th>Infração</th><th>Apto</th></tr></thead>
-    <tbody>
-      <tr><td>Set/25</td><td>R$ 365,95</td><td>Roupas na grade</td><td>2113</td></tr>
-      <tr><td>Nov/25</td><td>R$ 365,95</td><td>Estacionar indevido</td><td>2013</td></tr>
-    </tbody>
-  </table></div></div>
 </div>
 
 <div id="pg-documentos" class="pg">
   <div class="alert bad"><span>🚨</span><div>AVCB vencido em Mar/2026 — renovar urgentemente.</div></div>
+  <a href="https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm" target="_blank" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:10px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
+    <span style="font-size:20px">📂</span>
+    <div style="flex:1"><div style="font-weight:600;color:#2d7a3a;font-size:13px">Abrir pasta Documentos Importantes no Google Drive</div><div style="font-size:11px;color:#388e3c">Convenção, regimento, CNPJ, vagas...</div></div>
+    <span style="font-size:13px;color:#2d7a3a;font-weight:600">Abrir →</span>
+  </a>
   <div class="sec">Documentos obrigatórios</div>
   <div class="card" style="padding:0 15px">
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:600">AVCB — Auto de Vistoria Bombeiros</div><div style="font-size:11px;color:var(--txt3)">Emitido Mar/2021 · Válido até Mar/2026</div></div><span class="badge bad">Vencido</span></div>
@@ -388,12 +412,176 @@ textarea.fi{height:75px;resize:vertical}
   </table></div></div>
 </div>
 
+<div id="pg-prestadores" class="pg">
+  <div class="alert blue"><span>📄</span><div>Dados carregados da planilha <strong>Melhorias - Dados Históricos</strong> — aba PRESTADORES SERVIÇO. Para atualizar, edite a planilha no Drive e avise no chat.</div></div>
+
+  <input class="fi" id="busca-prest" placeholder="🔍  Buscar por nome, atividade ou indicação..." oninput="filtrarPrest()" style="margin-bottom:12px">
+
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Total prestadores</div><div class="mc-val">13</div></div>
+    <div class="mc"><div class="mc-lbl">Categorias</div><div class="mc-val">7</div></div>
+    <div class="mc"><div class="mc-lbl">Com indicação</div><div class="mc-val ok">8</div></div>
+  </div>
+
+  <div class="sec">Por categoria</div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="filtros-cat">
+    <button class="tag" style="cursor:pointer;background:var(--azul);color:#fff;border-color:var(--azul)" onclick="filtrarCat('todos',this)">Todos</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Eletricista',this)">Eletricista</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Jardinagem',this)">Jardinagem</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Portaria / Cameras',this)">Portaria / Câmeras</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Ar Condicionado',this)">Ar Condicionado</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Placa Solar',this)">Placa Solar</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('FoodTruck',this)">Food Truck</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Advogado',this)">Advogado</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Smart Store',this)">Smart Store</button>
+  </div>
+
+  <div id="lista-prest">
+    <div class="card" style="padding:0 15px" data-cat="Eletricista">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Eletricista</div>
+      <div class="file-row prest-item" data-nome="jeová" data-cat="Eletricista" data-ind="">
+        <div class="file-ico" style="background:#fff3e0">⚡</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Jeová</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99228-3082</div>
+        </div>
+        <a href="tel:+5519992283082" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+      <div class="file-row prest-item" data-nome="wendel" data-cat="Eletricista" data-ind="apto 1121 wilson">
+        <div class="file-ico" style="background:#fff3e0">⚡</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Wendel</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 98166-3208 · Ind: Apto 1121 — Wilson</div>
+        </div>
+        <a href="tel:+5519981663208" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+      <div class="file-row prest-item" data-nome="luis fernando" data-cat="Eletricista" data-ind="roberto concierge">
+        <div class="file-ico" style="background:#fff3e0">⚡</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Luis Fernando</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99369-9529 · Ind: Roberto Concierge</div>
+        </div>
+        <a href="tel:+5519993699529" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+      <div class="file-row prest-item" data-nome="mauricio" data-cat="Eletricista" data-ind="morador gui bedon">
+        <div class="file-ico" style="background:#fff3e0">⚡</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Mauricio</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 98800-5082 · Ind: Morador Gui Bedon</div>
+        </div>
+        <a href="tel:+5519988005082" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+      <div class="file-row prest-item" data-nome="wagner" data-cat="Eletricista" data-ind="moradora cris 1114">
+        <div class="file-ico" style="background:#fff3e0">⚡</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Wagner</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99824-5455 · Ind: Moradora Cris 1114</div>
+        </div>
+        <a href="tel:+5519998245455" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+      <div class="file-row prest-item" data-nome="rodrigo" data-cat="Eletricista" data-ind="morador victor">
+        <div class="file-ico" style="background:#fff3e0">⚡</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Rodrigo</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99199-6448 · Ind: Morador Victor</div>
+        </div>
+        <a href="tel:+5519991996448" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Jardinagem">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Jardinagem</div>
+      <div class="file-row prest-item" data-nome="horto plantas" data-cat="Jardinagem" data-ind="">
+        <div class="file-ico" style="background:#e8f5e9">🌿</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Horto Plantas</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 3819-9187</div>
+        </div>
+        <a href="tel:+551938199187" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Portaria / Cameras">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Portaria / Câmeras</div>
+      <div class="file-row prest-item" data-nome="mtc christian" data-cat="Portaria / Cameras" data-ind="cunhado edvaldo">
+        <div class="file-ico" style="background:#e3f0fb">📷</div>
+        <div style="flex:1">
+          <div style="font-weight:600">MTC — Christian</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 98235-0001 · Ind: Cunhado Edvaldo</div>
+        </div>
+        <a href="tel:+5519982350001" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="FoodTruck">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Food Truck</div>
+      <div class="file-row prest-item" data-nome="rubens" data-cat="FoodTruck" data-ind="">
+        <div class="file-ico" style="background:#fff3e0">🚚</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Rubens</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 97821-3922</div>
+        </div>
+        <a href="tel:+5519978213922" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Ar Condicionado">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Ar Condicionado</div>
+      <div class="file-row prest-item" data-nome="daniel" data-cat="Ar Condicionado" data-ind="">
+        <div class="file-ico" style="background:#e3f0fb">❄️</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Daniel</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 97406-5063</div>
+        </div>
+        <a href="tel:+5519974065063" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Placa Solar">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Placa Solar</div>
+      <div class="file-row prest-item" data-nome="everton" data-cat="Placa Solar" data-ind="instalou as placas">
+        <div class="file-ico" style="background:#fff3e0">☀️</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Everton</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99979-0550 · Ind: Instalou as placas</div>
+        </div>
+        <a href="tel:+5519999790550" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Smart Store">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Smart Store</div>
+      <div class="file-row prest-item" data-nome="robson" data-cat="Smart Store" data-ind="">
+        <div class="file-ico" style="background:#e8f5e9">🛒</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Robson</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(11) 95741-5192</div>
+        </div>
+        <a href="tel:+5511957415192" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Advogado">
+      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Advogado</div>
+      <div class="file-row prest-item" data-nome="amanda amaral" data-cat="Advogado" data-ind="cuida dos debitos antes da garantidora">
+        <div class="file-ico" style="background:#fdecea">⚖️</div>
+        <div style="flex:1">
+          <div style="font-weight:600">Amanda Amaral</div>
+          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 3054-6196 · Débitos / Garantidora</div>
+        </div>
+        <a href="tel:+551930546196" class="badge blue" style="text-decoration:none">Ligar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="pg-assembleias" class="pg">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Atas registradas</div><div class="mc-val ok">9</div></div>
     <div class="mc"><div class="mc-lbl">Última</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
     <div class="mc"><div class="mc-lbl">Síndico eleito</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
   </div>
+
   <div class="sec">Atas disponíveis</div>
   <div class="card" style="padding:0 15px">
     <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">AGE — Eleição de Síndico</div><div style="font-size:11px;color:var(--txt3)">Dez/2024 · Registrada</div></div><span class="badge ok">Registrada</span></div>
@@ -445,6 +633,15 @@ textarea.fi{height:75px;resize:vertical}
 
 <script>
 var WA_NUMBER='SUBSTITUIR_NUMERO';
+
+var DRIVE = {
+  assembleias: 'https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG',
+  contratos: 'https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4',
+  documentos: 'https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm',
+  orcamentos: 'https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj',
+  plantas: 'https://drive.google.com/drive/folders/1u1Z2CBCPdJ5JZxlZxSgqrc3Qd8ihhU2k',
+  quiosque: 'https://drive.google.com/drive/folders/1tvURkt4M6RKJdFUz3qitVCw1crZu0ISh'
+};
 var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','assembleias','defeitos'];
 var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
 
@@ -529,7 +726,51 @@ function abrirWA(){
   window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
 }
 
+function filtrarPrest(){
+  var q=document.getElementById('busca-prest').value.toLowerCase();
+  document.querySelectorAll('.prest-item').forEach(function(r){
+    var txt=(r.dataset.nome+' '+r.dataset.cat+' '+r.dataset.ind).toLowerCase();
+    r.style.display=txt.includes(q)?'flex':'none';
+  });
+  document.querySelectorAll('#lista-prest .card').forEach(function(c){
+    var vis=Array.from(c.querySelectorAll('.prest-item')).some(function(r){return r.style.display!=='none'});
+    c.style.display=vis?'':'none';
+  });
+}
+
+function filtrarCat(cat,btn){
+  document.querySelectorAll('#filtros-cat button').forEach(function(b){
+    b.style.background='';b.style.color='';b.style.borderColor='';
+  });
+  btn.style.background='var(--azul)';btn.style.color='#fff';btn.style.borderColor='var(--azul)';
+  document.querySelectorAll('#lista-prest .card').forEach(function(c){
+    c.style.display=(cat==='todos'||c.dataset.cat===cat)?'':'none';
+  });
+  document.getElementById('busca-prest').value='';
+  document.querySelectorAll('.prest-item').forEach(function(r){r.style.display='flex'});
+}
+
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function(){});
+
+// Injetar botões Drive automaticamente
+var driveLinks = [
+  {pg:'pg-assembleias', key:'assembleias', label:'Assembleias'},
+  {pg:'pg-contratos',   key:'contratos',   label:'Contratos'},
+  {pg:'pg-documentos',  key:'documentos',  label:'Documentos Importantes'},
+  {pg:'pg-orcamentos',  key:'orcamentos',  label:'Orçamentos'},
+  {pg:'pg-plantas',     key:'plantas',     label:'Plantas Condomínio'},
+  {pg:'pg-projetos',    key:'quiosque',    label:'Projeto Quiosque'}
+];
+driveLinks.forEach(function(d){
+  var pg = document.getElementById(d.pg);
+  if(!pg) return;
+  var btn = document.createElement('a');
+  btn.href = DRIVE[d.key];
+  btn.target = '_blank';
+  btn.style = 'display:flex;align-items:center;gap:10px;background:#e3f0fb;border:1px solid #bbdefb;border-radius:10px;padding:11px 14px;margin-bottom:14px;text-decoration:none';
+  btn.innerHTML = '<span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta no Google Drive</div><div style="font-size:11px;color:#1976d2">' + d.label + ' — ver e baixar arquivos</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span>';
+  pg.insertBefore(btn, pg.firstChild);
+});
 var deferredPrompt;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();deferredPrompt=e;

@@ -78,6 +78,7 @@ textarea.fi{height:75px;resize:vertical}
 .chamado{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4ef}
 .chamado:last-child{border-bottom:none}
 .sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.drive-btn{display:flex;align-items:center;gap:10px;background:#e3f0fb;border:1px solid #bbdefb;border-radius:10px;padding:11px 14px;margin-bottom:14px;text-decoration:none}
 @media(max-width:600px){
   .bnav{display:block}
   .pg{padding:12px 12px 90px}
@@ -172,7 +173,6 @@ textarea.fi{height:75px;resize:vertical}
     <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Criação Car Wash</div><div style="font-size:12px;color:var(--txt3)">R$ 17.080 · Garagem</div></div><span class="badge warn">Em Projeto</span></div>
     <div class="pl"><span>Andamento</span><span>15%</span></div>
     <div class="bw"><div class="br" style="width:15%;background:var(--warn)"></div></div>
-    <div style="margin-top:8px"><span class="tag">Cotação realizada</span><span class="tag">Aguarda deliberação</span></div>
   </div>
   <div class="card clickable">
     <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Paisagismo — áreas comuns</div><div style="font-size:12px;color:var(--txt3)">R$ 15.575 · Play, Sacadas, Entrada</div></div><span class="badge blue">Em Orçamento</span></div>
@@ -181,18 +181,18 @@ textarea.fi{height:75px;resize:vertical}
   </div>
   <div class="sec">Todas as ações / tarefas</div>
   <div id="proj-lista"><div class="card" style="padding:0 15px">
-    <div class="file-row" data-search="regra bloqueio facial controle"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Regra de bloqueio facial / controle</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil · Confirmado 30 dias sem uso</div></div><span class="badge gray">Andamento</span></div>
-    <div class="file-row" data-search="ajustar cargo marcos"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Ajustar cargo Marcos</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio · Aux Serv Gerais, acúmulo 40%</div></div><span class="badge gray">Andamento</span></div>
-    <div class="file-row" data-search="revisar tarefas zeladoria"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar tarefas Zeladoria</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio · Não concluído</div></div><span class="badge warn">Parcial</span></div>
+    <div class="file-row" data-search="regra bloqueio facial controle"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Regra de bloqueio facial / controle</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Andamento</span></div>
+    <div class="file-row" data-search="ajustar cargo marcos"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Ajustar cargo Marcos</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio</div></div><span class="badge gray">Andamento</span></div>
+    <div class="file-row" data-search="revisar tarefas zeladoria"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar tarefas Zeladoria</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio</div></div><span class="badge warn">Parcial</span></div>
     <div class="file-row" data-search="revisar câmeras"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar câmeras</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
     <div class="file-row" data-search="liberar acesso câmeras conselho"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Liberar acesso câmeras — conselho</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge ok">Concluído</span></div>
     <div class="file-row" data-search="avaliar árvores quadra"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Avaliar árvores da Quadra</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
     <div class="file-row" data-search="alterar abertura portão"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Alterar abertura do portão</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Fácil</div></div><span class="badge ok">Concluído</span></div>
     <div class="file-row" data-search="comprar bebedouro quadra"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Comprar bebedouro da Quadra</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Médio</div></div><span class="badge gray">Pendente</span></div>
     <div class="file-row" data-search="avaliar infiltração robson edvaldo"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Avaliar infiltrações — Ap Robson e Edvaldo</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
-    <div class="file-row" data-search="revisar contrato garbens concierge jardinagem elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar contratos: Garbens, Concierge, Jardinagem, Elevador</div><div style="font-size:11px;color:var(--txt3)">Jan–Mar/2025 · Médio</div></div><span class="badge warn">Andamento</span></div>
-    <div class="file-row" data-search="orçamento pintura portaria quiosque espelho elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Orçamentos: Pintura, Portaria Presencial, Quiosque, Espelho Elevador T2</div><div style="font-size:11px;color:var(--txt3)">Fev–Jul/2025</div></div><span class="badge warn">Andamento</span></div>
-    <div class="file-row" data-search="troca led coberturas"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Troca de LED nas coberturas</div><div style="font-size:11px;color:var(--txt3)">Fácil · Resolvido</div></div><span class="badge ok">Concluído</span></div>
+    <div class="file-row" data-search="revisar contrato garbens concierge jardinagem elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar contratos: Garbens, Concierge, Jardinagem, Elevador</div><div style="font-size:11px;color:var(--txt3)">Jan–Mar/2025</div></div><span class="badge warn">Andamento</span></div>
+    <div class="file-row" data-search="orçamento pintura portaria quiosque espelho elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Orçamentos: Pintura, Portaria, Quiosque, Espelho Elevador T2</div><div style="font-size:11px;color:var(--txt3)">Fev–Jul/2025</div></div><span class="badge warn">Andamento</span></div>
+    <div class="file-row" data-search="troca led coberturas"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Troca de LED nas coberturas</div><div style="font-size:11px;color:var(--txt3)">Resolvido</div></div><span class="badge ok">Concluído</span></div>
     <div class="file-row" data-search="vistoria noturna condomínio"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Vistoria noturna no condomínio</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
     <div class="file-row" data-search="reenvio regras moradores disponibilizar"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Disponibilizar regras do condômino aos moradores</div><div style="font-size:11px;color:var(--txt3)">Enviado parcialmente</div></div><span class="badge warn">Parcial</span></div>
     <div class="file-row" data-search="acesso email condomínio priscila"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Acesso ao e-mail do condomínio</div><div style="font-size:11px;color:var(--txt3)">Priscila acompanhando</div></div><span class="badge ok">Concluído</span></div>
@@ -200,88 +200,50 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <div id="pg-orcamentos" class="pg">
-  <div class="alert blue"><span>📁</span><div>Orçamentos organizados por categoria conforme pastas no Google Drive. Para adicionar novos, salve na pasta correspondente e avise para atualizar o portal.</div></div>
-
-  <a href="https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj" target="_blank" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:10px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
-    <span style="font-size:20px">📂</span>
-    <div style="flex:1"><div style="font-weight:600;color:#2d7a3a;font-size:13px">Abrir pasta Orçamentos no Google Drive</div><div style="font-size:11px;color:#388e3c">Ver todos os orçamentos e propostas</div></div>
-    <span style="font-size:13px;color:#2d7a3a;font-weight:600">Abrir →</span>
-  </a>
-
+  <div class="alert blue"><span>📁</span><div>Orçamentos organizados por categoria. Clique em "Abrir no Drive" para visualizar os arquivos originais.</div></div>
+  <a class="drive-btn" href="https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Orçamentos no Drive</div><div style="font-size:11px;color:#1976d2">Ver todos os arquivos e propostas</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">2026 — Projetos em andamento</div>
-
   <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px">
-      <div class="gico" style="background:#f0eeff">🍖</div>
-      <div style="flex:1"><div style="font-weight:600">Projeto Quiosque / Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Projeto Quiosque</div></div>
-      <span class="badge warn">Em análise</span>
-    </div>
+    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🍖</div><div style="flex:1"><div style="font-weight:600">Projeto Quiosque / Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Projeto Quiosque</div></div><span class="badge warn">Em análise</span></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 151225-00</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Relatório de Orçamento — Quiosque Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Reforma Área Gourmet (assinado)</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02240 — Altos de Santa Izabel</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Reforma Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02240</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
   </div>
-
   <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px">
-      <div class="gico" style="background:#f0eeff">🚗</div>
-      <div style="flex:1"><div style="font-weight:600">Car Wash</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Car Wash</div></div>
-      <span class="badge warn">Em análise</span>
-    </div>
+    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🚗</div><div style="flex:1"><div style="font-weight:600">Car Wash</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Car Wash</div></div><span class="badge warn">Em análise</span></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Relatório de Orçamento — Car Wash</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Car Wash (assinado)</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Car Wash</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
   </div>
-
   <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px">
-      <div class="gico" style="background:#f0eeff">🎨</div>
-      <div style="flex:1"><div style="font-weight:600">Pintura Predial</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Pintura Predial</div></div>
-      <span class="badge gray">Cotação</span>
-    </div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Pintura — Altos Santa Isabel (assinado)</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
+    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🎨</div><div style="flex:1"><div style="font-weight:600">Pintura Predial</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Pintura Predial</div></div><span class="badge gray">Cotação</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Pintura — Altos Santa Isabel</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02239</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta 02239 — Predial + Quiosque</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Técnica Comercial — Abr/2026</div><div style="font-size:11px;color:var(--txt3)">PDF · Mais recente</div></div><span class="badge blue">Novo</span></div>
   </div>
-
   <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px">
-      <div class="gico" style="background:#f0eeff">📷</div>
-      <div style="flex:1"><div style="font-weight:600">Facial ADM — Portaria</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › Facial ADM</div></div>
-      <span class="badge gray">Cotação</span>
-    </div>
+    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">📷</div><div style="flex:1"><div style="font-weight:600">Facial ADM — Portaria</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Facial ADM</div></div><span class="badge gray">Cotação</span></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Facial Porta ADM — Concierge</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Facial — MTC</div><div style="font-size:11px;color:var(--txt3)">PDF · Jan/2026</div></div></div>
   </div>
-
   <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px">
-      <div class="gico" style="background:#f0eeff">🏷</div>
-      <div style="flex:1"><div style="font-weight:600">TAG Veicular</div><div style="font-size:11px;color:var(--txt3)">Pasta: Orçamentos › 2026 › TAG Veicular</div></div>
-      <span class="badge gray">Cotação</span>
-    </div>
+    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🏷</div><div style="flex:1"><div style="font-weight:600">TAG Veicular</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › TAG Veicular</div></div><span class="badge gray">Cotação</span></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Antena TAG Veicular — Concierge</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento TAG Veicular — MTC</div><div style="font-size:11px;color:var(--txt3)">PDF · Jan/2026</div></div></div>
   </div>
-
   <div class="sec">2026 — Demais categorias</div>
   <div class="grid2">
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div><div style="font-size:11px;color:var(--txt3)">1 orçamento</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Jardinagem</div><div style="font-size:11px;color:var(--txt3)">Orçamentos</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Portaria Virtual</div><div style="font-size:11px;color:var(--txt3)">Orçamentos</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Manutenção Câmeras</div><div style="font-size:11px;color:var(--txt3)">Orçamentos</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores Serviço</div><div style="font-size:11px;color:var(--txt3)">Referências</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Jardinagem</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Portaria Virtual</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Manutenção Câmeras</div></div></div>
+    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores Serviço</div></div></div>
   </div>
-
   <div class="sec">Anteriores</div>
   <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta CRM V1 e V2 (2022)</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Portaria Virtual</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta IK Safety</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Portaria Virtual</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">AVCB — Orçamento 043/2020</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Reforma Playground (2020)</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Play — 2 orçamentos recebidos</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Módulo Padrão 8413</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Apresentação ALTEC Sombra</div><div style="font-size:11px;color:var(--txt3)">PDF · Pasta: Orçamentos</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta CRM V1 e V2 (2022)</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">AVCB — Orçamento 043/2020</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Reforma Playground (2020)</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
   </div>
 </div>
 
@@ -291,15 +253,11 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">A revisar</div><div class="mc-val warn">1</div></div>
     <div class="mc"><div class="mc-lbl">Docs vencidos</div><div class="mc-val bad">1</div></div>
   </div>
-  <a href="https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4" target="_blank" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:10px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
-    <span style="font-size:20px">📂</span>
-    <div style="flex:1"><div style="font-weight:600;color:#2d7a3a;font-size:13px">Abrir pasta Contratos no Google Drive</div><div style="font-size:11px;color:#388e3c">Ver e baixar todos os contratos</div></div>
-    <span style="font-size:13px;color:#2d7a3a;font-weight:600">Abrir →</span>
-  </a>
+  <a class="drive-btn" href="https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Contratos no Drive</div><div style="font-size:11px;color:#1976d2">Ver e baixar todos os contratos</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Contratos ativos</div>
   <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div><div style="margin-top:4px"><span class="tag">PDF assinado disponível</span></div></div>
-  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo · Pasta Contratos</div></div><span class="badge warn">Revisar</span></div><div style="margin-top:4px"><span class="tag">Marcar agenda com Roberto</span><span class="tag">Contrato aditivo incluído</span></div></div>
-  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Jardinagem</div><div style="font-size:12px;color:var(--txt3)">PDF assinado + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div><div style="margin-top:4px"><span class="tag">Versão atualizada assinada</span></div></div>
+  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo · Pasta Contratos</div></div><span class="badge warn">Revisar</span></div><div style="margin-top:4px"><span class="tag">Marcar agenda com Roberto</span></div></div>
+  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Jardinagem</div><div style="font-size:12px;color:var(--txt3)">PDF assinado + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div></div>
   <div class="sec">Prazos e vencimentos</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Documento</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
@@ -310,12 +268,6 @@ textarea.fi{height:75px;resize:vertical}
       <tr><td>Contrato Jardinagem</td><td>—</td><td>A verificar</td><td><span class="badge ok">OK</span></td></tr>
     </tbody>
   </table></div></div>
-  <div class="sec">Documentos legais</div>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">Registrada</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">OK</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">OK</span></div>
-  </div>
 </div>
 
 <div id="pg-churrasqueira" class="pg">
@@ -329,8 +281,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="card">
     <label class="fl">Apartamento</label><input class="fi" id="res-apto" placeholder="Ex: Ap. 1121">
     <label class="fl">Data desejada</label><input class="fi" type="date" id="res-data">
-    <label class="fl">Horário</label>
-    <select class="fi" id="res-hora"><option>12h–18h (tarde)</option><option>18h–23h (noite)</option><option>Dia todo</option></select>
+    <label class="fl">Horário</label><select class="fi" id="res-hora"><option>12h–18h (tarde)</option><option>18h–23h (noite)</option><option>Dia todo</option></select>
     <label class="fl">Número de pessoas</label><input class="fi" type="number" id="res-pessoas" placeholder="Ex: 20" min="1">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn primary" onclick="fazerReserva()">Confirmar reserva</button>
@@ -350,39 +301,33 @@ textarea.fi{height:75px;resize:vertical}
       <tr style="font-weight:700"><td>Total 2025</td><td>47</td><td>R$ 1.470</td></tr>
     </tbody>
   </table></div></div>
-  <div class="sec">Reservas registradas nesta sessão</div>
+  <div class="sec">Reservas desta sessão</div>
   <div class="card" id="lista-reservas"><div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div></div>
 </div>
 
 <div id="pg-financeiro" class="pg">
-  <div class="alert blue"><span>📂</span><div>Os demonstrativos financeiros serão carregados em breve. Envie os arquivos ao síndico para popular esta tela com histórico anual, comparativos de despesas e análise de custos.</div></div>
-
+  <div class="alert blue"><span>📂</span><div>Demonstrativos financeiros serão carregados em breve. Envie os arquivos ao síndico para popular esta tela.</div></div>
   <div class="sec">O que será exibido aqui</div>
   <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📊</div><div style="flex:1"><div style="font-weight:500">Histórico anual de despesas</div><div style="font-size:11px;color:var(--txt3)">Comparativo por ano — elevador, limpeza, manutenção...</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📈</div><div style="flex:1"><div style="font-weight:500">Maiores e menores custos por período</div><div style="font-size:11px;color:var(--txt3)">Identificação de gargalos financeiros</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por ano</div><div style="font-size:11px;color:var(--txt3)">Locações, valores arrecadados, meses mais movimentados</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">⚠️</div><div style="flex:1"><div style="font-weight:500">Multas aplicadas por período</div><div style="font-size:11px;color:var(--txt3)">Histórico de infrações e valores</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📊</div><div style="flex:1"><div style="font-weight:500">Histórico anual de despesas</div><div style="font-size:11px;color:var(--txt3)">Comparativo por ano</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📈</div><div style="flex:1"><div style="font-weight:500">Maiores e menores custos por período</div><div style="font-size:11px;color:var(--txt3)">Identificação de gargalos</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por ano</div><div style="font-size:11px;color:var(--txt3)">Locações e valores arrecadados</div></div><span class="badge gray">Em breve</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">⚠️</div><div style="flex:1"><div style="font-weight:500">Multas aplicadas por período</div><div style="font-size:11px;color:var(--txt3)">Histórico de infrações</div></div><span class="badge gray">Em breve</span></div>
     <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">Demonstrativos mensais detalhados</div><div style="font-size:11px;color:var(--txt3)">Receitas x despesas por categoria</div></div><span class="badge gray">Em breve</span></div>
   </div>
-
   <div class="sec">Como alimentar esta tela</div>
   <div class="card">
     <div style="font-size:13px;color:var(--txt2);line-height:1.7">
       <div style="margin-bottom:8px">1. Reúna os demonstrativos financeiros de cada ano (planilhas ou PDFs)</div>
-      <div style="margin-bottom:8px">2. Salve na pasta <strong>H:\Meu Drive\Orcamentos</strong> ou em uma nova pasta <strong>Financeiro</strong></div>
-      <div>3. Avise no chat — os dados serão lidos e o painel será montado automaticamente</div>
+      <div style="margin-bottom:8px">2. Salve em uma pasta <strong>Financeiro</strong> no Google Drive</div>
+      <div>3. Avise no chat — os dados serão lidos e o painel montado automaticamente</div>
     </div>
   </div>
 </div>
 
 <div id="pg-documentos" class="pg">
   <div class="alert bad"><span>🚨</span><div>AVCB vencido em Mar/2026 — renovar urgentemente.</div></div>
-  <a href="https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm" target="_blank" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:10px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
-    <span style="font-size:20px">📂</span>
-    <div style="flex:1"><div style="font-weight:600;color:#2d7a3a;font-size:13px">Abrir pasta Documentos Importantes no Google Drive</div><div style="font-size:11px;color:#388e3c">Convenção, regimento, CNPJ, vagas...</div></div>
-    <span style="font-size:13px;color:#2d7a3a;font-weight:600">Abrir →</span>
-  </a>
+  <a class="drive-btn" href="https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir Documentos Importantes no Drive</div><div style="font-size:11px;color:#1976d2">Convenção, regimento, CNPJ, vagas...</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Documentos obrigatórios</div>
   <div class="card" style="padding:0 15px">
     <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:600">AVCB — Auto de Vistoria Bombeiros</div><div style="font-size:11px;color:var(--txt3)">Emitido Mar/2021 · Válido até Mar/2026</div></div><span class="badge bad">Vencido</span></div>
@@ -391,39 +336,23 @@ textarea.fi{height:75px;resize:vertical}
   <div class="sec">Documentos importantes</div>
   <div class="card" style="padding:0 15px">
     <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:500">Controle de Vagas — Torre 1</div><div style="font-size:11px;color:var(--txt3)">PDF · Documentos Importantes</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:500">Controle de Vagas — Torre 1</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div><span class="badge ok">✓</span></div>
   </div>
   <div class="sec">Plantas e projetos técnicos</div>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🏛</div><div style="flex:1"><div style="font-weight:500">Arquitetura — implantação + 5 folhas</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">💧</div><div style="flex:1"><div style="font-weight:500">Hidráulica — 11 folhas completas</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:500">Elétrica — 22 folhas completas</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🚗</div><div style="flex:1"><div style="font-weight:500">Projeto de Tráfego + Abrigo de Gás</div><div style="font-size:11px;color:var(--txt3)">PDF · Plantas Condomínio</div></div><span class="badge blue">PDF</span></div>
-  </div>
-  <div class="sec">Prestadores de serviço</div>
-  <div class="card" style="padding:0"><div class="tw"><table>
-    <thead><tr><th>Nome</th><th>Atividade</th><th>Contato</th><th>Indicação</th></tr></thead>
-    <tbody>
-      <tr><td>Jeová</td><td>Eletricista</td><td>(19) 99228-3082</td><td>—</td></tr>
-      <tr><td>Wendel</td><td>Eletricista</td><td>(19) 98166-3208</td><td>Ap 1121 – Wilson</td></tr>
-    </tbody>
-  </table></div></div>
+  <a class="drive-btn" href="https://drive.google.com/drive/folders/1u1Z2CBCPdJ5JZxlZxSgqrc3Qd8ihhU2k" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir Plantas Condomínio no Drive</div><div style="font-size:11px;color:#1976d2">Hidráulica (11 folhas), Elétrica (22 folhas), Arquitetura</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
 </div>
 
 <div id="pg-prestadores" class="pg">
-  <div class="alert blue"><span>📄</span><div>Dados carregados da planilha <strong>Melhorias - Dados Históricos</strong> — aba PRESTADORES SERVIÇO. Para atualizar, edite a planilha no Drive e avise no chat.</div></div>
-
+  <div class="alert blue"><span>📄</span><div>Dados da planilha <strong>Melhorias - Dados Históricos</strong> — aba PRESTADORES SERVIÇO. Para atualizar, edite a planilha no Drive e avise no chat.</div></div>
   <input class="fi" id="busca-prest" placeholder="🔍  Buscar por nome, atividade ou indicação..." oninput="filtrarPrest()" style="margin-bottom:12px">
-
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Total prestadores</div><div class="mc-val">13</div></div>
-    <div class="mc"><div class="mc-lbl">Categorias</div><div class="mc-val">7</div></div>
+    <div class="mc"><div class="mc-lbl">Categorias</div><div class="mc-val">8</div></div>
     <div class="mc"><div class="mc-lbl">Com indicação</div><div class="mc-val ok">8</div></div>
   </div>
-
-  <div class="sec">Por categoria</div>
+  <div class="sec">Filtrar por categoria</div>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="filtros-cat">
     <button class="tag" style="cursor:pointer;background:var(--azul);color:#fff;border-color:var(--azul)" onclick="filtrarCat('todos',this)">Todos</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCat('Eletricista',this)">Eletricista</button>
@@ -435,142 +364,43 @@ textarea.fi{height:75px;resize:vertical}
     <button class="tag" style="cursor:pointer" onclick="filtrarCat('Advogado',this)">Advogado</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCat('Smart Store',this)">Smart Store</button>
   </div>
-
   <div id="lista-prest">
     <div class="card" style="padding:0 15px" data-cat="Eletricista">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Eletricista</div>
-      <div class="file-row prest-item" data-nome="jeová" data-cat="Eletricista" data-ind="">
-        <div class="file-ico" style="background:#fff3e0">⚡</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Jeová</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99228-3082</div>
-        </div>
-        <a href="tel:+5519992283082" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
-      <div class="file-row prest-item" data-nome="wendel" data-cat="Eletricista" data-ind="apto 1121 wilson">
-        <div class="file-ico" style="background:#fff3e0">⚡</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Wendel</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 98166-3208 · Ind: Apto 1121 — Wilson</div>
-        </div>
-        <a href="tel:+5519981663208" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
-      <div class="file-row prest-item" data-nome="luis fernando" data-cat="Eletricista" data-ind="roberto concierge">
-        <div class="file-ico" style="background:#fff3e0">⚡</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Luis Fernando</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99369-9529 · Ind: Roberto Concierge</div>
-        </div>
-        <a href="tel:+5519993699529" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
-      <div class="file-row prest-item" data-nome="mauricio" data-cat="Eletricista" data-ind="morador gui bedon">
-        <div class="file-ico" style="background:#fff3e0">⚡</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Mauricio</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 98800-5082 · Ind: Morador Gui Bedon</div>
-        </div>
-        <a href="tel:+5519988005082" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
-      <div class="file-row prest-item" data-nome="wagner" data-cat="Eletricista" data-ind="moradora cris 1114">
-        <div class="file-ico" style="background:#fff3e0">⚡</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Wagner</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99824-5455 · Ind: Moradora Cris 1114</div>
-        </div>
-        <a href="tel:+5519998245455" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
-      <div class="file-row prest-item" data-nome="rodrigo" data-cat="Eletricista" data-ind="morador victor">
-        <div class="file-ico" style="background:#fff3e0">⚡</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Rodrigo</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99199-6448 · Ind: Morador Victor</div>
-        </div>
-        <a href="tel:+5519991996448" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="jeová" data-cat="Eletricista" data-ind=""><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Jeová</div><div style="font-size:12px;color:var(--txt3)">(19) 99228-3082</div></div><a href="tel:+5519992283082" class="badge blue" style="text-decoration:none">Ligar</a></div>
+      <div class="file-row prest-item" data-nome="wendel" data-cat="Eletricista" data-ind="apto 1121 wilson"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Wendel</div><div style="font-size:12px;color:var(--txt3)">(19) 98166-3208 · Ind: Apto 1121 — Wilson</div></div><a href="tel:+5519981663208" class="badge blue" style="text-decoration:none">Ligar</a></div>
+      <div class="file-row prest-item" data-nome="luis fernando" data-cat="Eletricista" data-ind="roberto concierge"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Luis Fernando</div><div style="font-size:12px;color:var(--txt3)">(19) 99369-9529 · Ind: Roberto Concierge</div></div><a href="tel:+5519993699529" class="badge blue" style="text-decoration:none">Ligar</a></div>
+      <div class="file-row prest-item" data-nome="mauricio" data-cat="Eletricista" data-ind="morador gui bedon"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Mauricio</div><div style="font-size:12px;color:var(--txt3)">(19) 98800-5082 · Ind: Morador Gui Bedon</div></div><a href="tel:+5519988005082" class="badge blue" style="text-decoration:none">Ligar</a></div>
+      <div class="file-row prest-item" data-nome="wagner" data-cat="Eletricista" data-ind="moradora cris 1114"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Wagner</div><div style="font-size:12px;color:var(--txt3)">(19) 99824-5455 · Ind: Moradora Cris 1114</div></div><a href="tel:+5519998245455" class="badge blue" style="text-decoration:none">Ligar</a></div>
+      <div class="file-row prest-item" data-nome="rodrigo" data-cat="Eletricista" data-ind="morador victor"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Rodrigo</div><div style="font-size:12px;color:var(--txt3)">(19) 99199-6448 · Ind: Morador Victor</div></div><a href="tel:+5519991996448" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Jardinagem">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Jardinagem</div>
-      <div class="file-row prest-item" data-nome="horto plantas" data-cat="Jardinagem" data-ind="">
-        <div class="file-ico" style="background:#e8f5e9">🌿</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Horto Plantas</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 3819-9187</div>
-        </div>
-        <a href="tel:+551938199187" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="horto plantas" data-cat="Jardinagem" data-ind=""><div class="file-ico" style="background:#e8f5e9">🌿</div><div style="flex:1"><div style="font-weight:600">Horto Plantas</div><div style="font-size:12px;color:var(--txt3)">(19) 3819-9187</div></div><a href="tel:+551938199187" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Portaria / Cameras">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Portaria / Câmeras</div>
-      <div class="file-row prest-item" data-nome="mtc christian" data-cat="Portaria / Cameras" data-ind="cunhado edvaldo">
-        <div class="file-ico" style="background:#e3f0fb">📷</div>
-        <div style="flex:1">
-          <div style="font-weight:600">MTC — Christian</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 98235-0001 · Ind: Cunhado Edvaldo</div>
-        </div>
-        <a href="tel:+5519982350001" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="mtc christian" data-cat="Portaria / Cameras" data-ind="cunhado edvaldo"><div class="file-ico" style="background:#e3f0fb">📷</div><div style="flex:1"><div style="font-weight:600">MTC — Christian</div><div style="font-size:12px;color:var(--txt3)">(19) 98235-0001 · Ind: Cunhado Edvaldo</div></div><a href="tel:+5519982350001" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="FoodTruck">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Food Truck</div>
-      <div class="file-row prest-item" data-nome="rubens" data-cat="FoodTruck" data-ind="">
-        <div class="file-ico" style="background:#fff3e0">🚚</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Rubens</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 97821-3922</div>
-        </div>
-        <a href="tel:+5519978213922" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="rubens" data-cat="FoodTruck" data-ind=""><div class="file-ico" style="background:#fff3e0">🚚</div><div style="flex:1"><div style="font-weight:600">Rubens</div><div style="font-size:12px;color:var(--txt3)">(19) 97821-3922</div></div><a href="tel:+5519978213922" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Ar Condicionado">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Ar Condicionado</div>
-      <div class="file-row prest-item" data-nome="daniel" data-cat="Ar Condicionado" data-ind="">
-        <div class="file-ico" style="background:#e3f0fb">❄️</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Daniel</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 97406-5063</div>
-        </div>
-        <a href="tel:+5519974065063" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="daniel" data-cat="Ar Condicionado" data-ind=""><div class="file-ico" style="background:#e3f0fb">❄️</div><div style="flex:1"><div style="font-weight:600">Daniel</div><div style="font-size:12px;color:var(--txt3)">(19) 97406-5063</div></div><a href="tel:+5519974065063" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Placa Solar">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Placa Solar</div>
-      <div class="file-row prest-item" data-nome="everton" data-cat="Placa Solar" data-ind="instalou as placas">
-        <div class="file-ico" style="background:#fff3e0">☀️</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Everton</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 99979-0550 · Ind: Instalou as placas</div>
-        </div>
-        <a href="tel:+5519999790550" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="everton" data-cat="Placa Solar" data-ind="instalou as placas"><div class="file-ico" style="background:#fff3e0">☀️</div><div style="flex:1"><div style="font-weight:600">Everton</div><div style="font-size:12px;color:var(--txt3)">(19) 99979-0550 · Ind: Instalou as placas</div></div><a href="tel:+5519999790550" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Smart Store">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Smart Store</div>
-      <div class="file-row prest-item" data-nome="robson" data-cat="Smart Store" data-ind="">
-        <div class="file-ico" style="background:#e8f5e9">🛒</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Robson</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(11) 95741-5192</div>
-        </div>
-        <a href="tel:+5511957415192" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="robson" data-cat="Smart Store" data-ind=""><div class="file-ico" style="background:#e8f5e9">🛒</div><div style="flex:1"><div style="font-weight:600">Robson</div><div style="font-size:12px;color:var(--txt3)">(11) 95741-5192</div></div><a href="tel:+5511957415192" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
-
     <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Advogado">
       <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Advogado</div>
-      <div class="file-row prest-item" data-nome="amanda amaral" data-cat="Advogado" data-ind="cuida dos debitos antes da garantidora">
-        <div class="file-ico" style="background:#fdecea">⚖️</div>
-        <div style="flex:1">
-          <div style="font-weight:600">Amanda Amaral</div>
-          <div style="font-size:12px;color:var(--txt3);margin-top:2px">(19) 3054-6196 · Débitos / Garantidora</div>
-        </div>
-        <a href="tel:+551930546196" class="badge blue" style="text-decoration:none">Ligar</a>
-      </div>
+      <div class="file-row prest-item" data-nome="amanda amaral" data-cat="Advogado" data-ind="debitos garantidora"><div class="file-ico" style="background:#fdecea">⚖️</div><div style="flex:1"><div style="font-weight:600">Amanda Amaral</div><div style="font-size:12px;color:var(--txt3)">(19) 3054-6196 · Débitos / Garantidora</div></div><a href="tel:+551930546196" class="badge blue" style="text-decoration:none">Ligar</a></div>
     </div>
   </div>
 </div>
@@ -581,18 +411,18 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">Última</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
     <div class="mc"><div class="mc-lbl">Síndico eleito</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
   </div>
-
+  <a class="drive-btn" href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Assembleias no Drive</div><div style="font-size:11px;color:#1976d2">Ver e baixar todas as atas</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Atas disponíveis</div>
   <div class="card" style="padding:0 15px">
     <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">AGE — Eleição de Síndico</div><div style="font-size:11px;color:var(--txt3)">Dez/2024 · Registrada</div></div><span class="badge ok">Registrada</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 16/01/2024</div><div style="font-size:11px;color:var(--txt3)">Jan/2024 · PDF</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/04/2023</div><div style="font-size:11px;color:var(--txt3)">Abr/2023 · PDF</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 29/11/2022</div><div style="font-size:11px;color:var(--txt3)">Nov/2022 · PDF</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 23/06/2022</div><div style="font-size:11px;color:var(--txt3)">Jun/2022 · PDF</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/11/2020</div><div style="font-size:11px;color:var(--txt3)">Nov/2020 · PDF</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">AGO — Eleição (por e-mail)</div><div style="font-size:11px;color:var(--txt3)">Ago/2020 · PDF</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#f0efe8">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia Abril 2019</div><div style="font-size:11px;color:var(--txt3)">Abr/2019 · PPTX</div></div><span class="badge gray">PPTX</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Retificação AGI 27/10/2018</div><div style="font-size:11px;color:var(--txt3)">Out/2018 · PDF</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 16/01/2024</div><div style="font-size:11px;color:var(--txt3)">Jan/2024</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/04/2023</div><div style="font-size:11px;color:var(--txt3)">Abr/2023</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 29/11/2022</div><div style="font-size:11px;color:var(--txt3)">Nov/2022</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 23/06/2022</div><div style="font-size:11px;color:var(--txt3)">Jun/2022</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/11/2020</div><div style="font-size:11px;color:var(--txt3)">Nov/2020</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">AGO — Eleição (por e-mail)</div><div style="font-size:11px;color:var(--txt3)">Ago/2020</div></div><span class="badge blue">PDF</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#f0efe8">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia Abril 2019</div><div style="font-size:11px;color:var(--txt3)">Abr/2019</div></div><span class="badge gray">PPTX</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Retificação AGI 27/10/2018</div><div style="font-size:11px;color:var(--txt3)">Out/2018</div></div><span class="badge blue">PDF</span></div>
     <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">Registrada</span></div>
   </div>
 </div>
@@ -633,16 +463,7 @@ textarea.fi{height:75px;resize:vertical}
 
 <script>
 var WA_NUMBER='SUBSTITUIR_NUMERO';
-
-var DRIVE = {
-  assembleias: 'https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG',
-  contratos: 'https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4',
-  documentos: 'https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm',
-  orcamentos: 'https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj',
-  plantas: 'https://drive.google.com/drive/folders/1u1Z2CBCPdJ5JZxlZxSgqrc3Qd8ihhU2k',
-  quiosque: 'https://drive.google.com/drive/folders/1tvURkt4M6RKJdFUz3qitVCw1crZu0ISh'
-};
-var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','assembleias','defeitos'];
+var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos'];
 var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
 
 function nav(id){
@@ -656,58 +477,38 @@ function nav(id){
   if(bidx>=0) document.querySelectorAll('.bni')[bidx].classList.add('on');
   window.scrollTo(0,0);
 }
-
 function filtrarLista(listId,inputId){
   var q=document.getElementById(inputId).value.toLowerCase();
   document.querySelectorAll('#'+listId+' .file-row').forEach(function(r){
     r.style.display=(r.dataset.search||r.innerText).toLowerCase().includes(q)?'flex':'none';
   });
 }
-
-function filtrarTabela(tbodyId,inputId){
-  var q=document.getElementById(inputId).value.toLowerCase();
-  document.querySelectorAll('#'+tbodyId+' tr').forEach(function(r){
-    r.style.display=r.innerText.toLowerCase().includes(q)?'':'none';
-  });
-}
-
-function chamarWA(){
-  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal da Transparência do Condomínio Altos de Santa Izabel.'));
-}
-
+function chamarWA(){window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'));}
 var reservas=[];
 function fazerReserva(){
   var apto=document.getElementById('res-apto').value.trim();
   var data=document.getElementById('res-data').value;
   if(!apto||!data){alert('Preencha apartamento e data');return;}
   reservas.push({apto:apto,data:data,hora:document.getElementById('res-hora').value,pess:document.getElementById('res-pessoas').value});
-  document.getElementById('res-apto').value='';
-  document.getElementById('res-data').value='';
-  document.getElementById('res-pessoas').value='';
-  renderReservas();
-  alert('Reserva registrada!');
+  document.getElementById('res-apto').value='';document.getElementById('res-data').value='';document.getElementById('res-pessoas').value='';
+  renderReservas();alert('Reserva registrada!');
 }
 function renderReservas(){
   var el=document.getElementById('lista-reservas');
   if(!reservas.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div>';return;}
-  el.innerHTML=reservas.slice().reverse().map(function(r){
-    return '<div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Ap. '+r.apto+'</div><div style="font-size:11px;color:var(--txt3)">'+r.data+' · '+r.hora+(r.pess?' · '+r.pess+' pessoas':'')+'</div></div><span class="badge ok">Reservado</span></div>';
-  }).join('');
+  el.innerHTML=reservas.slice().reverse().map(function(r){return '<div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Ap. '+r.apto+'</div><div style="font-size:11px;color:var(--txt3)">'+r.data+' · '+r.hora+(r.pess?' · '+r.pess+' pessoas':'')+'</div></div><span class="badge ok">Reservado</span></div>';}).join('');
 }
 function reservaWA(){
-  var msg='*Reserva Churrasqueira — Altos de Santa Izabel*\n\nApartamento: '+(document.getElementById('res-apto').value||'(não informado)')+'\nData: '+(document.getElementById('res-data').value||'(não informada)')+'\nHorário: '+document.getElementById('res-hora').value+(document.getElementById('res-pessoas').value?'\nPessoas: '+document.getElementById('res-pessoas').value:'');
+  var msg='*Reserva Churrasqueira — Altos de Santa Izabel*\n\nApartamento: '+(document.getElementById('res-apto').value||'(não informado)')+'\nData: '+(document.getElementById('res-data').value||'(não informada)')+'\nHorário: '+document.getElementById('res-hora').value;
   window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
 }
-
 var chamados=[];
 function registrar(){
   var apto=document.getElementById('f-apto').value.trim();
   if(!apto){alert('Informe o apartamento ou local');return;}
   chamados.push({apto:apto,cat:document.getElementById('f-cat').value,desc:document.getElementById('f-desc').value.trim()||'Sem descrição',urg:document.getElementById('f-urg').value,data:new Date().toLocaleDateString('pt-BR'),status:'Aberto'});
-  document.getElementById('f-apto').value='';
-  document.getElementById('f-desc').value='';
-  renderChamados();
-  alert('Chamado registrado!');
+  document.getElementById('f-apto').value='';document.getElementById('f-desc').value='';
+  renderChamados();alert('Chamado registrado!');
 }
 function renderChamados(){
   document.getElementById('cnt-ab').textContent=chamados.filter(function(c){return c.status==='Aberto'}).length;
@@ -715,69 +516,32 @@ function renderChamados(){
   document.getElementById('cnt-re').textContent=chamados.filter(function(c){return c.status==='Resolvido'}).length;
   var lista=document.getElementById('lista-chamados');
   if(!chamados.length){lista.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div>';return;}
-  lista.innerHTML=chamados.slice().reverse().map(function(c){
-    var cor=c.status==='Aberto'?'#c0392b':c.status==='Em análise'?'#b8630a':'#2d7a3a';
-    var bg=c.status==='Aberto'?'bad':c.status==='Em análise'?'warn':'ok';
-    return '<div class="chamado"><div class="sdot" style="background:'+cor+'"></div><div style="flex:1"><div style="font-weight:600">'+c.cat+' — '+c.apto+'</div><div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+' · '+c.data+' · '+c.urg+'</div></div><span class="badge '+bg+'">'+c.status+'</span></div>';
-  }).join('');
+  lista.innerHTML=chamados.slice().reverse().map(function(c){var cor=c.status==='Aberto'?'#c0392b':c.status==='Em análise'?'#b8630a':'#2d7a3a';var bg=c.status==='Aberto'?'bad':c.status==='Em análise'?'warn':'ok';return '<div class="chamado"><div class="sdot" style="background:'+cor+'"></div><div style="flex:1"><div style="font-weight:600">'+c.cat+' — '+c.apto+'</div><div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+' · '+c.data+'</div></div><span class="badge '+bg+'">'+c.status+'</span></div>';}).join('');
 }
 function abrirWA(){
   var msg='*Defeito — Altos de Santa Izabel*\n\nLocal: '+(document.getElementById('f-apto').value||'(não informado)')+'\nCategoria: '+document.getElementById('f-cat').value+'\nUrgência: '+document.getElementById('f-urg').value+'\nDescrição: '+(document.getElementById('f-desc').value||'(sem descrição)');
   window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
 }
-
 function filtrarPrest(){
   var q=document.getElementById('busca-prest').value.toLowerCase();
-  document.querySelectorAll('.prest-item').forEach(function(r){
-    var txt=(r.dataset.nome+' '+r.dataset.cat+' '+r.dataset.ind).toLowerCase();
-    r.style.display=txt.includes(q)?'flex':'none';
-  });
-  document.querySelectorAll('#lista-prest .card').forEach(function(c){
-    var vis=Array.from(c.querySelectorAll('.prest-item')).some(function(r){return r.style.display!=='none'});
-    c.style.display=vis?'':'none';
-  });
+  document.querySelectorAll('.prest-item').forEach(function(r){var txt=(r.dataset.nome+' '+r.dataset.cat+' '+r.dataset.ind).toLowerCase();r.style.display=txt.includes(q)?'flex':'none';});
+  document.querySelectorAll('#lista-prest .card').forEach(function(c){var vis=Array.from(c.querySelectorAll('.prest-item')).some(function(r){return r.style.display!=='none'});c.style.display=vis?'':'none';});
 }
-
 function filtrarCat(cat,btn){
-  document.querySelectorAll('#filtros-cat button').forEach(function(b){
-    b.style.background='';b.style.color='';b.style.borderColor='';
-  });
+  document.querySelectorAll('#filtros-cat button').forEach(function(b){b.style.background='';b.style.color='';b.style.borderColor='';});
   btn.style.background='var(--azul)';btn.style.color='#fff';btn.style.borderColor='var(--azul)';
-  document.querySelectorAll('#lista-prest .card').forEach(function(c){
-    c.style.display=(cat==='todos'||c.dataset.cat===cat)?'':'none';
-  });
+  document.querySelectorAll('#lista-prest .card').forEach(function(c){c.style.display=(cat==='todos'||c.dataset.cat===cat)?'':'none';});
   document.getElementById('busca-prest').value='';
-  document.querySelectorAll('.prest-item').forEach(function(r){r.style.display='flex'});
+  document.querySelectorAll('.prest-item').forEach(function(r){r.style.display='flex';});
 }
-
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function(){});
-
-// Injetar botões Drive automaticamente
-var driveLinks = [
-  {pg:'pg-assembleias', key:'assembleias', label:'Assembleias'},
-  {pg:'pg-contratos',   key:'contratos',   label:'Contratos'},
-  {pg:'pg-documentos',  key:'documentos',  label:'Documentos Importantes'},
-  {pg:'pg-orcamentos',  key:'orcamentos',  label:'Orçamentos'},
-  {pg:'pg-plantas',     key:'plantas',     label:'Plantas Condomínio'},
-  {pg:'pg-projetos',    key:'quiosque',    label:'Projeto Quiosque'}
-];
-driveLinks.forEach(function(d){
-  var pg = document.getElementById(d.pg);
-  if(!pg) return;
-  var btn = document.createElement('a');
-  btn.href = DRIVE[d.key];
-  btn.target = '_blank';
-  btn.style = 'display:flex;align-items:center;gap:10px;background:#e3f0fb;border:1px solid #bbdefb;border-radius:10px;padding:11px 14px;margin-bottom:14px;text-decoration:none';
-  btn.innerHTML = '<span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta no Google Drive</div><div style="font-size:11px;color:#1976d2">' + d.label + ' — ver e baixar arquivos</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span>';
-  pg.insertBefore(btn, pg.firstChild);
-});
 var deferredPrompt;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();deferredPrompt=e;
   var btn=document.createElement('button');
   btn.textContent='📲 Instalar app';
   btn.style='position:fixed;bottom:80px;right:14px;z-index:999;font-size:12px;padding:8px 14px;border-radius:99px;background:#1a3a5c;color:#fff;border:none;cursor:pointer;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.25)';
-  btn.onclick=function(){deferredPrompt.prompt();btn.remove()};
+  btn.onclick=function(){deferredPrompt.prompt();btn.remove();};
   document.body.appendChild(btn);
 });
 </script>

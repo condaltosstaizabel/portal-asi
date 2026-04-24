@@ -141,10 +141,7 @@ textarea.fi{height:75px;resize:vertical}
     <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Jan/2026</div><div style="flex:1">Compra das redes da Quadra</div><span class="badge ok">✓</span></div>
     <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Out/2025</div><div style="flex:1">Festa das Crianças</div><span class="badge ok">✓</span></div>
     <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Jul/2025</div><div style="flex:1">Cinema na Quadra</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Liberação câmeras para o conselho</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Alteração abertura do portão</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Troca de LED nas coberturas</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">2025</div><div style="flex:1">Acesso e-mail do condomínio (Priscila)</div><span class="badge ok">✓</span></div>
+
   </div>
   <div class="sec">Contato da administração</div>
   <div class="card row">
@@ -306,23 +303,24 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <div id="pg-financeiro" class="pg">
-  <div class="alert blue"><span>📂</span><div>Demonstrativos financeiros serão carregados em breve. Envie os arquivos ao síndico para popular esta tela.</div></div>
-  <div class="sec">O que será exibido aqui</div>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📊</div><div style="flex:1"><div style="font-weight:500">Histórico anual de despesas</div><div style="font-size:11px;color:var(--txt3)">Comparativo por ano</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📈</div><div style="flex:1"><div style="font-weight:500">Maiores e menores custos por período</div><div style="font-size:11px;color:var(--txt3)">Identificação de gargalos</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por ano</div><div style="font-size:11px;color:var(--txt3)">Locações e valores arrecadados</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">⚠️</div><div style="flex:1"><div style="font-weight:500">Multas aplicadas por período</div><div style="font-size:11px;color:var(--txt3)">Histórico de infrações</div></div><span class="badge gray">Em breve</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">Demonstrativos mensais detalhados</div><div style="font-size:11px;color:var(--txt3)">Receitas x despesas por categoria</div></div><span class="badge gray">Em breve</span></div>
-  </div>
-  <div class="sec">Como alimentar esta tela</div>
-  <div class="card">
-    <div style="font-size:13px;color:var(--txt2);line-height:1.7">
-      <div style="margin-bottom:8px">1. Reúna os demonstrativos financeiros de cada ano (planilhas ou PDFs)</div>
-      <div style="margin-bottom:8px">2. Salve em uma pasta <strong>Financeiro</strong> no Google Drive</div>
-      <div>3. Avise no chat — os dados serão lidos e o painel montado automaticamente</div>
+  <div class="alert blue"><span>📊</span><div>Painel financeiro completo com gráficos e análise por item. Abre em página dedicada.</div></div>
+  <a href="financeiro.html" style="display:flex;align-items:center;gap:12px;background:var(--azul);color:#fff;border-radius:12px;padding:16px;text-decoration:none;margin-bottom:12px">
+    <span style="font-size:28px">📊</span>
+    <div style="flex:1">
+      <div style="font-weight:700;font-size:15px">Abrir Painel Financeiro</div>
+      <div style="font-size:12px;opacity:.75;margin-top:2px">Gráficos, saldo mensal, maiores ofensores, análise por item</div>
     </div>
+    <span style="font-size:18px">→</span>
+  </a>
+  <div class="sec">O que você encontra no painel</div>
+  <div class="card" style="padding:0 15px">
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📈</div><div style="flex:1"><div style="font-weight:500">Saldo, receitas e despesas mensais</div><div style="font-size:11px;color:var(--txt3)">Gráfico de barras Jul/2025 a Mar/2026</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🗂</div><div style="flex:1"><div style="font-weight:500">Despesas por categoria</div><div style="font-size:11px;color:var(--txt3)">Terceiros, tarifas, manutenção, admin...</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#f0eeff">🔍</div><div style="flex:1"><div style="font-weight:500">Análise detalhada por item</div><div style="font-size:11px;color:var(--txt3)">Clique em qualquer item para ver valor por mês</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">🏆</div><div style="flex:1"><div style="font-weight:500">Top 10 maiores ofensores</div><div style="font-size:11px;color:var(--txt3)">Ranking de despesas do período</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por mês</div><div style="font-size:11px;color:var(--txt3)">Histórico de locações</div></div></div>
   </div>
+  <div class="alert warn" style="margin-top:12px"><span>📂</span><div>Período atual: <strong>Jul/2025 a Mar/2026</strong>. Envie demonstrativos de outros anos para ampliar o histórico.</div></div>
 </div>
 
 <div id="pg-documentos" class="pg">

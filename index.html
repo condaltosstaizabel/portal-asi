@@ -79,7 +79,24 @@ textarea.fi{height:75px;resize:vertical}
 .chamado:last-child{border-bottom:none}
 .sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
 .drive-btn{display:flex;align-items:center;gap:10px;background:#e3f0fb;border:1px solid #bbdefb;border-radius:10px;padding:11px 14px;margin-bottom:14px;text-decoration:none}
-@media(max-width:600px){
+.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
+.admin-overlay.on{display:flex}
+.admin-box{background:var(--card);border-radius:16px;padding:24px;width:92%;max-width:560px;max-height:90vh;overflow-y:auto}
+.admin-box h2{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--azul)}
+.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto}
+.at{font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;white-space:nowrap}
+.at.on{background:var(--azul);color:#fff;border-color:var(--azul)}
+.admin-sec{display:none}.admin-sec.on{display:block}
+.item-edit{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f4f4ef}
+.item-edit:last-child{border-bottom:none}
+.item-edit input,.item-edit select{font-size:12px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit;background:#fafafa}
+.item-edit .ie-txt{flex:1}
+.item-edit .ie-sub{width:140px}
+.item-edit .ie-sel{width:100px}
+.del-btn{width:28px;height:28px;border-radius:7px;border:none;background:#fdecea;color:#c0392b;cursor:pointer;font-size:14px;flex-shrink:0}
+.add-btn{width:100%;padding:8px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--azul);cursor:pointer;font-size:13px;margin-top:8px}
+.save-btn{width:100%;padding:11px;border-radius:9px;background:var(--azul);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
+.close-btn{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--txt3);margin-top:-4px}
   .bnav{display:block}
   .pg{padding:12px 12px 90px}
   .metrics{grid-template-columns:1fr 1fr}
@@ -93,6 +110,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="hdr-logo">🏢</div>
   <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p>Condomínio Altos Santa Izabel</p></div>
   <div class="hdr-bell" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
+  <div style="width:34px;height:34px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0" onclick="abrirAdmin()">⚙️</div>
 </div>
 <div class="nav-wrap">
   <div class="nav">
@@ -129,20 +147,9 @@ textarea.fi{height:75px;resize:vertical}
     <div class="gcard" onclick="nav('defeitos')"><div class="gico" style="background:#fdecea">🔧</div><div><div style="font-weight:600;font-size:13px">Reportar defeito</div><div style="font-size:11px;color:var(--txt3)">Formulário rápido</div></div></div>
   </div>
   <div class="sec">Alertas e pendências</div>
-  <div class="card">
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">🔴</div><div style="flex:1"><div style="font-weight:600">AVCB — renovação urgente</div><div style="font-size:12px;color:var(--txt3)">Venceu Mar/2026</div></div><span class="badge bad">Urgente</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fff3e0">🟡</div><div style="flex:1"><div style="font-weight:600">Reforma do Quiosque</div><div style="font-size:12px;color:var(--txt3)">R$ 121.604 · Aguarda aprovação</div></div><span class="badge warn">Pendente</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fff3e0">🟡</div><div style="flex:1"><div style="font-weight:600">Seguro do condomínio</div><div style="font-size:12px;color:var(--txt3)">Validade não verificada</div></div><span class="badge warn">Verificar</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🔵</div><div style="flex:1"><div style="font-weight:600">Pintura predial</div><div style="font-size:12px;color:var(--txt3)">Orçamento pendente</div></div><span class="badge blue">Em cotação</span></div>
-  </div>
+  <div class="card" id="lista-alertas"></div>
   <div class="sec">Realizações recentes</div>
-  <div class="card">
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Fev/2026</div><div style="flex:1">Projeto do Quiosque finalizado</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Jan/2026</div><div style="flex:1">Compra das redes da Quadra</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Out/2025</div><div style="flex:1">Festa das Crianças</div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">Jul/2025</div><div style="flex:1">Cinema na Quadra</div><span class="badge ok">✓</span></div>
-
-  </div>
+  <div class="card" id="lista-realizacoes"></div>
   <div class="sec">Contato da administração</div>
   <div class="card row">
     <div class="gico" style="background:#e8f5e9">📞</div>
@@ -160,22 +167,7 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">Valor est.</div><div class="mc-val">R$ 154k</div></div>
   </div>
   <div class="sec">Projetos maiores 2026</div>
-  <div class="card clickable">
-    <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Reforma do Quiosque</div><div style="font-size:12px;color:var(--txt3)">R$ 121.604 · Quiosque</div></div><span class="badge warn">Em Projeto</span></div>
-    <div class="pl"><span>Andamento</span><span>25%</span></div>
-    <div class="bw"><div class="br" style="width:25%;background:var(--warn)"></div></div>
-    <div style="margin-top:8px"><span class="tag">Projeto entregue Fev/26</span><span class="tag">Aguarda aprovação</span></div>
-  </div>
-  <div class="card clickable">
-    <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Criação Car Wash</div><div style="font-size:12px;color:var(--txt3)">R$ 17.080 · Garagem</div></div><span class="badge warn">Em Projeto</span></div>
-    <div class="pl"><span>Andamento</span><span>15%</span></div>
-    <div class="bw"><div class="br" style="width:15%;background:var(--warn)"></div></div>
-  </div>
-  <div class="card clickable">
-    <div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">Paisagismo — áreas comuns</div><div style="font-size:12px;color:var(--txt3)">R$ 15.575 · Play, Sacadas, Entrada</div></div><span class="badge blue">Em Orçamento</span></div>
-    <div class="pl"><span>Andamento</span><span>10%</span></div>
-    <div class="bw"><div class="br" style="width:10%;background:#1565c0"></div></div>
-  </div>
+  <div id="lista-projetos-admin"></div>
   <div class="sec">Todas as ações / tarefas</div>
   <div id="proj-lista"><div class="card" style="padding:0 15px">
     <div class="file-row" data-search="regra bloqueio facial controle"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Regra de bloqueio facial / controle</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Andamento</span></div>
@@ -258,12 +250,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="sec">Prazos e vencimentos</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Documento</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
-    <tbody>
-      <tr><td>AVCB</td><td>Mar/2021</td><td>Mar/2026</td><td><span class="badge bad">Vencido</span></td></tr>
-      <tr><td>Seguro</td><td>—</td><td>—</td><td><span class="badge warn">Verificar</span></td></tr>
-      <tr><td>Contrato Concierge</td><td>—</td><td>A verificar</td><td><span class="badge warn">Revisar</span></td></tr>
-      <tr><td>Contrato Jardinagem</td><td>—</td><td>A verificar</td><td><span class="badge ok">OK</span></td></tr>
-    </tbody>
+    <tbody id="tbody-contratos"></tbody>
   </table></div></div>
 </div>
 
@@ -449,6 +436,54 @@ textarea.fi{height:75px;resize:vertical}
   <div class="card" id="lista-chamados"><div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div></div>
 </div>
 
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-box">
+    <button class="close-btn" onclick="fecharAdmin()">✕</button>
+    <h2>⚙️ Área de Administração</h2>
+    <div id="adminLogin">
+      <div class="alert blue" style="margin-bottom:14px"><span>🔒</span><div>Digite a senha de administrador.</div></div>
+      <label class="fl">Senha</label>
+      <input class="fi" type="password" id="adminSenha" placeholder="Senha..." onkeydown="if(event.key==='Enter')verificarSenha()">
+      <button class="save-btn" onclick="verificarSenha()">Entrar</button>
+      <div id="erroSenha" style="color:#c0392b;font-size:12px;margin-top:8px;display:none">Senha incorreta.</div>
+    </div>
+    <div id="adminPainel" style="display:none">
+      <div class="admin-tabs">
+        <button class="at on" onclick="adminTab('alertas',this)">🔴 Alertas</button>
+        <button class="at" onclick="adminTab('realizacoes',this)">✅ Realizações</button>
+        <button class="at" onclick="adminTab('projetos',this)">🔨 Projetos</button>
+        <button class="at" onclick="adminTab('contratos',this)">📋 Contratos</button>
+      </div>
+      <div class="admin-sec on" id="asec-alertas">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite, adicione ou remova alertas da tela inicial.</div>
+        <div id="edit-alertas"></div>
+        <button class="add-btn" onclick="addAlerta()">+ Adicionar alerta</button>
+        <button class="save-btn" onclick="salvarAlertas()">💾 Salvar alertas</button>
+      </div>
+      <div class="admin-sec" id="asec-realizacoes">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite o histórico de realizações recentes.</div>
+        <div id="edit-realizacoes"></div>
+        <button class="add-btn" onclick="addRealizacao()">+ Adicionar realização</button>
+        <button class="save-btn" onclick="salvarRealizacoes()">💾 Salvar realizações</button>
+      </div>
+      <div class="admin-sec" id="asec-projetos">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite os projetos e seus status.</div>
+        <div id="edit-projetos"></div>
+        <button class="add-btn" onclick="addProjeto()">+ Adicionar projeto</button>
+        <button class="save-btn" onclick="salvarProjetos()">💾 Salvar projetos</button>
+      </div>
+      <div class="admin-sec" id="asec-contratos">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite prazos e status dos contratos.</div>
+        <div id="edit-contratos"></div>
+        <button class="add-btn" onclick="addContrato()">+ Adicionar contrato</button>
+        <button class="save-btn" onclick="salvarContratos()">💾 Salvar contratos</button>
+      </div>
+      <button onclick="fecharAdmin()" style="width:100%;padding:10px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer;font-size:13px;margin-top:8px">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <div class="bnav">
   <div class="bnav-items">
     <button class="bni on" onclick="nav('inicio')"><span class="bni-ico">🏠</span>Início</button>
@@ -532,6 +567,194 @@ function filtrarCat(cat,btn){
   document.getElementById('busca-prest').value='';
   document.querySelectorAll('.prest-item').forEach(function(r){r.style.display='flex';});
 }
+// ============ ADMIN ============
+var ADMIN_SENHA = 'altos2026';
+
+var dadosAdmin = {
+  alertas: JSON.parse(localStorage.getItem('asi_alertas')||'null') || [
+    {txt:'AVCB — renovação urgente',sub:'Venceu Mar/2026',status:'bad'},
+    {txt:'Reforma do Quiosque',sub:'R$ 121.604 · Aguarda aprovação',status:'warn'},
+    {txt:'Seguro do condomínio',sub:'Validade não verificada',status:'warn'},
+    {txt:'Pintura predial',sub:'Orçamento pendente',status:'blue'}
+  ],
+  realizacoes: JSON.parse(localStorage.getItem('asi_realizacoes')||'null') || [
+    {data:'Fev/2026',txt:'Projeto do Quiosque finalizado'},
+    {data:'Jan/2026',txt:'Compra das redes da Quadra'},
+    {data:'Out/2025',txt:'Festa das Crianças'},
+    {data:'Jul/2025',txt:'Cinema na Quadra'}
+  ],
+  projetos: JSON.parse(localStorage.getItem('asi_projetos')||'null') || [
+    {nome:'Reforma do Quiosque',sub:'R$ 121.604 · Quiosque',pct:25,status:'warn'},
+    {nome:'Criação Car Wash',sub:'R$ 17.080 · Garagem',pct:15,status:'warn'},
+    {nome:'Paisagismo — áreas comuns',sub:'R$ 15.575 · Play, Sacadas, Entrada',pct:10,status:'blue'}
+  ],
+  contratos: JSON.parse(localStorage.getItem('asi_contratos')||'null') || [
+    {doc:'AVCB',emissao:'Mar/2021',validade:'Mar/2026',status:'bad'},
+    {doc:'Seguro',emissao:'—',validade:'—',status:'warn'},
+    {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'warn'},
+    {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'}
+  ]
+};
+
+var statusOpts = [
+  {v:'bad',l:'🔴 Urgente'},
+  {v:'warn',l:'🟡 Atenção'},
+  {v:'blue',l:'🔵 Informação'},
+  {v:'ok',l:'🟢 OK'}
+];
+var statusLabel = {bad:'Urgente',warn:'Atenção',blue:'Info',ok:'OK',gray:'Normal'};
+
+function abrirAdmin(){
+  document.getElementById('adminOverlay').classList.add('on');
+  document.getElementById('adminLogin').style.display='block';
+  document.getElementById('adminPainel').style.display='none';
+  document.getElementById('adminSenha').value='';
+  document.getElementById('erroSenha').style.display='none';
+}
+function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('on');}
+function verificarSenha(){
+  if(document.getElementById('adminSenha').value===ADMIN_SENHA){
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminPainel').style.display='block';
+    renderAdmin();
+  } else {
+    document.getElementById('erroSenha').style.display='block';
+  }
+}
+function adminTab(id,btn){
+  document.querySelectorAll('.admin-sec').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.at').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('asec-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+function selOpts(val){
+  return statusOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');
+}
+
+function renderAdmin(){
+  // Alertas
+  var ea=document.getElementById('edit-alertas');
+  ea.innerHTML=dadosAdmin.alertas.map(function(a,i){
+    return '<div class="item-edit">'+
+      '<select class="ie-sel" onchange="dadosAdmin.alertas['+i+'].status=this.value">'+selOpts(a.status)+'</select>'+
+      '<input class="ie-txt" value="'+esc(a.txt)+'" onchange="dadosAdmin.alertas['+i+'].txt=this.value" placeholder="Título">'+
+      '<input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
+  // Realizações
+  var er=document.getElementById('edit-realizacoes');
+  er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){
+    return '<div class="item-edit">'+
+      '<input style="width:80px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data">'+
+      '<input class="ie-txt" value="'+esc(r.txt)+'" onchange="dadosAdmin.realizacoes['+i+'].txt=this.value" placeholder="Descrição">'+
+      '<button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
+  // Projetos
+  var ep=document.getElementById('edit-projetos');
+  ep.innerHTML=dadosAdmin.projetos.map(function(p,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" style="min-width:140px" value="'+esc(p.nome)+'" onchange="dadosAdmin.projetos['+i+'].nome=this.value" placeholder="Nome">'+
+      '<input class="ie-sub" value="'+esc(p.sub)+'" onchange="dadosAdmin.projetos['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<input style="width:60px" type="number" min="0" max="100" value="'+p.pct+'" onchange="dadosAdmin.projetos['+i+'].pct=+this.value" placeholder="%">'+
+      '<select class="ie-sel" onchange="dadosAdmin.projetos['+i+'].status=this.value">'+selOpts(p.status)+'</select>'+
+      '<button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
+  // Contratos
+  var ec=document.getElementById('edit-contratos');
+  ec.innerHTML=dadosAdmin.contratos.map(function(c,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" style="min-width:120px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento">'+
+      '<input style="width:80px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão">'+
+      '<input style="width:90px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade">'+
+      '<select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value">'+selOpts(c.status)+'</select>'+
+      '<button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
+}
+
+function esc(s){return (s||'').replace(/"/g,'&quot;');}
+
+function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'warn'});renderAdmin();}
+function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}
+function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
+function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'gray'});renderAdmin();}
+
+function salvarAlertas(){
+  localStorage.setItem('asi_alertas',JSON.stringify(dadosAdmin.alertas));
+  renderAlertas();alert('✅ Alertas salvos!');
+}
+function salvarRealizacoes(){
+  localStorage.setItem('asi_realizacoes',JSON.stringify(dadosAdmin.realizacoes));
+  renderRealizacoes();alert('✅ Realizações salvas!');
+}
+function salvarProjetos(){
+  localStorage.setItem('asi_projetos',JSON.stringify(dadosAdmin.projetos));
+  renderProjetosAdmin();alert('✅ Projetos salvos!');
+}
+function salvarContratos(){
+  localStorage.setItem('asi_contratos',JSON.stringify(dadosAdmin.contratos));
+  renderContratosAdmin();alert('✅ Contratos salvos!');
+}
+
+function iconeAlerta(s){return s==='bad'?'🔴':s==='warn'?'🟡':s==='blue'?'🔵':'🟢';}
+
+function renderAlertas(){
+  var el=document.getElementById('lista-alertas');
+  if(!el)return;
+  var corIco={bad:'#fdecea',warn:'#fff3e0',blue:'#e3f0fb',ok:'#e8f5e9',gray:'#f0efe8'};
+  el.innerHTML=dadosAdmin.alertas.map(function(a){
+    return '<div class="file-row"><div class="file-ico" style="background:'+corIco[a.status]+'">'+iconeAlerta(a.status)+'</div>'+
+      '<div style="flex:1"><div style="font-weight:600">'+a.txt+'</div><div style="font-size:12px;color:var(--txt3)">'+a.sub+'</div></div>'+
+      '<span class="badge '+a.status+'">'+statusLabel[a.status]+'</span></div>';
+  }).join('');
+}
+
+function renderRealizacoes(){
+  var el=document.getElementById('lista-realizacoes');
+  if(!el)return;
+  el.innerHTML=dadosAdmin.realizacoes.map(function(r){
+    return '<div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">'+r.data+'</div>'+
+      '<div style="flex:1">'+r.txt+'</div><span class="badge ok">✓</span></div>';
+  }).join('');
+}
+
+function renderProjetosAdmin(){
+  var el=document.getElementById('lista-projetos-admin');
+  if(!el)return;
+  var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',gray:'#888'};
+  el.innerHTML=dadosAdmin.projetos.map(function(p){
+    return '<div class="card clickable" style="margin-bottom:8px">'+
+      '<div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div>'+
+      '<div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(p.status==='warn'?'Em Projeto':p.status==='blue'?'Em Orçamento':p.status==='ok'?'Concluído':'Em andamento')+'</span></div>'+
+      '<div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div>'+
+      '<div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+corBar[p.status]+'"></div></div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderContratosAdmin(){
+  var el=document.getElementById('tbody-contratos');
+  if(!el)return;
+  el.innerHTML=dadosAdmin.contratos.map(function(c){
+    return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td>'+
+      '<td><span class="badge '+c.status+'">'+statusLabel[c.status]+'</span></td></tr>';
+  }).join('');
+}
+
+// Render dinâmico ao carregar
+window.addEventListener('DOMContentLoaded',function(){
+  renderAlertas();
+  renderRealizacoes();
+  renderProjetosAdmin();
+  renderContratosAdmin();
+});
+
+// ============ FIM ADMIN ============
+
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function(){});
 var deferredPrompt;
 window.addEventListener('beforeinstallprompt',function(e){

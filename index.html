@@ -163,7 +163,7 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <div id="pg-projetos" class="pg">
-  <input class="fi" id="busca-proj" placeholder="🔍  Buscar projeto ou tarefa..." oninput="filtrarLista('proj-lista','busca-proj')" style="margin-bottom:12px">
+  <input class="fi" id="busca-proj" placeholder="🔍  Buscar projeto ou tarefa..." oninput="renderTarefas()" style="margin-bottom:12px">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Total ações</div><div class="mc-val">26</div></div>
     <div class="mc"><div class="mc-lbl">Concluídas</div><div class="mc-val ok">6</div></div>
@@ -233,10 +233,10 @@ textarea.fi{height:75px;resize:vertical}
 
 <div id="pg-churrasqueira" class="pg">
   <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Reservas 2025</div><div class="mc-val">47</div></div>
-    <div class="mc"><div class="mc-lbl">Receita 2025</div><div class="mc-val ok">R$ 1.470</div></div>
-    <div class="mc"><div class="mc-lbl">Média/mês</div><div class="mc-val">R$ 122</div></div>
-    <div class="mc"><div class="mc-lbl">Mês top</div><div class="mc-val">Fev/Jun</div></div>
+    <div class="mc"><div class="mc-lbl">Total locações</div><div class="mc-val" id="churr-total-loc">47</div></div>
+    <div class="mc"><div class="mc-lbl">Receita total</div><div class="mc-val ok" id="churr-total-rec">R$ 1.470</div></div>
+    <div class="mc"><div class="mc-lbl">Média/mês</div><div class="mc-val" id="churr-media">R$ 122</div></div>
+    <div class="mc"><div class="mc-lbl">Fonte</div><div class="mc-val" style="font-size:11px;margin-top:6px;color:var(--txt3)" id="churr-fonte">Manual</div></div>
   </div>
   <div class="sec">Fazer nova reserva</div>
   <div class="card">
@@ -392,6 +392,8 @@ textarea.fi{height:75px;resize:vertical}
         <button class="at" onclick="adminTab('realizacoes',this)">✅ Realizações</button>
         <button class="at" onclick="adminTab('projetos',this)">🔨 Projetos</button>
         <button class="at" onclick="adminTab('contratos',this)">📋 Contratos</button>
+        <button class="at" onclick="adminTab('prestadores',this)">👤 Prestadores</button>
+        <button class="at" onclick="adminTab('tarefas',this)">📌 Tarefas</button>
       </div>
       <div class="admin-sec on" id="asec-alertas">
         <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite, adicione ou remova alertas da tela inicial.</div>
@@ -416,6 +418,18 @@ textarea.fi{height:75px;resize:vertical}
         <div id="edit-contratos"></div>
         <button class="add-btn" onclick="addContrato()">+ Adicionar contrato</button>
         <button class="save-btn" onclick="salvarContratos()">💾 Salvar contratos</button>
+      </div>
+      <div class="admin-sec" id="asec-prestadores">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Adicione ou remova prestadores. Para editar, use os botões na aba Prestadores.</div>
+        <div id="edit-prestadores"></div>
+        <button class="add-btn" onclick="addPrestador()">+ Adicionar prestador</button>
+        <button class="save-btn" onclick="salvarPrestadores();renderPrestadores();alert('Prestadores salvos!')">💾 Salvar prestadores</button>
+      </div>
+      <div class="admin-sec" id="asec-tarefas">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite as tarefas e ações listadas na aba Projetos.</div>
+        <div id="edit-tarefas"></div>
+        <button class="add-btn" onclick="addTarefa()">+ Adicionar tarefa</button>
+        <button class="save-btn" onclick="salvarTarefas()">💾 Salvar tarefas</button>
       </div>
       <button onclick="fecharAdmin()" style="width:100%;padding:10px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer;font-size:13px;margin-top:8px">Fechar</button>
     </div>
@@ -701,6 +715,8 @@ function verificarSenha(){
     renderAdmin();
     renderPrestadores();
     renderOrcamentos();
+    renderTarefasAdmin();
+    renderPrestadoresAdmin();
   } else {
     document.getElementById('erroSenha').style.display='block';
   }
@@ -835,9 +851,144 @@ window.addEventListener('DOMContentLoaded',function(){
   renderRealizacoes();
   renderProjetosAdmin();
   renderContratosAdmin();
+  renderPrestadores();
+  renderOrcamentos();
+  renderTarefas();
+  sincronizarFinanceiro();
 });
 
-// ============ FIM ADMIN ============
+function sincronizarFinanceiro(){
+  try{
+    var fin=JSON.parse(localStorage.getItem('asi_financeiro_v3')||'null');
+    if(!fin||!fin.periodos||!fin.periodos.length) return;
+    // Merge churrasqueira de todos os períodos
+    var totalChurr=0, mesesChurr=[];
+    fin.periodos.forEach(function(p){
+      if(p.churr) p.churr.forEach(function(v,i){
+        totalChurr+=v;
+        if(v>0) mesesChurr.push(p.meses[i]);
+      });
+    });
+    var allMeses=[];
+    fin.periodos.forEach(function(p){p.meses.forEach(function(m){if(!allMeses.includes(m)) allMeses.push(m);});});
+    var nMeses=allMeses.length||1;
+    if(totalChurr>0){
+      var el1=document.getElementById('churr-total-rec');
+      var el2=document.getElementById('churr-media');
+      var el3=document.getElementById('churr-fonte');
+      var el4=document.getElementById('churr-total-loc');
+      if(el1) el1.textContent='R$ '+totalChurr.toLocaleString('pt-BR',{minimumFractionDigits:2});
+      if(el2) el2.textContent='R$ '+Math.round(totalChurr/nMeses);
+      if(el3) el3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
+      if(el4) el4.textContent=mesesChurr.length+'x';
+      // Atualizar tabela histórico
+      var tbody=document.querySelector('#pg-churrasqueira table tbody');
+      if(tbody&&allMeses.length>0){
+        var rows='';
+        var allChurr=[];
+        fin.periodos.forEach(function(p){p.meses.forEach(function(m,i){if(!allChurr.find(function(x){return x.m===m;})) allChurr.push({m:m,v:p.churr[i]||0});});});
+        allChurr.forEach(function(c){
+          if(c.v>0) rows+='<tr><td>'+c.m+'</td><td>—</td><td>R$ '+c.v.toFixed(2).replace('.',',')+'</td></tr>';
+        });
+        rows+='<tr style="font-weight:700"><td>Total</td><td>'+mesesChurr.length+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
+        tbody.innerHTML=rows;
+      }
+    }
+  }catch(e){}
+}
+
+// ============ TAREFAS EDITÁVEIS ============
+var tarefas = JSON.parse(localStorage.getItem('asi_tarefas')||'null') || [
+  {txt:'Regra de bloqueio facial / controle',sub:'Jan/2025 · Fácil',status:'gray'},
+  {txt:'Ajustar cargo Marcos',sub:'Jan/2025 · Médio',status:'gray'},
+  {txt:'Revisar tarefas Zeladoria',sub:'Jan/2025 · Médio',status:'warn'},
+  {txt:'Revisar câmeras',sub:'Jan/2025 · Fácil',status:'gray'},
+  {txt:'Liberar acesso câmeras — conselho',sub:'Jan/2025 · Fácil',status:'ok'},
+  {txt:'Avaliar árvores da Quadra',sub:'Fev/2025 · Fácil',status:'gray'},
+  {txt:'Alterar abertura do portão',sub:'Fev/2025 · Fácil',status:'ok'},
+  {txt:'Comprar bebedouro da Quadra',sub:'Fev/2025 · Médio',status:'gray'},
+  {txt:'Avaliar infiltrações — Ap Robson e Edvaldo',sub:'Jan/2025 · Fácil',status:'gray'},
+  {txt:'Revisar contratos: Garbens, Concierge, Jardinagem, Elevador',sub:'Jan–Mar/2025',status:'warn'},
+  {txt:'Orçamentos: Pintura, Portaria, Quiosque, Espelho Elevador T2',sub:'Fev–Jul/2025',status:'warn'},
+  {txt:'Troca de LED nas coberturas',sub:'Resolvido',status:'ok'},
+  {txt:'Vistoria noturna no condomínio',sub:'Jan/2025 · Fácil',status:'gray'},
+  {txt:'Disponibilizar regras do condômino aos moradores',sub:'Enviado parcialmente',status:'warn'},
+  {txt:'Acesso ao e-mail do condomínio',sub:'Priscila acompanhando',status:'ok'}
+];
+
+var statusTarefaLabel={ok:'Concluído',warn:'Parcial',gray:'Pendente',bad:'Urgente',blue:'Andamento'};
+
+function salvarTarefas(){localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));}
+
+function renderTarefas(){
+  var el=document.getElementById('proj-lista');
+  if(!el)return;
+  var q=document.getElementById('busca-proj')?document.getElementById('busca-proj').value.toLowerCase():'';
+  var icoMap={ok:'✅',warn:'📦',gray:'📌',bad:'🔴',blue:'📌'};
+  var filtrados=tarefas.filter(function(t){return (t.txt+t.sub).toLowerCase().includes(q);});
+  var html='<div class="card" style="padding:0 15px">';
+  filtrados.forEach(function(t,i){
+    html+='<div class="file-row">'+
+      '<div class="file-ico" style="background:'+(t.status==='ok'?'#e8f5e9':'#fff3e0')+'">'+(icoMap[t.status]||'📌')+'</div>'+
+      '<div style="flex:1"><div style="font-weight:500">'+t.txt+'</div><div style="font-size:11px;color:var(--txt3)">'+t.sub+'</div></div>'+
+      '<span class="badge '+t.status+'">'+statusTarefaLabel[t.status]+'</span>'+
+    '</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+  // atualizar métricas
+  var tot=document.querySelector('#pg-projetos .mc-val');
+  if(tot) tot.textContent=tarefas.length;
+  var conc=document.querySelectorAll('#pg-projetos .mc-val')[1];
+  if(conc){conc.textContent=tarefas.filter(function(t){return t.status==='ok';}).length;}
+  var pend=document.querySelectorAll('#pg-projetos .mc-val')[2];
+  if(pend){pend.textContent=tarefas.filter(function(t){return t.status!=='ok';}).length;}
+}
+
+function renderTarefasAdmin(){
+  var ea=document.getElementById('edit-tarefas');
+  if(!ea)return;
+  var statusOpts3=['ok','warn','gray','bad','blue'];
+  ea.innerHTML=tarefas.map(function(t,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" style="min-width:140px" value="'+esc(t.txt)+'" onchange="tarefas['+i+'].txt=this.value" placeholder="Tarefa">'+
+      '<input class="ie-sub" value="'+esc(t.sub)+'" onchange="tarefas['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<select class="ie-sel" onchange="tarefas['+i+'].status=this.value">'+
+        statusOpts3.map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+statusTarefaLabel[s]+'</option>';}).join('')+
+      '</select>'+
+      '<button class="del-btn" onclick="tarefas.splice('+i+',1);renderTarefasAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
+}
+
+function addTarefa(){
+  tarefas.push({txt:'Nova tarefa',sub:'',status:'gray'});
+  renderTarefasAdmin();
+}
+
+function salvarTarefas(){
+  localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));
+  renderTarefas();
+  alert('✅ Tarefas salvas!');
+}
+
+function renderPrestadoresAdmin(){
+  var ea=document.getElementById('edit-prestadores');
+  if(!ea)return;
+  ea.innerHTML=prestadores.map(function(p,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" style="min-width:100px" value="'+esc(p.nome)+'" onchange="prestadores['+i+'].nome=this.value" placeholder="Nome">'+
+      '<select class="ie-sel" style="width:130px" onchange="prestadores['+i+'].cat=this.value">'+
+        CATS_PREST.map(function(c){return '<option value="'+c+'"'+(p.cat===c?' selected':'')+'>'+c+'</option>';}).join('')+
+      '</select>'+
+      '<input style="width:120px" value="'+esc(p.tel)+'" onchange="prestadores['+i+'].tel=this.value" placeholder="Telefone">'+
+      '<input class="ie-sub" value="'+esc(p.ind)+'" onchange="prestadores['+i+'].ind=this.value" placeholder="Indicação">'+
+      '<button class="del-btn" onclick="prestadores.splice('+i+',1);salvarPrestadores();renderPrestadoresAdmin();renderPrestadores()">✕</button>'+
+    '</div>';
+  }).join('');
+}
+
+// ============ FIM TAREFAS ============
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function(){});
 var deferredPrompt;

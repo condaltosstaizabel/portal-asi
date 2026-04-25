@@ -97,6 +97,10 @@ textarea.fi{height:75px;resize:vertical}
 .add-btn{width:100%;padding:8px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--azul);cursor:pointer;font-size:13px;margin-top:8px}
 .save-btn{width:100%;padding:11px;border-radius:9px;background:var(--azul);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
 .close-btn{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--txt3);margin-top:-4px}
+.orc-status-sel{font-size:11px;padding:3px 6px;border:1px solid #ddd;border-radius:6px;font-family:inherit;background:#fafafa;cursor:pointer}
+.prest-edit-row{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
+.prest-edit-row:last-child{border-bottom:none}
+.prest-edit-row input,.prest-edit-row select{font-size:12px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit;background:#fafafa}
   .bnav{display:block}
   .pg{padding:12px 12px 90px}
   .metrics{grid-template-columns:1fr 1fr}
@@ -192,34 +196,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="alert blue"><span>📁</span><div>Orçamentos organizados por categoria. Clique em "Abrir no Drive" para visualizar os arquivos originais.</div></div>
   <a class="drive-btn" href="https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Orçamentos no Drive</div><div style="font-size:11px;color:#1976d2">Ver todos os arquivos e propostas</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">2026 — Projetos em andamento</div>
-  <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🍖</div><div style="flex:1"><div style="font-weight:600">Projeto Quiosque / Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Projeto Quiosque</div></div><span class="badge warn">Em análise</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 151225-00</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Relatório de Orçamento — Quiosque Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Reforma Área Gourmet</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02240</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-  </div>
-  <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🚗</div><div style="flex:1"><div style="font-weight:600">Car Wash</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Car Wash</div></div><span class="badge warn">Em análise</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Relatório de Orçamento — Car Wash</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Prestação de Serviço — Car Wash</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
-  </div>
-  <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🎨</div><div style="flex:1"><div style="font-weight:600">Pintura Predial</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Pintura Predial</div></div><span class="badge gray">Cotação</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Pintura — Altos Santa Isabel</div><div style="font-size:11px;color:var(--txt3)">PDF · Assinado</div></div><span class="badge ok">Assinado</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Comercial 02239</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Proposta Técnica Comercial — Abr/2026</div><div style="font-size:11px;color:var(--txt3)">PDF · Mais recente</div></div><span class="badge blue">Novo</span></div>
-  </div>
-  <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">📷</div><div style="flex:1"><div style="font-weight:600">Facial ADM — Portaria</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › Facial ADM</div></div><span class="badge gray">Cotação</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Facial Porta ADM — Concierge</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Facial — MTC</div><div style="font-size:11px;color:var(--txt3)">PDF · Jan/2026</div></div></div>
-  </div>
-  <div class="card" style="margin-bottom:8px">
-    <div class="row" style="margin-bottom:10px"><div class="gico" style="background:#f0eeff">🏷</div><div style="flex:1"><div style="font-weight:600">TAG Veicular</div><div style="font-size:11px;color:var(--txt3)">Orçamentos › 2026 › TAG Veicular</div></div><span class="badge gray">Cotação</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento Antena TAG Veicular — Concierge</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:500">Orçamento TAG Veicular — MTC</div><div style="font-size:11px;color:var(--txt3)">PDF · Jan/2026</div></div></div>
-  </div>
+  <div id="orc-lista"></div>
   <div class="sec">2026 — Demais categorias</div>
   <div class="grid2">
     <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div></div></div>
@@ -330,64 +307,25 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <div id="pg-prestadores" class="pg">
-  <div class="alert blue"><span>📄</span><div>Dados da planilha <strong>Melhorias - Dados Históricos</strong> — aba PRESTADORES SERVIÇO. Para atualizar, edite a planilha no Drive e avise no chat.</div></div>
-  <input class="fi" id="busca-prest" placeholder="🔍  Buscar por nome, atividade ou indicação..." oninput="filtrarPrest()" style="margin-bottom:12px">
+  <input class="fi" id="busca-prest" placeholder="🔍  Buscar por nome, atividade ou indicação..." oninput="renderPrestadores()" style="margin-bottom:12px">
   <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Total prestadores</div><div class="mc-val">13</div></div>
+    <div class="mc"><div class="mc-lbl">Total prestadores</div><div class="mc-val" id="prest-total">13</div></div>
     <div class="mc"><div class="mc-lbl">Categorias</div><div class="mc-val">8</div></div>
-    <div class="mc"><div class="mc-lbl">Com indicação</div><div class="mc-val ok">8</div></div>
+    <div class="mc"><div class="mc-lbl">Com indicação</div><div class="mc-val ok" id="prest-com-ind">8</div></div>
   </div>
   <div class="sec">Filtrar por categoria</div>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="filtros-cat">
-    <button class="tag" style="cursor:pointer;background:var(--azul);color:#fff;border-color:var(--azul)" onclick="filtrarCat('todos',this)">Todos</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Eletricista',this)">Eletricista</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Jardinagem',this)">Jardinagem</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Portaria / Cameras',this)">Portaria / Câmeras</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Ar Condicionado',this)">Ar Condicionado</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Placa Solar',this)">Placa Solar</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('FoodTruck',this)">Food Truck</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Advogado',this)">Advogado</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCat('Smart Store',this)">Smart Store</button>
+    <button class="tag" style="cursor:pointer;background:var(--azul);color:#fff;border-color:var(--azul)" onclick="filtrarCatPrest('todos',this)">Todos</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Eletricista',this)">Eletricista</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Jardinagem',this)">Jardinagem</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Portaria / Cameras',this)">Portaria / Câmeras</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Ar Condicionado',this)">Ar Condicionado</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Placa Solar',this)">Placa Solar</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('FoodTruck',this)">Food Truck</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Advogado',this)">Advogado</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Smart Store',this)">Smart Store</button>
   </div>
-  <div id="lista-prest">
-    <div class="card" style="padding:0 15px" data-cat="Eletricista">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Eletricista</div>
-      <div class="file-row prest-item" data-nome="jeová" data-cat="Eletricista" data-ind=""><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Jeová</div><div style="font-size:12px;color:var(--txt3)">(19) 99228-3082</div></div><a href="tel:+5519992283082" class="badge blue" style="text-decoration:none">Ligar</a></div>
-      <div class="file-row prest-item" data-nome="wendel" data-cat="Eletricista" data-ind="apto 1121 wilson"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Wendel</div><div style="font-size:12px;color:var(--txt3)">(19) 98166-3208 · Ind: Apto 1121 — Wilson</div></div><a href="tel:+5519981663208" class="badge blue" style="text-decoration:none">Ligar</a></div>
-      <div class="file-row prest-item" data-nome="luis fernando" data-cat="Eletricista" data-ind="roberto concierge"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Luis Fernando</div><div style="font-size:12px;color:var(--txt3)">(19) 99369-9529 · Ind: Roberto Concierge</div></div><a href="tel:+5519993699529" class="badge blue" style="text-decoration:none">Ligar</a></div>
-      <div class="file-row prest-item" data-nome="mauricio" data-cat="Eletricista" data-ind="morador gui bedon"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Mauricio</div><div style="font-size:12px;color:var(--txt3)">(19) 98800-5082 · Ind: Morador Gui Bedon</div></div><a href="tel:+5519988005082" class="badge blue" style="text-decoration:none">Ligar</a></div>
-      <div class="file-row prest-item" data-nome="wagner" data-cat="Eletricista" data-ind="moradora cris 1114"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Wagner</div><div style="font-size:12px;color:var(--txt3)">(19) 99824-5455 · Ind: Moradora Cris 1114</div></div><a href="tel:+5519998245455" class="badge blue" style="text-decoration:none">Ligar</a></div>
-      <div class="file-row prest-item" data-nome="rodrigo" data-cat="Eletricista" data-ind="morador victor"><div class="file-ico" style="background:#fff3e0">⚡</div><div style="flex:1"><div style="font-weight:600">Rodrigo</div><div style="font-size:12px;color:var(--txt3)">(19) 99199-6448 · Ind: Morador Victor</div></div><a href="tel:+5519991996448" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Jardinagem">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Jardinagem</div>
-      <div class="file-row prest-item" data-nome="horto plantas" data-cat="Jardinagem" data-ind=""><div class="file-ico" style="background:#e8f5e9">🌿</div><div style="flex:1"><div style="font-weight:600">Horto Plantas</div><div style="font-size:12px;color:var(--txt3)">(19) 3819-9187</div></div><a href="tel:+551938199187" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Portaria / Cameras">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Portaria / Câmeras</div>
-      <div class="file-row prest-item" data-nome="mtc christian" data-cat="Portaria / Cameras" data-ind="cunhado edvaldo"><div class="file-ico" style="background:#e3f0fb">📷</div><div style="flex:1"><div style="font-weight:600">MTC — Christian</div><div style="font-size:12px;color:var(--txt3)">(19) 98235-0001 · Ind: Cunhado Edvaldo</div></div><a href="tel:+5519982350001" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="FoodTruck">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Food Truck</div>
-      <div class="file-row prest-item" data-nome="rubens" data-cat="FoodTruck" data-ind=""><div class="file-ico" style="background:#fff3e0">🚚</div><div style="flex:1"><div style="font-weight:600">Rubens</div><div style="font-size:12px;color:var(--txt3)">(19) 97821-3922</div></div><a href="tel:+5519978213922" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Ar Condicionado">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Ar Condicionado</div>
-      <div class="file-row prest-item" data-nome="daniel" data-cat="Ar Condicionado" data-ind=""><div class="file-ico" style="background:#e3f0fb">❄️</div><div style="flex:1"><div style="font-weight:600">Daniel</div><div style="font-size:12px;color:var(--txt3)">(19) 97406-5063</div></div><a href="tel:+5519974065063" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Placa Solar">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Placa Solar</div>
-      <div class="file-row prest-item" data-nome="everton" data-cat="Placa Solar" data-ind="instalou as placas"><div class="file-ico" style="background:#fff3e0">☀️</div><div style="flex:1"><div style="font-weight:600">Everton</div><div style="font-size:12px;color:var(--txt3)">(19) 99979-0550 · Ind: Instalou as placas</div></div><a href="tel:+5519999790550" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Smart Store">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Smart Store</div>
-      <div class="file-row prest-item" data-nome="robson" data-cat="Smart Store" data-ind=""><div class="file-ico" style="background:#e8f5e9">🛒</div><div style="flex:1"><div style="font-weight:600">Robson</div><div style="font-size:12px;color:var(--txt3)">(11) 95741-5192</div></div><a href="tel:+5511957415192" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-    <div class="card" style="padding:0 15px;margin-top:8px" data-cat="Advogado">
-      <div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">Advogado</div>
-      <div class="file-row prest-item" data-nome="amanda amaral" data-cat="Advogado" data-ind="debitos garantidora"><div class="file-ico" style="background:#fdecea">⚖️</div><div style="flex:1"><div style="font-weight:600">Amanda Amaral</div><div style="font-size:12px;color:var(--txt3)">(19) 3054-6196 · Débitos / Garantidora</div></div><a href="tel:+551930546196" class="badge blue" style="text-decoration:none">Ligar</a></div>
-    </div>
-  </div>
+  <div id="lista-prest-dyn"></div>
 </div>
 
 <div id="pg-assembleias" class="pg">
@@ -539,9 +477,17 @@ var chamados=[];
 function registrar(){
   var apto=document.getElementById('f-apto').value.trim();
   if(!apto){alert('Informe o apartamento ou local');return;}
-  chamados.push({apto:apto,cat:document.getElementById('f-cat').value,desc:document.getElementById('f-desc').value.trim()||'Sem descrição',urg:document.getElementById('f-urg').value,data:new Date().toLocaleDateString('pt-BR'),status:'Aberto'});
+  var cat=document.getElementById('f-cat').value;
+  var desc=document.getElementById('f-desc').value.trim()||'Sem descrição';
+  var urg=document.getElementById('f-urg').value;
+  var data=new Date().toLocaleDateString('pt-BR');
+  chamados.push({apto:apto,cat:cat,desc:desc,urg:urg,data:data,status:'Aberto'});
+  // Enviar e-mail
+  var assunto=encodeURIComponent('[Defeito '+urg+'] '+cat+' — '+apto);
+  var corpo=encodeURIComponent('Registro de defeito\n\nLocal: '+apto+'\nCategoria: '+cat+'\nUrgência: '+urg+'\nData: '+data+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
+  window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
   document.getElementById('f-apto').value='';document.getElementById('f-desc').value='';
-  renderChamados();alert('Chamado registrado!');
+  renderChamados();alert('Chamado registrado! O e-mail foi preparado para envio.');
 }
 function renderChamados(){
   document.getElementById('cnt-ab').textContent=chamados.filter(function(c){return c.status==='Aberto'}).length;
@@ -567,7 +513,142 @@ function filtrarCat(cat,btn){
   document.getElementById('busca-prest').value='';
   document.querySelectorAll('.prest-item').forEach(function(r){r.style.display='flex';});
 }
-// ============ ADMIN ============
+// ============ ORÇAMENTOS EDITÁVEIS ============
+var orcamentos = JSON.parse(localStorage.getItem('asi_orcamentos')||'null') || [
+  {nome:'Projeto Quiosque / Área Gourmet',cat:'Quiosque',status:'warn',arquivos:['Proposta Comercial 151225-00','Relatório Orçamento Quiosque','Prestação Serviço Reforma (assinado)','Proposta Comercial 02240']},
+  {nome:'Car Wash',cat:'Car Wash',status:'warn',arquivos:['Relatório Orçamento Car Wash','Prestação Serviço Car Wash (assinado)']},
+  {nome:'Pintura Predial',cat:'Pintura',status:'gray',arquivos:['Proposta Pintura (assinado)','Proposta Comercial 02239','Proposta Técnica Abr/2026']},
+  {nome:'Facial ADM — Portaria',cat:'Portaria',status:'gray',arquivos:['Orçamento Facial Concierge','Orçamento Facial MTC']},
+  {nome:'TAG Veicular',cat:'Portaria',status:'gray',arquivos:['Orçamento TAG Veicular Concierge','Orçamento TAG Veicular MTC']},
+  {nome:'AVCB — Renovação',cat:'Documentação',status:'bad',arquivos:[]},
+  {nome:'Pintura Predial',cat:'Pintura',status:'gray',arquivos:[]},
+  {nome:'Limpeza Caixa d\'gua',cat:'Limpeza',status:'gray',arquivos:[]}
+];
+
+function salvarOrcamentos(){localStorage.setItem('asi_orcamentos',JSON.stringify(orcamentos));}
+
+function renderOrcamentos(){
+  var el=document.getElementById('orc-lista');
+  if(!el)return;
+  var statusOpts2=['warn','bad','blue','ok','gray'];
+  var statusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
+  el.innerHTML=orcamentos.map(function(o,i){
+    return '<div class="card" style="margin-bottom:8px">'+
+      '<div class="row">'+
+        '<div style="flex:1"><div style="font-weight:600">'+o.nome+'</div><div style="font-size:11px;color:var(--txt3)">'+o.cat+'</div></div>'+
+        '<select class="orc-status-sel badge '+o.status+'" onchange="orcamentos['+i+'].status=this.value;this.className=\'orc-status-sel badge \'+this.value;salvarOrcamentos()">'+
+          statusOpts2.map(function(s){return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+statusTxt[s]+'</option>';}).join('')+
+        '</select>'+
+        (adminLogado?'<button class="del-btn" onclick="orcamentos.splice('+i+',1);salvarOrcamentos();renderOrcamentos()">✕</button>':'')+
+      '</div>'+
+      (o.arquivos&&o.arquivos.length?'<div style="margin-top:8px">'+o.arquivos.map(function(a){return '<span class="tag">📄 '+a+'</span>';}).join('')+'</div>':'')+
+    '</div>';
+  }).join('')+
+  (adminLogado?'<button class="add-btn" onclick="addOrcamento()">+ Adicionar orçamento</button>':'');
+}
+
+function addOrcamento(){
+  var nome=prompt('Nome do orçamento/item:');
+  if(!nome)return;
+  var cat=prompt('Categoria (ex: Quiosque, Pintura, Portaria):') || '';
+  orcamentos.push({nome:nome,cat:cat,status:'gray',arquivos:[]});
+  salvarOrcamentos();renderOrcamentos();
+}
+
+// ============ PRESTADORES EDITÁVEIS ============
+var CATS_PREST = ['Eletricista','Jardinagem','Portaria / Cameras','Ar Condicionado','Placa Solar','FoodTruck','Smart Store','Advogado'];
+
+var prestadores = JSON.parse(localStorage.getItem('asi_prestadores')||'null') || [
+  {nome:'Jeová',cat:'Eletricista',tel:'(19) 99228-3082',ind:''},
+  {nome:'Wendel',cat:'Eletricista',tel:'(19) 98166-3208',ind:'Apto 1121 — Wilson'},
+  {nome:'Luis Fernando',cat:'Eletricista',tel:'(19) 99369-9529',ind:'Roberto Concierge'},
+  {nome:'Mauricio',cat:'Eletricista',tel:'(19) 98800-5082',ind:'Morador Gui Bedon'},
+  {nome:'Wagner',cat:'Eletricista',tel:'(19) 99824-5455',ind:'Moradora Cris 1114'},
+  {nome:'Rodrigo',cat:'Eletricista',tel:'(19) 99199-6448',ind:'Morador Victor'},
+  {nome:'Horto Plantas',cat:'Jardinagem',tel:'(19) 3819-9187',ind:''},
+  {nome:'MTC — Christian',cat:'Portaria / Cameras',tel:'(19) 98235-0001',ind:'Cunhado Edvaldo'},
+  {nome:'Rubens',cat:'FoodTruck',tel:'(19) 97821-3922',ind:''},
+  {nome:'Daniel',cat:'Ar Condicionado',tel:'(19) 97406-5063',ind:''},
+  {nome:'Everton',cat:'Placa Solar',tel:'(19) 99979-0550',ind:'Instalou as placas'},
+  {nome:'Robson',cat:'Smart Store',tel:'(11) 95741-5192',ind:''},
+  {nome:'Amanda Amaral',cat:'Advogado',tel:'(19) 3054-6196',ind:'Débitos / Garantidora'}
+];
+
+function salvarPrestadores(){localStorage.setItem('asi_prestadores',JSON.stringify(prestadores));}
+
+var adminLogado=false;
+var filtroAtualPrest='todos';
+
+function renderPrestadores(){
+  var el=document.getElementById('lista-prest-dyn');
+  if(!el)return;
+  var q=document.getElementById('busca-prest')? document.getElementById('busca-prest').value.toLowerCase():'';
+  var filtrados=prestadores.filter(function(p){
+    var matchCat=filtroAtualPrest==='todos'||p.cat===filtroAtualPrest;
+    var matchQ=(p.nome+p.cat+p.ind).toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  // Agrupar por categoria
+  var grupos={};
+  filtrados.forEach(function(p){
+    if(!grupos[p.cat]) grupos[p.cat]=[];
+    grupos[p.cat].push(p);
+  });
+  var catIcos={Eletricista:'⚡',Jardinagem:'🌿','Portaria / Cameras':'📷','Ar Condicionado':'❄️','Placa Solar':'☀️',FoodTruck:'🚚','Smart Store':'🛒',Advogado:'⚖️'};
+  var catBg={Eletricista:'#fff3e0',Jardinagem:'#e8f5e9','Portaria / Cameras':'#e3f0fb','Ar Condicionado':'#e3f0fb','Placa Solar':'#fff3e0',FoodTruck:'#fff3e0','Smart Store':'#e8f5e9',Advogado:'#fdecea'};
+  var html='';
+  Object.keys(grupos).forEach(function(cat){
+    html+='<div class="card" style="padding:0 15px;margin-bottom:8px" data-cat="'+cat+'">';
+    html+='<div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">'+cat+'</div>';
+    grupos[cat].forEach(function(p){
+      var idx=prestadores.indexOf(p);
+      var tel=p.tel.replace(/[^0-9]/g,'');
+      if(tel.length>=10) tel='55'+tel;
+      html+='<div class="file-row prest-item" data-nome="'+p.nome.toLowerCase()+'" data-cat="'+p.cat+'" data-ind="'+p.ind.toLowerCase()+'">';
+      html+='<div class="file-ico" style="background:'+catBg[cat]+'">'+catIcos[cat]+'</div>';
+      html+='<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>';
+      html+='<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>';
+      if(adminLogado) html+='<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>';
+      html+='</div>';
+    });
+    html+='</div>';
+  });
+  if(adminLogado){
+    html+='<button class="btn primary" style="width:100%;margin-top:4px" onclick="addPrestador()">+ Adicionar prestador</button>';
+  }
+  el.innerHTML=html;
+  // Atualizar métricas
+  var mc=document.getElementById('prest-total');
+  if(mc) mc.textContent=prestadores.length;
+  var mc2=document.getElementById('prest-com-ind');
+  if(mc2) mc2.textContent=prestadores.filter(function(p){return p.ind;}).length;
+}
+
+function removerPrestador(idx){
+  if(!confirm('Remover '+prestadores[idx].nome+'?')) return;
+  prestadores.splice(idx,1);
+  salvarPrestadores();renderPrestadores();
+}
+
+function addPrestador(){
+  var nome=prompt('Nome do prestador:');
+  if(!nome)return;
+  var catSel=prompt('Categoria:\n'+CATS_PREST.join('\n'));
+  if(!catSel)return;
+  var tel=prompt('Telefone:') || '';
+  var ind=prompt('Indicação (opcional):') || '';
+  prestadores.push({nome:nome,cat:catSel,tel:tel,ind:ind});
+  salvarPrestadores();renderPrestadores();
+}
+
+function filtrarCatPrest(cat,btn){
+  filtroAtualPrest=cat;
+  document.querySelectorAll('#filtros-cat button').forEach(function(b){b.style.background='';b.style.color='';b.style.borderColor='';});
+  btn.style.background='var(--azul)';btn.style.color='#fff';btn.style.borderColor='var(--azul)';
+  renderPrestadores();
+}
+
+// ============ ADMIN (atualizado com adminLogado) ============
 var ADMIN_SENHA = 'altos2026';
 
 var dadosAdmin = {
@@ -614,9 +695,12 @@ function abrirAdmin(){
 function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('on');}
 function verificarSenha(){
   if(document.getElementById('adminSenha').value===ADMIN_SENHA){
+    adminLogado=true;
     document.getElementById('adminLogin').style.display='none';
     document.getElementById('adminPainel').style.display='block';
     renderAdmin();
+    renderPrestadores();
+    renderOrcamentos();
   } else {
     document.getElementById('erroSenha').style.display='block';
   }

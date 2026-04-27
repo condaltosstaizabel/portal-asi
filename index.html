@@ -12,19 +12,17 @@
 <title>Portal Altos Santa Izabel</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--azul:#1a3a5c;--azul2:#2a5298;--ok:#2d7a3a;--warn:#b8630a;--bad:#c0392b;--bg:#f4f4ef;--card:#fff;--border:#e4e4dc;--txt:#1a1a1a;--txt2:#666;--txt3:#999}
+:root{--azul:#1a3a5c;--ok:#2d7a3a;--warn:#b8630a;--bad:#c0392b;--bg:#f4f4ef;--card:#fff;--border:#e4e4dc;--txt:#1a1a1a;--txt2:#666;--txt3:#999}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg);color:var(--txt);min-height:100vh}
-.hdr{background:var(--azul);color:#fff;padding:14px 16px 12px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px}
+.hdr{background:var(--azul);color:#fff;padding:14px 16px 12px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
 .hdr-logo{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.hdr-title{flex:1}
-.hdr-title h1{font-size:15px;font-weight:700}
-.hdr-title p{font-size:11px;opacity:.65;margin-top:1px}
-.hdr-bell{width:34px;height:34px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;position:relative}
+.hdr-title{flex:1}.hdr-title h1{font-size:15px;font-weight:700}.hdr-title p{font-size:11px;opacity:.65;margin-top:1px}
+.hdr-ico{width:34px;height:34px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;position:relative}
 .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:#e74c3c;border-radius:50%;border:2px solid var(--azul)}
 .nav-wrap{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:62px;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .nav-wrap::-webkit-scrollbar{display:none}
 .nav{display:flex;padding:0 8px;min-width:max-content}
-.nb{font-size:13px;padding:11px 14px;border:none;background:transparent;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;white-space:nowrap;transition:color .15s}
+.nb{font-size:13px;padding:11px 14px;border:none;background:transparent;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;white-space:nowrap}
 .nb.on{color:var(--azul);border-bottom-color:var(--azul)}
 .pg{display:none;padding:14px;max-width:900px;margin:0 auto;padding-bottom:80px}
 .pg.on{display:block}
@@ -35,13 +33,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .mc-val.ok{color:var(--ok)}.mc-val.warn{color:var(--warn)}.mc-val.bad{color:var(--bad)}
 .sec{font-size:10px;font-weight:700;color:var(--txt3);letter-spacing:.08em;text-transform:uppercase;margin:16px 0 8px;display:flex;align-items:center;justify-content:space-between}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:8px}
-.card.clickable{cursor:pointer;transition:transform .1s}
-.card.clickable:active{transform:scale(.98)}
+.card.clickable{cursor:pointer}.card.clickable:active{transform:scale(.98)}
 .row{display:flex;align-items:center;gap:10px}
 .badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600;flex-shrink:0}
 .badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
-.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}
-.badge.gray{background:#f0efe8;color:#555}
+.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}
 .pl{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-bottom:3px}
 .bw{height:7px;background:#f0efe8;border-radius:99px;overflow:hidden}
 .br{height:100%;border-radius:99px}
@@ -51,7 +47,7 @@ th{text-align:left;padding:8px 10px;background:#f8f8f4;font-weight:600;color:#55
 td{padding:8px 10px;border-bottom:1px solid #f4f4ef;color:#333;vertical-align:top}
 tr:last-child td{border-bottom:none}
 .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
-.gcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .1s}
+.gcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .gcard:active{background:#f4f4ef}
 .gico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .alert{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;border:1px solid;display:flex;gap:10px;align-items:flex-start}
@@ -63,14 +59,7 @@ tr:last-child td{border-bottom:none}
 .fi{width:100%;padding:9px 11px;border:1px solid #ddd;border-radius:9px;font-size:13px;font-family:inherit;background:#fafafa;margin-bottom:11px}
 textarea.fi{height:75px;resize:vertical}
 .btn{padding:10px 18px;border-radius:9px;border:none;font-size:13px;cursor:pointer;font-weight:600}
-.btn:active{opacity:.8}
-.btn.primary{background:var(--azul);color:#fff}
-.btn.success{background:#25D366;color:#fff}
-.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200}
-.bnav-items{display:flex;justify-content:space-around}
-.bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;border:none;background:transparent;color:var(--txt3);font-size:10px;font-weight:500;min-width:56px}
-.bni.on{color:var(--azul)}
-.bni-ico{font-size:20px}
+.btn.primary{background:var(--azul);color:#fff}.btn.success{background:#25D366;color:#fff}
 .tag{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--border);color:var(--txt2);display:inline-block;margin:2px 2px 0 0}
 .file-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4ef}
 .file-row:last-child{border-bottom:none}
@@ -79,28 +68,31 @@ textarea.fi{height:75px;resize:vertical}
 .chamado:last-child{border-bottom:none}
 .sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
 .drive-btn{display:flex;align-items:center;gap:10px;background:#e3f0fb;border:1px solid #bbdefb;border-radius:10px;padding:11px 14px;margin-bottom:14px;text-decoration:none}
+/* ADMIN */
 .admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
 .admin-overlay.on{display:flex}
 .admin-box{background:var(--card);border-radius:16px;padding:24px;width:92%;max-width:560px;max-height:90vh;overflow-y:auto}
 .admin-box h2{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--azul)}
-.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto}
+.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.admin-tabs::-webkit-scrollbar{display:none}
 .at{font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;white-space:nowrap}
 .at.on{background:var(--azul);color:#fff;border-color:var(--azul)}
 .admin-sec{display:none}.admin-sec.on{display:block}
-.item-edit{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f4f4ef}
+.item-edit{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
 .item-edit:last-child{border-bottom:none}
 .item-edit input,.item-edit select{font-size:12px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit;background:#fafafa}
-.item-edit .ie-txt{flex:1}
-.item-edit .ie-sub{width:140px}
-.item-edit .ie-sel{width:100px}
+.ie-txt{flex:1;min-width:120px}.ie-sub{width:130px}.ie-sel{width:100px}
 .del-btn{width:28px;height:28px;border-radius:7px;border:none;background:#fdecea;color:#c0392b;cursor:pointer;font-size:14px;flex-shrink:0}
 .add-btn{width:100%;padding:8px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--azul);cursor:pointer;font-size:13px;margin-top:8px}
 .save-btn{width:100%;padding:11px;border-radius:9px;background:var(--azul);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
 .close-btn{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--txt3);margin-top:-4px}
-.orc-status-sel{font-size:11px;padding:3px 6px;border:1px solid #ddd;border-radius:6px;font-family:inherit;background:#fafafa;cursor:pointer}
-.prest-edit-row{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
-.prest-edit-row:last-child{border-bottom:none}
-.prest-edit-row input,.prest-edit-row select{font-size:12px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit;background:#fafafa}
+.orc-status-sel{font-size:11px;padding:3px 6px;border:1px solid #ddd;border-radius:6px;font-family:inherit;cursor:pointer}
+/* BOTTOM NAV */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200}
+.bnav-items{display:flex;justify-content:space-around}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;border:none;background:transparent;color:var(--txt3);font-size:10px;font-weight:500;min-width:56px}
+.bni.on{color:var(--azul)}.bni-ico{font-size:20px}
+@media(max-width:600px){
   .bnav{display:block}
   .pg{padding:12px 12px 90px}
   .metrics{grid-template-columns:1fr 1fr}
@@ -110,27 +102,28 @@ textarea.fi{height:75px;resize:vertical}
 </style>
 </head>
 <body>
+
 <div class="hdr">
   <div class="hdr-logo">🏢</div>
   <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p>Condomínio Altos Santa Izabel</p></div>
-  <div class="hdr-bell" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
-  <div style="width:34px;height:34px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0" onclick="abrirAdmin()">⚙️</div>
-</div>
-<div class="nav-wrap">
-  <div class="nav">
-    <button class="nb on" onclick="nav('inicio')">Início</button>
-    <button class="nb" onclick="nav('projetos')">Projetos</button>
-    <button class="nb" onclick="nav('orcamentos')">Orçamentos</button>
-    <button class="nb" onclick="nav('contratos')">Contratos</button>
-    <button class="nb" onclick="nav('churrasqueira')">Churrasqueira</button>
-    <button class="nb" onclick="nav('financeiro')">Financeiro</button>
-    <button class="nb" onclick="nav('documentos')">Documentos</button>
-    <button class="nb" onclick="nav('prestadores')">Prestadores</button>
-    <button class="nb" onclick="nav('assembleias')">Assembleias</button>
-    <button class="nb" onclick="nav('defeitos')">Defeitos</button>
-  </div>
+  <div class="hdr-ico" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
+  <div class="hdr-ico" onclick="abrirAdmin()">⚙️</div>
 </div>
 
+<div class="nav-wrap"><div class="nav">
+  <button class="nb on" onclick="nav('inicio')">Início</button>
+  <button class="nb" onclick="nav('projetos')">Projetos</button>
+  <button class="nb" onclick="nav('orcamentos')">Orçamentos</button>
+  <button class="nb" onclick="nav('contratos')">Contratos</button>
+  <button class="nb" onclick="nav('churrasqueira')">Churrasqueira</button>
+  <button class="nb" onclick="nav('financeiro')">Financeiro</button>
+  <button class="nb" onclick="nav('documentos')">Documentos</button>
+  <button class="nb" onclick="nav('prestadores')">Prestadores</button>
+  <button class="nb" onclick="nav('assembleias')">Assembleias</button>
+  <button class="nb" onclick="nav('defeitos')">Defeitos</button>
+</div></div>
+
+<!-- INÍCIO -->
 <div id="pg-inicio" class="pg on">
   <div class="alert bad"><span>🚨</span><div><strong>AVCB vencido</strong> — Renovar com urgência (venceu Mar/2026).</div></div>
   <div class="metrics">
@@ -162,36 +155,22 @@ textarea.fi{height:75px;resize:vertical}
   </div>
 </div>
 
+<!-- PROJETOS -->
 <div id="pg-projetos" class="pg">
   <input class="fi" id="busca-proj" placeholder="🔍  Buscar projeto ou tarefa..." oninput="renderTarefas()" style="margin-bottom:12px">
   <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Total ações</div><div class="mc-val">26</div></div>
-    <div class="mc"><div class="mc-lbl">Concluídas</div><div class="mc-val ok">6</div></div>
-    <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val warn">20</div></div>
+    <div class="mc"><div class="mc-lbl">Total ações</div><div class="mc-val" id="proj-total">0</div></div>
+    <div class="mc"><div class="mc-lbl">Concluídas</div><div class="mc-val ok" id="proj-conc">0</div></div>
+    <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val warn" id="proj-pend">0</div></div>
     <div class="mc"><div class="mc-lbl">Valor est.</div><div class="mc-val">R$ 154k</div></div>
   </div>
   <div class="sec">Projetos maiores 2026</div>
   <div id="lista-projetos-admin"></div>
   <div class="sec">Todas as ações / tarefas</div>
-  <div id="proj-lista"><div class="card" style="padding:0 15px">
-    <div class="file-row" data-search="regra bloqueio facial controle"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Regra de bloqueio facial / controle</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Andamento</span></div>
-    <div class="file-row" data-search="ajustar cargo marcos"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Ajustar cargo Marcos</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio</div></div><span class="badge gray">Andamento</span></div>
-    <div class="file-row" data-search="revisar tarefas zeladoria"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar tarefas Zeladoria</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Médio</div></div><span class="badge warn">Parcial</span></div>
-    <div class="file-row" data-search="revisar câmeras"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar câmeras</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
-    <div class="file-row" data-search="liberar acesso câmeras conselho"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Liberar acesso câmeras — conselho</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge ok">Concluído</span></div>
-    <div class="file-row" data-search="avaliar árvores quadra"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Avaliar árvores da Quadra</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
-    <div class="file-row" data-search="alterar abertura portão"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Alterar abertura do portão</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Fácil</div></div><span class="badge ok">Concluído</span></div>
-    <div class="file-row" data-search="comprar bebedouro quadra"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Comprar bebedouro da Quadra</div><div style="font-size:11px;color:var(--txt3)">Fev/2025 · Médio</div></div><span class="badge gray">Pendente</span></div>
-    <div class="file-row" data-search="avaliar infiltração robson edvaldo"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Avaliar infiltrações — Ap Robson e Edvaldo</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
-    <div class="file-row" data-search="revisar contrato garbens concierge jardinagem elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Revisar contratos: Garbens, Concierge, Jardinagem, Elevador</div><div style="font-size:11px;color:var(--txt3)">Jan–Mar/2025</div></div><span class="badge warn">Andamento</span></div>
-    <div class="file-row" data-search="orçamento pintura portaria quiosque espelho elevador"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Orçamentos: Pintura, Portaria, Quiosque, Espelho Elevador T2</div><div style="font-size:11px;color:var(--txt3)">Fev–Jul/2025</div></div><span class="badge warn">Andamento</span></div>
-    <div class="file-row" data-search="troca led coberturas"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Troca de LED nas coberturas</div><div style="font-size:11px;color:var(--txt3)">Resolvido</div></div><span class="badge ok">Concluído</span></div>
-    <div class="file-row" data-search="vistoria noturna condomínio"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Vistoria noturna no condomínio</div><div style="font-size:11px;color:var(--txt3)">Jan/2025 · Fácil</div></div><span class="badge gray">Pendente</span></div>
-    <div class="file-row" data-search="reenvio regras moradores disponibilizar"><div class="file-ico" style="background:#fff3e0">📌</div><div style="flex:1"><div style="font-weight:500">Disponibilizar regras do condômino aos moradores</div><div style="font-size:11px;color:var(--txt3)">Enviado parcialmente</div></div><span class="badge warn">Parcial</span></div>
-    <div class="file-row" data-search="acesso email condomínio priscila"><div class="file-ico" style="background:#e8f5e9">✅</div><div style="flex:1"><div style="font-weight:500">Acesso ao e-mail do condomínio</div><div style="font-size:11px;color:var(--txt3)">Priscila acompanhando</div></div><span class="badge ok">Concluído</span></div>
-  </div></div>
+  <div id="proj-lista"></div>
 </div>
 
+<!-- ORÇAMENTOS -->
 <div id="pg-orcamentos" class="pg">
   <div class="alert blue"><span>📁</span><div>Orçamentos organizados por categoria. Clique em "Abrir no Drive" para visualizar os arquivos originais.</div></div>
   <a class="drive-btn" href="https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Orçamentos no Drive</div><div style="font-size:11px;color:#1976d2">Ver todos os arquivos e propostas</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
@@ -207,23 +186,24 @@ textarea.fi{height:75px;resize:vertical}
   </div>
   <div class="sec">Anteriores</div>
   <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta CRM V1 e V2 (2022)</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">AVCB — Orçamento 043/2020</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Reforma Playground (2020)</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta CRM V1 e V2 (2022)</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">AVCB — Orçamento 043/2020</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Reforma Playground (2020)</div></div></div>
   </div>
 </div>
 
+<!-- CONTRATOS -->
 <div id="pg-contratos" class="pg">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Vigentes</div><div class="mc-val ok">3</div></div>
     <div class="mc"><div class="mc-lbl">A revisar</div><div class="mc-val warn">1</div></div>
     <div class="mc"><div class="mc-lbl">Docs vencidos</div><div class="mc-val bad">1</div></div>
   </div>
-  <a class="drive-btn" href="https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Contratos no Drive</div><div style="font-size:11px;color:#1976d2">Ver e baixar todos os contratos</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
+  <a class="drive-btn" href="https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Contratos no Drive</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Contratos ativos</div>
-  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div><div style="margin-top:4px"><span class="tag">PDF assinado disponível</span></div></div>
-  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo · Pasta Contratos</div></div><span class="badge warn">Revisar</span></div><div style="margin-top:4px"><span class="tag">Marcar agenda com Roberto</span></div></div>
-  <div class="card"><div class="row" style="margin-bottom:10px"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Jardinagem</div><div style="font-size:12px;color:var(--txt3)">PDF assinado + DOCX · Pasta Contratos</div></div><span class="badge ok">Vigente</span></div></div>
+  <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX</div></div><span class="badge ok">Vigente</span></div></div>
+  <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo</div></div><span class="badge warn">Revisar</span></div></div>
+  <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Jardinagem</div><div style="font-size:12px;color:var(--txt3)">PDF assinado + DOCX</div></div><span class="badge ok">Vigente</span></div></div>
   <div class="sec">Prazos e vencimentos</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Documento</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
@@ -231,6 +211,7 @@ textarea.fi{height:75px;resize:vertical}
   </table></div></div>
 </div>
 
+<!-- CHURRASQUEIRA -->
 <div id="pg-churrasqueira" class="pg">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Total locações</div><div class="mc-val" id="churr-total-loc">47</div></div>
@@ -249,76 +230,75 @@ textarea.fi{height:75px;resize:vertical}
       <button class="btn success" onclick="reservaWA()">Solicitar pelo WhatsApp</button>
     </div>
   </div>
-  <div class="sec">Histórico de uso 2025</div>
+  <div class="sec">Histórico de uso</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead>
-    <tbody>
-      <tr><td>Janeiro</td><td>1</td><td>R$ 30</td></tr><tr><td>Fevereiro</td><td>7</td><td>R$ 210</td></tr>
-      <tr><td>Março</td><td>1</td><td>R$ 30</td></tr><tr><td>Abril</td><td>3</td><td>R$ 90</td></tr>
-      <tr><td>Maio</td><td>1</td><td>R$ 30</td></tr><tr><td>Junho</td><td>7</td><td>R$ 210</td></tr>
-      <tr><td>Julho</td><td>5</td><td>R$ 150</td></tr><tr><td>Agosto</td><td>5</td><td>R$ 150</td></tr>
-      <tr><td>Setembro</td><td>3</td><td>R$ 90</td></tr><tr><td>Outubro</td><td>6</td><td>R$ 180</td></tr>
-      <tr><td>Novembro</td><td>3</td><td>R$ 90</td></tr><tr><td>Dezembro</td><td>5</td><td>R$ 150</td></tr>
-      <tr style="font-weight:700"><td>Total 2025</td><td>47</td><td>R$ 1.470</td></tr>
+    <tbody id="churr-tbody">
+      <tr><td>Jan/25</td><td>1</td><td>R$ 30,00</td></tr>
+      <tr><td>Fev/25</td><td>7</td><td>R$ 210,00</td></tr>
+      <tr><td>Mar/25</td><td>1</td><td>R$ 30,00</td></tr>
+      <tr><td>Abr/25</td><td>3</td><td>R$ 90,00</td></tr>
+      <tr><td>Mai/25</td><td>1</td><td>R$ 30,00</td></tr>
+      <tr><td>Jun/25</td><td>7</td><td>R$ 210,00</td></tr>
+      <tr><td>Jul/25</td><td>5</td><td>R$ 150,00</td></tr>
+      <tr><td>Ago/25</td><td>5</td><td>R$ 150,00</td></tr>
+      <tr><td>Set/25</td><td>3</td><td>R$ 90,00</td></tr>
+      <tr><td>Out/25</td><td>6</td><td>R$ 180,00</td></tr>
+      <tr><td>Nov/25</td><td>3</td><td>R$ 90,00</td></tr>
+      <tr><td>Dez/25</td><td>5</td><td>R$ 150,00</td></tr>
+      <tr style="font-weight:700"><td>Total</td><td>47</td><td>R$ 1.470,00</td></tr>
     </tbody>
   </table></div></div>
   <div class="sec">Reservas desta sessão</div>
   <div class="card" id="lista-reservas"><div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div></div>
 </div>
 
+<!-- FINANCEIRO -->
 <div id="pg-financeiro" class="pg">
-  <div class="alert blue"><span>📊</span><div>Painel financeiro completo com gráficos e análise por item. Abre em página dedicada.</div></div>
+  <div class="alert blue"><span>📊</span><div>Painel financeiro completo com leitor de PDF. Abre em página dedicada.</div></div>
   <a href="financeiro.html" style="display:flex;align-items:center;gap:12px;background:var(--azul);color:#fff;border-radius:12px;padding:16px;text-decoration:none;margin-bottom:12px">
     <span style="font-size:28px">📊</span>
-    <div style="flex:1">
-      <div style="font-weight:700;font-size:15px">Abrir Painel Financeiro</div>
-      <div style="font-size:12px;opacity:.75;margin-top:2px">Gráficos, saldo mensal, maiores ofensores, análise por item</div>
-    </div>
+    <div style="flex:1"><div style="font-weight:700;font-size:15px">Abrir Painel Financeiro</div><div style="font-size:12px;opacity:.75;margin-top:2px">Carregar PDFs, gráficos, análise por categoria e item</div></div>
     <span style="font-size:18px">→</span>
   </a>
-  <div class="sec">O que você encontra no painel</div>
   <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📈</div><div style="flex:1"><div style="font-weight:500">Saldo, receitas e despesas mensais</div><div style="font-size:11px;color:var(--txt3)">Gráfico de barras Jul/2025 a Mar/2026</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">🗂</div><div style="flex:1"><div style="font-weight:500">Despesas por categoria</div><div style="font-size:11px;color:var(--txt3)">Terceiros, tarifas, manutenção, admin...</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#f0eeff">🔍</div><div style="flex:1"><div style="font-weight:500">Análise detalhada por item</div><div style="font-size:11px;color:var(--txt3)">Clique em qualquer item para ver valor por mês</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">🏆</div><div style="flex:1"><div style="font-weight:500">Top 10 maiores ofensores</div><div style="font-size:11px;color:var(--txt3)">Ranking de despesas do período</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por mês</div><div style="font-size:11px;color:var(--txt3)">Histórico de locações</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📤</div><div style="flex:1"><div style="font-weight:500">Carregue o PDF do demonstrativo</div><div style="font-size:11px;color:var(--txt3)">Direto no painel financeiro — atualiza tudo automaticamente</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📈</div><div style="flex:1"><div style="font-weight:500">Saldo, receitas e despesas por mês</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#f0eeff">🔍</div><div style="flex:1"><div style="font-weight:500">Análise detalhada por item — clique para ver por mês</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">🏆</div><div style="flex:1"><div style="font-weight:500">Top 10 maiores ofensores</div></div></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por mês</div></div></div>
   </div>
-  <div class="alert warn" style="margin-top:12px"><span>📂</span><div>Período atual: <strong>Jul/2025 a Mar/2026</strong>. Envie demonstrativos de outros anos para ampliar o histórico.</div></div>
 </div>
 
+<!-- DOCUMENTOS -->
 <div id="pg-documentos" class="pg">
   <div class="alert bad"><span>🚨</span><div>AVCB vencido em Mar/2026 — renovar urgentemente.</div></div>
   <a class="drive-btn" href="https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir Documentos Importantes no Drive</div><div style="font-size:11px;color:#1976d2">Convenção, regimento, CNPJ, vagas...</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Documentos obrigatórios</div>
   <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:600">AVCB — Auto de Vistoria Bombeiros</div><div style="font-size:11px;color:var(--txt3)">Emitido Mar/2021 · Válido até Mar/2026</div></div><span class="badge bad">Vencido</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:600">AVCB</div><div style="font-size:11px;color:var(--txt3)">Emitido Mar/2021 · Válido até Mar/2026</div></div><span class="badge bad">Vencido</span></div>
     <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:600">Seguro do Condomínio</div><div style="font-size:11px;color:var(--txt3)">Validade não verificada</div></div><span class="badge warn">Verificar</span></div>
-  </div>
-  <div class="sec">Documentos importantes</div>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:500">Controle de Vagas — Torre 1</div><div style="font-size:11px;color:var(--txt3)">PDF</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div></div><span class="badge ok">✓</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div></div><span class="badge ok">✓</span></div>
   </div>
   <div class="sec">Plantas e projetos técnicos</div>
   <a class="drive-btn" href="https://drive.google.com/drive/folders/1u1Z2CBCPdJ5JZxlZxSgqrc3Qd8ihhU2k" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir Plantas Condomínio no Drive</div><div style="font-size:11px;color:#1976d2">Hidráulica (11 folhas), Elétrica (22 folhas), Arquitetura</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
 </div>
 
+<!-- PRESTADORES -->
 <div id="pg-prestadores" class="pg">
   <input class="fi" id="busca-prest" placeholder="🔍  Buscar por nome, atividade ou indicação..." oninput="renderPrestadores()" style="margin-bottom:12px">
   <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Total prestadores</div><div class="mc-val" id="prest-total">13</div></div>
+    <div class="mc"><div class="mc-lbl">Total</div><div class="mc-val" id="prest-total">13</div></div>
     <div class="mc"><div class="mc-lbl">Categorias</div><div class="mc-val">8</div></div>
     <div class="mc"><div class="mc-lbl">Com indicação</div><div class="mc-val ok" id="prest-com-ind">8</div></div>
   </div>
-  <div class="sec">Filtrar por categoria</div>
   <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="filtros-cat">
     <button class="tag" style="cursor:pointer;background:var(--azul);color:#fff;border-color:var(--azul)" onclick="filtrarCatPrest('todos',this)">Todos</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Eletricista',this)">Eletricista</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Jardinagem',this)">Jardinagem</button>
-    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Portaria / Cameras',this)">Portaria / Câmeras</button>
+    <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Portaria / Cameras',this)">Portaria</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Ar Condicionado',this)">Ar Condicionado</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('Placa Solar',this)">Placa Solar</button>
     <button class="tag" style="cursor:pointer" onclick="filtrarCatPrest('FoodTruck',this)">Food Truck</button>
@@ -328,6 +308,7 @@ textarea.fi{height:75px;resize:vertical}
   <div id="lista-prest-dyn"></div>
 </div>
 
+<!-- ASSEMBLEIAS -->
 <div id="pg-assembleias" class="pg">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Atas registradas</div><div class="mc-val ok">9</div></div>
@@ -346,10 +327,11 @@ textarea.fi{height:75px;resize:vertical}
     <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">AGO — Eleição (por e-mail)</div><div style="font-size:11px;color:var(--txt3)">Ago/2020</div></div><span class="badge blue">PDF</span></div>
     <div class="file-row"><div class="file-ico" style="background:#f0efe8">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia Abril 2019</div><div style="font-size:11px;color:var(--txt3)">Abr/2019</div></div><span class="badge gray">PPTX</span></div>
     <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Retificação AGI 27/10/2018</div><div style="font-size:11px;color:var(--txt3)">Out/2018</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div><div style="font-size:11px;color:var(--txt3)">PDF registrado</div></div><span class="badge ok">Registrada</span></div>
+    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div></div><span class="badge ok">Registrada</span></div>
   </div>
 </div>
 
+<!-- DEFEITOS -->
 <div id="pg-defeitos" class="pg">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Abertos</div><div class="mc-val bad" id="cnt-ab">0</div></div>
@@ -391,90 +373,86 @@ textarea.fi{height:75px;resize:vertical}
         <button class="at on" onclick="adminTab('alertas',this)">🔴 Alertas</button>
         <button class="at" onclick="adminTab('realizacoes',this)">✅ Realizações</button>
         <button class="at" onclick="adminTab('projetos',this)">🔨 Projetos</button>
+        <button class="at" onclick="adminTab('tarefas',this)">📌 Tarefas</button>
         <button class="at" onclick="adminTab('contratos',this)">📋 Contratos</button>
         <button class="at" onclick="adminTab('prestadores',this)">👤 Prestadores</button>
-        <button class="at" onclick="adminTab('tarefas',this)">📌 Tarefas</button>
+        <button class="at" onclick="adminTab('orcamentos',this)">💰 Orçamentos</button>
       </div>
       <div class="admin-sec on" id="asec-alertas">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite, adicione ou remova alertas da tela inicial.</div>
         <div id="edit-alertas"></div>
         <button class="add-btn" onclick="addAlerta()">+ Adicionar alerta</button>
         <button class="save-btn" onclick="salvarAlertas()">💾 Salvar alertas</button>
       </div>
       <div class="admin-sec" id="asec-realizacoes">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite o histórico de realizações recentes.</div>
         <div id="edit-realizacoes"></div>
         <button class="add-btn" onclick="addRealizacao()">+ Adicionar realização</button>
         <button class="save-btn" onclick="salvarRealizacoes()">💾 Salvar realizações</button>
       </div>
       <div class="admin-sec" id="asec-projetos">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite os projetos e seus status.</div>
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Projetos principais com barra de progresso.</div>
         <div id="edit-projetos"></div>
         <button class="add-btn" onclick="addProjeto()">+ Adicionar projeto</button>
         <button class="save-btn" onclick="salvarProjetos()">💾 Salvar projetos</button>
       </div>
+      <div class="admin-sec" id="asec-tarefas">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Lista de tarefas e ações da aba Projetos.</div>
+        <div id="edit-tarefas"></div>
+        <button class="add-btn" onclick="addTarefa()">+ Adicionar tarefa</button>
+        <button class="save-btn" onclick="salvarTarefas()">💾 Salvar tarefas</button>
+      </div>
       <div class="admin-sec" id="asec-contratos">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite prazos e status dos contratos.</div>
         <div id="edit-contratos"></div>
         <button class="add-btn" onclick="addContrato()">+ Adicionar contrato</button>
         <button class="save-btn" onclick="salvarContratos()">💾 Salvar contratos</button>
       </div>
       <div class="admin-sec" id="asec-prestadores">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Adicione ou remova prestadores. Para editar, use os botões na aba Prestadores.</div>
         <div id="edit-prestadores"></div>
         <button class="add-btn" onclick="addPrestador()">+ Adicionar prestador</button>
-        <button class="save-btn" onclick="salvarPrestadores();renderPrestadores();alert('Prestadores salvos!')">💾 Salvar prestadores</button>
+        <button class="save-btn" onclick="salvarPrestadores();renderPrestadores();alert('✅ Prestadores salvos!')">💾 Salvar prestadores</button>
       </div>
-      <div class="admin-sec" id="asec-tarefas">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">Edite as tarefas e ações listadas na aba Projetos.</div>
-        <div id="edit-tarefas"></div>
-        <button class="add-btn" onclick="addTarefa()">+ Adicionar tarefa</button>
-        <button class="save-btn" onclick="salvarTarefas()">💾 Salvar tarefas</button>
+      <div class="admin-sec" id="asec-orcamentos">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Adicione ou remova orçamentos. Status pode ser alterado diretamente na aba.</div>
+        <div id="edit-orcamentos"></div>
+        <button class="add-btn" onclick="addOrcamentoAdmin()">+ Adicionar orçamento</button>
+        <button class="save-btn" onclick="salvarOrcamentos();renderOrcamentos();alert('✅ Orçamentos salvos!')">💾 Salvar orçamentos</button>
       </div>
       <button onclick="fecharAdmin()" style="width:100%;padding:10px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer;font-size:13px;margin-top:8px">Fechar</button>
     </div>
   </div>
 </div>
 
-<div class="bnav">
-  <div class="bnav-items">
-    <button class="bni on" onclick="nav('inicio')"><span class="bni-ico">🏠</span>Início</button>
-    <button class="bni" onclick="nav('projetos')"><span class="bni-ico">🔨</span>Projetos</button>
-    <button class="bni" onclick="nav('contratos')"><span class="bni-ico">📋</span>Contratos</button>
-    <button class="bni" onclick="nav('churrasqueira')"><span class="bni-ico">🍖</span>Reservas</button>
-    <button class="bni" onclick="nav('defeitos')"><span class="bni-ico">🔧</span>Defeitos</button>
-  </div>
-</div>
+<div class="bnav"><div class="bnav-items">
+  <button class="bni on" onclick="nav('inicio')"><span class="bni-ico">🏠</span>Início</button>
+  <button class="bni" onclick="nav('projetos')"><span class="bni-ico">🔨</span>Projetos</button>
+  <button class="bni" onclick="nav('contratos')"><span class="bni-ico">📋</span>Contratos</button>
+  <button class="bni" onclick="nav('churrasqueira')"><span class="bni-ico">🍖</span>Reservas</button>
+  <button class="bni" onclick="nav('defeitos')"><span class="bni-ico">🔧</span>Defeitos</button>
+</div></div>
 
 <script>
-var WA_NUMBER='SUBSTITUIR_NUMERO';
+var WA='SUBSTITUIR_NUMERO';
 var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos'];
 var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
+var adminLogado=false;
 
 function nav(id){
-  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});
-  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on')});
-  document.querySelectorAll('.bni').forEach(function(b){b.classList.remove('on')});
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
+  document.querySelectorAll('.bni').forEach(function(b){b.classList.remove('on');});
   document.getElementById('pg-'+id).classList.add('on');
-  var idx=NAV_IDS.indexOf(id);
-  if(idx>=0) document.querySelectorAll('.nb')[idx].classList.add('on');
-  var bidx=BNAV_IDS.indexOf(id);
-  if(bidx>=0) document.querySelectorAll('.bni')[bidx].classList.add('on');
+  var i=NAV_IDS.indexOf(id); if(i>=0) document.querySelectorAll('.nb')[i].classList.add('on');
+  var j=BNAV_IDS.indexOf(id); if(j>=0) document.querySelectorAll('.bni')[j].classList.add('on');
   window.scrollTo(0,0);
 }
-function filtrarLista(listId,inputId){
-  var q=document.getElementById(inputId).value.toLowerCase();
-  document.querySelectorAll('#'+listId+' .file-row').forEach(function(r){
-    r.style.display=(r.dataset.search||r.innerText).toLowerCase().includes(q)?'flex':'none';
-  });
-}
-function chamarWA(){window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'));}
+
+function chamarWA(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'));}
+
+// ===== RESERVAS =====
 var reservas=[];
 function fazerReserva(){
-  var apto=document.getElementById('res-apto').value.trim();
-  var data=document.getElementById('res-data').value;
-  if(!apto||!data){alert('Preencha apartamento e data');return;}
-  reservas.push({apto:apto,data:data,hora:document.getElementById('res-hora').value,pess:document.getElementById('res-pessoas').value});
+  var a=document.getElementById('res-apto').value.trim(), d=document.getElementById('res-data').value;
+  if(!a||!d){alert('Preencha apartamento e data');return;}
+  reservas.push({apto:a,data:d,hora:document.getElementById('res-hora').value,pess:document.getElementById('res-pessoas').value});
   document.getElementById('res-apto').value='';document.getElementById('res-data').value='';document.getElementById('res-pessoas').value='';
   renderReservas();alert('Reserva registrada!');
 }
@@ -485,94 +463,83 @@ function renderReservas(){
 }
 function reservaWA(){
   var msg='*Reserva Churrasqueira — Altos de Santa Izabel*\n\nApartamento: '+(document.getElementById('res-apto').value||'(não informado)')+'\nData: '+(document.getElementById('res-data').value||'(não informada)')+'\nHorário: '+document.getElementById('res-hora').value;
-  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
+  window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(msg));
 }
+
+// ===== DEFEITOS =====
 var chamados=[];
 function registrar(){
   var apto=document.getElementById('f-apto').value.trim();
   if(!apto){alert('Informe o apartamento ou local');return;}
-  var cat=document.getElementById('f-cat').value;
-  var desc=document.getElementById('f-desc').value.trim()||'Sem descrição';
-  var urg=document.getElementById('f-urg').value;
-  var data=new Date().toLocaleDateString('pt-BR');
+  var cat=document.getElementById('f-cat').value, desc=document.getElementById('f-desc').value.trim()||'Sem descrição';
+  var urg=document.getElementById('f-urg').value, data=new Date().toLocaleDateString('pt-BR');
   chamados.push({apto:apto,cat:cat,desc:desc,urg:urg,data:data,status:'Aberto'});
-  // Enviar e-mail
   var assunto=encodeURIComponent('[Defeito '+urg+'] '+cat+' — '+apto);
   var corpo=encodeURIComponent('Registro de defeito\n\nLocal: '+apto+'\nCategoria: '+cat+'\nUrgência: '+urg+'\nData: '+data+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
   window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
   document.getElementById('f-apto').value='';document.getElementById('f-desc').value='';
-  renderChamados();alert('Chamado registrado! O e-mail foi preparado para envio.');
+  renderChamados();alert('Chamado registrado! E-mail preparado para envio.');
 }
 function renderChamados(){
-  document.getElementById('cnt-ab').textContent=chamados.filter(function(c){return c.status==='Aberto'}).length;
-  document.getElementById('cnt-an').textContent=chamados.filter(function(c){return c.status==='Em análise'}).length;
-  document.getElementById('cnt-re').textContent=chamados.filter(function(c){return c.status==='Resolvido'}).length;
-  var lista=document.getElementById('lista-chamados');
-  if(!chamados.length){lista.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div>';return;}
-  lista.innerHTML=chamados.slice().reverse().map(function(c){var cor=c.status==='Aberto'?'#c0392b':c.status==='Em análise'?'#b8630a':'#2d7a3a';var bg=c.status==='Aberto'?'bad':c.status==='Em análise'?'warn':'ok';return '<div class="chamado"><div class="sdot" style="background:'+cor+'"></div><div style="flex:1"><div style="font-weight:600">'+c.cat+' — '+c.apto+'</div><div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+' · '+c.data+'</div></div><span class="badge '+bg+'">'+c.status+'</span></div>';}).join('');
+  document.getElementById('cnt-ab').textContent=chamados.filter(function(c){return c.status==='Aberto';}).length;
+  document.getElementById('cnt-an').textContent=chamados.filter(function(c){return c.status==='Em análise';}).length;
+  document.getElementById('cnt-re').textContent=chamados.filter(function(c){return c.status==='Resolvido';}).length;
+  var el=document.getElementById('lista-chamados');
+  if(!chamados.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div>';return;}
+  el.innerHTML=chamados.slice().reverse().map(function(c){
+    var cor=c.status==='Aberto'?'#c0392b':c.status==='Em análise'?'#b8630a':'#2d7a3a';
+    var bg=c.status==='Aberto'?'bad':c.status==='Em análise'?'warn':'ok';
+    return '<div class="chamado"><div class="sdot" style="background:'+cor+'"></div><div style="flex:1"><div style="font-weight:600">'+c.cat+' — '+c.apto+'</div><div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+' · '+c.data+'</div></div><span class="badge '+bg+'">'+c.status+'</span></div>';
+  }).join('');
 }
 function abrirWA(){
   var msg='*Defeito — Altos de Santa Izabel*\n\nLocal: '+(document.getElementById('f-apto').value||'(não informado)')+'\nCategoria: '+document.getElementById('f-cat').value+'\nUrgência: '+document.getElementById('f-urg').value+'\nDescrição: '+(document.getElementById('f-desc').value||'(sem descrição)');
-  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg));
+  window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(msg));
 }
-function filtrarPrest(){
-  var q=document.getElementById('busca-prest').value.toLowerCase();
-  document.querySelectorAll('.prest-item').forEach(function(r){var txt=(r.dataset.nome+' '+r.dataset.cat+' '+r.dataset.ind).toLowerCase();r.style.display=txt.includes(q)?'flex':'none';});
-  document.querySelectorAll('#lista-prest .card').forEach(function(c){var vis=Array.from(c.querySelectorAll('.prest-item')).some(function(r){return r.style.display!=='none'});c.style.display=vis?'':'none';});
-}
-function filtrarCat(cat,btn){
-  document.querySelectorAll('#filtros-cat button').forEach(function(b){b.style.background='';b.style.color='';b.style.borderColor='';});
-  btn.style.background='var(--azul)';btn.style.color='#fff';btn.style.borderColor='var(--azul)';
-  document.querySelectorAll('#lista-prest .card').forEach(function(c){c.style.display=(cat==='todos'||c.dataset.cat===cat)?'':'none';});
-  document.getElementById('busca-prest').value='';
-  document.querySelectorAll('.prest-item').forEach(function(r){r.style.display='flex';});
-}
-// ============ ORÇAMENTOS EDITÁVEIS ============
-var orcamentos = JSON.parse(localStorage.getItem('asi_orcamentos')||'null') || [
+
+// ===== ORÇAMENTOS =====
+var orcamentos=JSON.parse(localStorage.getItem('asi_orcamentos')||'null')||[
   {nome:'Projeto Quiosque / Área Gourmet',cat:'Quiosque',status:'warn',arquivos:['Proposta Comercial 151225-00','Relatório Orçamento Quiosque','Prestação Serviço Reforma (assinado)','Proposta Comercial 02240']},
   {nome:'Car Wash',cat:'Car Wash',status:'warn',arquivos:['Relatório Orçamento Car Wash','Prestação Serviço Car Wash (assinado)']},
   {nome:'Pintura Predial',cat:'Pintura',status:'gray',arquivos:['Proposta Pintura (assinado)','Proposta Comercial 02239','Proposta Técnica Abr/2026']},
   {nome:'Facial ADM — Portaria',cat:'Portaria',status:'gray',arquivos:['Orçamento Facial Concierge','Orçamento Facial MTC']},
   {nome:'TAG Veicular',cat:'Portaria',status:'gray',arquivos:['Orçamento TAG Veicular Concierge','Orçamento TAG Veicular MTC']},
   {nome:'AVCB — Renovação',cat:'Documentação',status:'bad',arquivos:[]},
-  {nome:'Pintura Predial',cat:'Pintura',status:'gray',arquivos:[]},
-  {nome:'Limpeza Caixa d\'gua',cat:'Limpeza',status:'gray',arquivos:[]}
+  {nome:'Limpeza Caixa d\'Água',cat:'Limpeza',status:'gray',arquivos:[]}
 ];
-
 function salvarOrcamentos(){localStorage.setItem('asi_orcamentos',JSON.stringify(orcamentos));}
-
+var orcStatusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
 function renderOrcamentos(){
-  var el=document.getElementById('orc-lista');
-  if(!el)return;
-  var statusOpts2=['warn','bad','blue','ok','gray'];
-  var statusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
+  var el=document.getElementById('orc-lista'); if(!el)return;
   el.innerHTML=orcamentos.map(function(o,i){
     return '<div class="card" style="margin-bottom:8px">'+
       '<div class="row">'+
         '<div style="flex:1"><div style="font-weight:600">'+o.nome+'</div><div style="font-size:11px;color:var(--txt3)">'+o.cat+'</div></div>'+
         '<select class="orc-status-sel badge '+o.status+'" onchange="orcamentos['+i+'].status=this.value;this.className=\'orc-status-sel badge \'+this.value;salvarOrcamentos()">'+
-          statusOpts2.map(function(s){return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+statusTxt[s]+'</option>';}).join('')+
+          ['warn','bad','blue','ok','gray'].map(function(s){return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+orcStatusTxt[s]+'</option>';}).join('')+
         '</select>'+
-        (adminLogado?'<button class="del-btn" onclick="orcamentos.splice('+i+',1);salvarOrcamentos();renderOrcamentos()">✕</button>':'')+
+        (adminLogado?'<button class="del-btn" style="margin-left:4px" onclick="orcamentos.splice('+i+',1);salvarOrcamentos();renderOrcamentos()">✕</button>':'')+
       '</div>'+
       (o.arquivos&&o.arquivos.length?'<div style="margin-top:8px">'+o.arquivos.map(function(a){return '<span class="tag">📄 '+a+'</span>';}).join('')+'</div>':'')+
     '</div>';
-  }).join('')+
-  (adminLogado?'<button class="add-btn" onclick="addOrcamento()">+ Adicionar orçamento</button>':'');
+  }).join('')+(adminLogado?'<button class="add-btn" onclick="addOrcamento()">+ Adicionar orçamento</button>':'');
 }
-
-function addOrcamento(){
-  var nome=prompt('Nome do orçamento/item:');
-  if(!nome)return;
-  var cat=prompt('Categoria (ex: Quiosque, Pintura, Portaria):') || '';
-  orcamentos.push({nome:nome,cat:cat,status:'gray',arquivos:[]});
-  salvarOrcamentos();renderOrcamentos();
+function addOrcamento(){var n=prompt('Nome:');if(!n)return;var c=prompt('Categoria:')||'';orcamentos.push({nome:n,cat:c,status:'gray',arquivos:[]});salvarOrcamentos();renderOrcamentos();}
+function renderOrcamentosAdmin(){
+  var el=document.getElementById('edit-orcamentos');if(!el)return;
+  el.innerHTML=orcamentos.map(function(o,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" value="'+esc(o.nome)+'" onchange="orcamentos['+i+'].nome=this.value" placeholder="Nome">'+
+      '<input style="width:90px" value="'+esc(o.cat)+'" onchange="orcamentos['+i+'].cat=this.value" placeholder="Categoria">'+
+      '<button class="del-btn" onclick="orcamentos.splice('+i+',1);renderOrcamentosAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
 }
+function addOrcamentoAdmin(){orcamentos.push({nome:'Novo orçamento',cat:'',status:'gray',arquivos:[]});renderOrcamentosAdmin();}
 
-// ============ PRESTADORES EDITÁVEIS ============
-var CATS_PREST = ['Eletricista','Jardinagem','Portaria / Cameras','Ar Condicionado','Placa Solar','FoodTruck','Smart Store','Advogado'];
-
-var prestadores = JSON.parse(localStorage.getItem('asi_prestadores')||'null') || [
+// ===== PRESTADORES =====
+var CATS_PREST=['Eletricista','Jardinagem','Portaria / Cameras','Ar Condicionado','Placa Solar','FoodTruck','Smart Store','Advogado'];
+var prestadores=JSON.parse(localStorage.getItem('asi_prestadores')||'null')||[
   {nome:'Jeová',cat:'Eletricista',tel:'(19) 99228-3082',ind:''},
   {nome:'Wendel',cat:'Eletricista',tel:'(19) 98166-3208',ind:'Apto 1121 — Wilson'},
   {nome:'Luis Fernando',cat:'Eletricista',tel:'(19) 99369-9529',ind:'Roberto Concierge'},
@@ -587,117 +554,143 @@ var prestadores = JSON.parse(localStorage.getItem('asi_prestadores')||'null') ||
   {nome:'Robson',cat:'Smart Store',tel:'(11) 95741-5192',ind:''},
   {nome:'Amanda Amaral',cat:'Advogado',tel:'(19) 3054-6196',ind:'Débitos / Garantidora'}
 ];
-
 function salvarPrestadores(){localStorage.setItem('asi_prestadores',JSON.stringify(prestadores));}
-
-var adminLogado=false;
 var filtroAtualPrest='todos';
-
+var catIcos={Eletricista:'⚡',Jardinagem:'🌿','Portaria / Cameras':'📷','Ar Condicionado':'❄️','Placa Solar':'☀️',FoodTruck:'🚚','Smart Store':'🛒',Advogado:'⚖️'};
+var catBg={Eletricista:'#fff3e0',Jardinagem:'#e8f5e9','Portaria / Cameras':'#e3f0fb','Ar Condicionado':'#e3f0fb','Placa Solar':'#fff3e0',FoodTruck:'#fff3e0','Smart Store':'#e8f5e9',Advogado:'#fdecea'};
 function renderPrestadores(){
-  var el=document.getElementById('lista-prest-dyn');
-  if(!el)return;
-  var q=document.getElementById('busca-prest')? document.getElementById('busca-prest').value.toLowerCase():'';
-  var filtrados=prestadores.filter(function(p){
-    var matchCat=filtroAtualPrest==='todos'||p.cat===filtroAtualPrest;
-    var matchQ=(p.nome+p.cat+p.ind).toLowerCase().includes(q);
-    return matchCat&&matchQ;
-  });
-  // Agrupar por categoria
+  var el=document.getElementById('lista-prest-dyn');if(!el)return;
+  var q=(document.getElementById('busca-prest')||{}).value||''; q=q.toLowerCase();
+  var filtrados=prestadores.filter(function(p){return (filtroAtualPrest==='todos'||p.cat===filtroAtualPrest)&&(p.nome+p.cat+p.ind).toLowerCase().includes(q);});
   var grupos={};
-  filtrados.forEach(function(p){
-    if(!grupos[p.cat]) grupos[p.cat]=[];
-    grupos[p.cat].push(p);
-  });
-  var catIcos={Eletricista:'⚡',Jardinagem:'🌿','Portaria / Cameras':'📷','Ar Condicionado':'❄️','Placa Solar':'☀️',FoodTruck:'🚚','Smart Store':'🛒',Advogado:'⚖️'};
-  var catBg={Eletricista:'#fff3e0',Jardinagem:'#e8f5e9','Portaria / Cameras':'#e3f0fb','Ar Condicionado':'#e3f0fb','Placa Solar':'#fff3e0',FoodTruck:'#fff3e0','Smart Store':'#e8f5e9',Advogado:'#fdecea'};
+  filtrados.forEach(function(p){if(!grupos[p.cat])grupos[p.cat]=[];grupos[p.cat].push(p);});
   var html='';
   Object.keys(grupos).forEach(function(cat){
-    html+='<div class="card" style="padding:0 15px;margin-bottom:8px" data-cat="'+cat+'">';
+    html+='<div class="card" style="padding:0 15px;margin-bottom:8px">';
     html+='<div style="padding:10px 0 6px;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em">'+cat+'</div>';
     grupos[cat].forEach(function(p){
       var idx=prestadores.indexOf(p);
-      var tel=p.tel.replace(/[^0-9]/g,'');
-      if(tel.length>=10) tel='55'+tel;
-      html+='<div class="file-row prest-item" data-nome="'+p.nome.toLowerCase()+'" data-cat="'+p.cat+'" data-ind="'+p.ind.toLowerCase()+'">';
-      html+='<div class="file-ico" style="background:'+catBg[cat]+'">'+catIcos[cat]+'</div>';
-      html+='<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>';
-      html+='<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>';
-      if(adminLogado) html+='<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>';
-      html+='</div>';
+      var tel=p.tel.replace(/[^0-9]/g,''); if(tel.length>=10) tel='55'+tel;
+      html+='<div class="file-row">'+
+        '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0)'"+'">'+( catIcos[cat]||'👤')+'</div>'+
+        '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>'+
+        '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>'+
+        (adminLogado?'<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>':'')+
+      '</div>';
     });
     html+='</div>';
   });
-  if(adminLogado){
-    html+='<button class="btn primary" style="width:100%;margin-top:4px" onclick="addPrestador()">+ Adicionar prestador</button>';
-  }
+  if(adminLogado) html+='<button class="btn primary" style="width:100%;margin-top:4px" onclick="addPrestador()">+ Adicionar prestador</button>';
   el.innerHTML=html;
-  // Atualizar métricas
-  var mc=document.getElementById('prest-total');
-  if(mc) mc.textContent=prestadores.length;
-  var mc2=document.getElementById('prest-com-ind');
-  if(mc2) mc2.textContent=prestadores.filter(function(p){return p.ind;}).length;
+  var e1=document.getElementById('prest-total'); if(e1) e1.textContent=prestadores.length;
+  var e2=document.getElementById('prest-com-ind'); if(e2) e2.textContent=prestadores.filter(function(p){return p.ind;}).length;
 }
-
-function removerPrestador(idx){
-  if(!confirm('Remover '+prestadores[idx].nome+'?')) return;
-  prestadores.splice(idx,1);
-  salvarPrestadores();renderPrestadores();
-}
-
+function removerPrestador(idx){if(!confirm('Remover '+prestadores[idx].nome+'?'))return;prestadores.splice(idx,1);salvarPrestadores();renderPrestadores();}
 function addPrestador(){
-  var nome=prompt('Nome do prestador:');
-  if(!nome)return;
-  var catSel=prompt('Categoria:\n'+CATS_PREST.join('\n'));
-  if(!catSel)return;
-  var tel=prompt('Telefone:') || '';
-  var ind=prompt('Indicação (opcional):') || '';
-  prestadores.push({nome:nome,cat:catSel,tel:tel,ind:ind});
-  salvarPrestadores();renderPrestadores();
+  var n=prompt('Nome do prestador:');if(!n)return;
+  var c=prompt('Categoria:\n'+CATS_PREST.join('\n'));if(!c)return;
+  var t=prompt('Telefone:')||'';
+  var ind=prompt('Indicação (opcional):')||'';
+  prestadores.push({nome:n,cat:c,tel:t,ind:ind});salvarPrestadores();renderPrestadores();
 }
-
 function filtrarCatPrest(cat,btn){
   filtroAtualPrest=cat;
   document.querySelectorAll('#filtros-cat button').forEach(function(b){b.style.background='';b.style.color='';b.style.borderColor='';});
   btn.style.background='var(--azul)';btn.style.color='#fff';btn.style.borderColor='var(--azul)';
   renderPrestadores();
 }
+function renderPrestadoresAdmin(){
+  var el=document.getElementById('edit-prestadores');if(!el)return;
+  el.innerHTML=prestadores.map(function(p,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" style="min-width:100px" value="'+esc(p.nome)+'" onchange="prestadores['+i+'].nome=this.value">'+
+      '<select class="ie-sel" style="width:130px" onchange="prestadores['+i+'].cat=this.value">'+CATS_PREST.map(function(c){return '<option value="'+c+'"'+(p.cat===c?' selected':'')+'>'+c+'</option>';}).join('')+'</select>'+
+      '<input style="width:120px" value="'+esc(p.tel)+'" onchange="prestadores['+i+'].tel=this.value" placeholder="Telefone">'+
+      '<input class="ie-sub" value="'+esc(p.ind)+'" onchange="prestadores['+i+'].ind=this.value" placeholder="Indicação">'+
+      '<button class="del-btn" onclick="prestadores.splice('+i+',1);salvarPrestadores();renderPrestadoresAdmin();renderPrestadores()">✕</button>'+
+    '</div>';
+  }).join('');
+}
 
-// ============ ADMIN (atualizado com adminLogado) ============
-var ADMIN_SENHA = 'altos2026';
+// ===== TAREFAS =====
+var tarefas=JSON.parse(localStorage.getItem('asi_tarefas')||'null')||[
+  {txt:'Regra de bloqueio facial / controle',sub:'Jan/2025',status:'gray'},
+  {txt:'Ajustar cargo Marcos',sub:'Jan/2025',status:'gray'},
+  {txt:'Revisar tarefas Zeladoria',sub:'Jan/2025',status:'warn'},
+  {txt:'Revisar câmeras',sub:'Jan/2025',status:'gray'},
+  {txt:'Liberar acesso câmeras — conselho',sub:'Jan/2025',status:'ok'},
+  {txt:'Avaliar árvores da Quadra',sub:'Fev/2025',status:'gray'},
+  {txt:'Alterar abertura do portão',sub:'Fev/2025',status:'ok'},
+  {txt:'Comprar bebedouro da Quadra',sub:'Fev/2025',status:'gray'},
+  {txt:'Avaliar infiltrações — Ap Robson e Edvaldo',sub:'Jan/2025',status:'gray'},
+  {txt:'Revisar contratos: Garbens, Concierge, Jardinagem, Elevador',sub:'Jan–Mar/2025',status:'warn'},
+  {txt:'Orçamentos: Pintura, Portaria, Quiosque, Espelho Elevador T2',sub:'Fev–Jul/2025',status:'warn'},
+  {txt:'Troca de LED nas coberturas',sub:'Resolvido',status:'ok'},
+  {txt:'Vistoria noturna no condomínio',sub:'Jan/2025',status:'gray'},
+  {txt:'Disponibilizar regras do condômino aos moradores',sub:'Enviado parcialmente',status:'warn'},
+  {txt:'Acesso ao e-mail do condomínio',sub:'Priscila acompanhando',status:'ok'}
+];
+var stLabel={ok:'Concluído',warn:'Parcial',gray:'Pendente',bad:'Urgente',blue:'Andamento'};
+function salvarTarefas(){localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));}
+function renderTarefas(){
+  var el=document.getElementById('proj-lista');if(!el)return;
+  var q=((document.getElementById('busca-proj')||{}).value||'').toLowerCase();
+  var icoMap={ok:'✅',warn:'📦',gray:'📌',bad:'🔴',blue:'📌'};
+  var fil=tarefas.filter(function(t){return (t.txt+t.sub).toLowerCase().includes(q);});
+  el.innerHTML='<div class="card" style="padding:0 15px">'+fil.map(function(t){
+    return '<div class="file-row">'+
+      '<div class="file-ico" style="background:'+(t.status==='ok'?'#e8f5e9':'#fff3e0')+'">'+icoMap[t.status]+'</div>'+
+      '<div style="flex:1"><div style="font-weight:500">'+t.txt+'</div><div style="font-size:11px;color:var(--txt3)">'+t.sub+'</div></div>'+
+      '<span class="badge '+t.status+'">'+stLabel[t.status]+'</span></div>';
+  }).join('')+'</div>';
+  var tot=document.getElementById('proj-total'),conc=document.getElementById('proj-conc'),pend=document.getElementById('proj-pend');
+  if(tot) tot.textContent=tarefas.length;
+  if(conc) conc.textContent=tarefas.filter(function(t){return t.status==='ok';}).length;
+  if(pend) pend.textContent=tarefas.filter(function(t){return t.status!=='ok';}).length;
+}
+function renderTarefasAdmin(){
+  var el=document.getElementById('edit-tarefas');if(!el)return;
+  el.innerHTML=tarefas.map(function(t,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      '<input class="ie-txt" style="min-width:140px" value="'+esc(t.txt)+'" onchange="tarefas['+i+'].txt=this.value">'+
+      '<input class="ie-sub" value="'+esc(t.sub)+'" onchange="tarefas['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<select class="ie-sel" onchange="tarefas['+i+'].status=this.value">'+['ok','warn','gray','bad','blue'].map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+stLabel[s]+'</option>';}).join('')+'</select>'+
+      '<button class="del-btn" onclick="tarefas.splice('+i+',1);renderTarefasAdmin()">✕</button></div>';
+  }).join('');
+}
+function addTarefa(){tarefas.push({txt:'Nova tarefa',sub:'',status:'gray'});renderTarefasAdmin();}
 
-var dadosAdmin = {
-  alertas: JSON.parse(localStorage.getItem('asi_alertas')||'null') || [
+// ===== ADMIN =====
+var SENHA='altos2026';
+var dadosAdmin={
+  alertas:JSON.parse(localStorage.getItem('asi_alertas')||'null')||[
     {txt:'AVCB — renovação urgente',sub:'Venceu Mar/2026',status:'bad'},
     {txt:'Reforma do Quiosque',sub:'R$ 121.604 · Aguarda aprovação',status:'warn'},
     {txt:'Seguro do condomínio',sub:'Validade não verificada',status:'warn'},
     {txt:'Pintura predial',sub:'Orçamento pendente',status:'blue'}
   ],
-  realizacoes: JSON.parse(localStorage.getItem('asi_realizacoes')||'null') || [
+  realizacoes:JSON.parse(localStorage.getItem('asi_realizacoes')||'null')||[
     {data:'Fev/2026',txt:'Projeto do Quiosque finalizado'},
     {data:'Jan/2026',txt:'Compra das redes da Quadra'},
     {data:'Out/2025',txt:'Festa das Crianças'},
     {data:'Jul/2025',txt:'Cinema na Quadra'}
   ],
-  projetos: JSON.parse(localStorage.getItem('asi_projetos')||'null') || [
+  projetos:JSON.parse(localStorage.getItem('asi_projetos')||'null')||[
     {nome:'Reforma do Quiosque',sub:'R$ 121.604 · Quiosque',pct:25,status:'warn'},
     {nome:'Criação Car Wash',sub:'R$ 17.080 · Garagem',pct:15,status:'warn'},
-    {nome:'Paisagismo — áreas comuns',sub:'R$ 15.575 · Play, Sacadas, Entrada',pct:10,status:'blue'}
+    {nome:'Paisagismo — áreas comuns',sub:'R$ 15.575 · Play, Sacadas',pct:10,status:'blue'}
   ],
-  contratos: JSON.parse(localStorage.getItem('asi_contratos')||'null') || [
+  contratos:JSON.parse(localStorage.getItem('asi_contratos')||'null')||[
     {doc:'AVCB',emissao:'Mar/2021',validade:'Mar/2026',status:'bad'},
     {doc:'Seguro',emissao:'—',validade:'—',status:'warn'},
     {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'warn'},
     {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'}
   ]
 };
-
-var statusOpts = [
-  {v:'bad',l:'🔴 Urgente'},
-  {v:'warn',l:'🟡 Atenção'},
-  {v:'blue',l:'🔵 Informação'},
-  {v:'ok',l:'🟢 OK'}
-];
-var statusLabel = {bad:'Urgente',warn:'Atenção',blue:'Info',ok:'OK',gray:'Normal'};
+var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Atenção'},{v:'blue',l:'🔵 Info'},{v:'ok',l:'🟢 OK'}];
+var stMap={bad:'Urgente',warn:'Atenção',blue:'Info',ok:'OK',gray:'Normal'};
+function esc(s){return (s||'').replace(/"/g,'&quot;');}
+function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
 function abrirAdmin(){
   document.getElementById('adminOverlay').classList.add('on');
@@ -708,188 +701,79 @@ function abrirAdmin(){
 }
 function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('on');}
 function verificarSenha(){
-  if(document.getElementById('adminSenha').value===ADMIN_SENHA){
+  if(document.getElementById('adminSenha').value===SENHA){
     adminLogado=true;
     document.getElementById('adminLogin').style.display='none';
     document.getElementById('adminPainel').style.display='block';
-    renderAdmin();
-    renderPrestadores();
-    renderOrcamentos();
-    renderTarefasAdmin();
-    renderPrestadoresAdmin();
-  } else {
-    document.getElementById('erroSenha').style.display='block';
-  }
+    renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
+  } else {document.getElementById('erroSenha').style.display='block';}
 }
 function adminTab(id,btn){
   document.querySelectorAll('.admin-sec').forEach(function(s){s.classList.remove('on');});
   document.querySelectorAll('.at').forEach(function(b){b.classList.remove('on');});
-  document.getElementById('asec-'+id).classList.add('on');
-  btn.classList.add('on');
+  document.getElementById('asec-'+id).classList.add('on');btn.classList.add('on');
 }
-
-function selOpts(val){
-  return statusOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');
-}
-
 function renderAdmin(){
-  // Alertas
   var ea=document.getElementById('edit-alertas');
-  ea.innerHTML=dadosAdmin.alertas.map(function(a,i){
-    return '<div class="item-edit">'+
-      '<select class="ie-sel" onchange="dadosAdmin.alertas['+i+'].status=this.value">'+selOpts(a.status)+'</select>'+
-      '<input class="ie-txt" value="'+esc(a.txt)+'" onchange="dadosAdmin.alertas['+i+'].txt=this.value" placeholder="Título">'+
-      '<input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe">'+
-      '<button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button>'+
-    '</div>';
-  }).join('');
-  // Realizações
+  ea.innerHTML=dadosAdmin.alertas.map(function(a,i){return '<div class="item-edit"><select class="ie-sel" onchange="dadosAdmin.alertas['+i+'].status=this.value">'+selOpts(a.status)+'</select><input class="ie-txt" value="'+esc(a.txt)+'" onchange="dadosAdmin.alertas['+i+'].txt=this.value" placeholder="Título"><input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe"><button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
   var er=document.getElementById('edit-realizacoes');
-  er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){
-    return '<div class="item-edit">'+
-      '<input style="width:80px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data">'+
-      '<input class="ie-txt" value="'+esc(r.txt)+'" onchange="dadosAdmin.realizacoes['+i+'].txt=this.value" placeholder="Descrição">'+
-      '<button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">✕</button>'+
-    '</div>';
-  }).join('');
-  // Projetos
+  er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){return '<div class="item-edit"><input style="width:80px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data"><input class="ie-txt" value="'+esc(r.txt)+'" onchange="dadosAdmin.realizacoes['+i+'].txt=this.value" placeholder="Descrição"><button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
   var ep=document.getElementById('edit-projetos');
-  ep.innerHTML=dadosAdmin.projetos.map(function(p,i){
-    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
-      '<input class="ie-txt" style="min-width:140px" value="'+esc(p.nome)+'" onchange="dadosAdmin.projetos['+i+'].nome=this.value" placeholder="Nome">'+
-      '<input class="ie-sub" value="'+esc(p.sub)+'" onchange="dadosAdmin.projetos['+i+'].sub=this.value" placeholder="Detalhe">'+
-      '<input style="width:60px" type="number" min="0" max="100" value="'+p.pct+'" onchange="dadosAdmin.projetos['+i+'].pct=+this.value" placeholder="%">'+
-      '<select class="ie-sel" onchange="dadosAdmin.projetos['+i+'].status=this.value">'+selOpts(p.status)+'</select>'+
-      '<button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button>'+
-    '</div>';
-  }).join('');
-  // Contratos
+  ep.innerHTML=dadosAdmin.projetos.map(function(p,i){return '<div class="item-edit" style="flex-wrap:wrap;gap:6px"><input class="ie-txt" style="min-width:130px" value="'+esc(p.nome)+'" onchange="dadosAdmin.projetos['+i+'].nome=this.value"><input class="ie-sub" value="'+esc(p.sub)+'" onchange="dadosAdmin.projetos['+i+'].sub=this.value" placeholder="Detalhe"><input style="width:55px" type="number" min="0" max="100" value="'+p.pct+'" onchange="dadosAdmin.projetos['+i+'].pct=+this.value" placeholder="%"><select class="ie-sel" onchange="dadosAdmin.projetos['+i+'].status=this.value">'+selOpts(p.status)+'</select><button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
   var ec=document.getElementById('edit-contratos');
-  ec.innerHTML=dadosAdmin.contratos.map(function(c,i){
-    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
-      '<input class="ie-txt" style="min-width:120px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento">'+
-      '<input style="width:80px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão">'+
-      '<input style="width:90px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade">'+
-      '<select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value">'+selOpts(c.status)+'</select>'+
-      '<button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button>'+
-    '</div>';
-  }).join('');
+  ec.innerHTML=dadosAdmin.contratos.map(function(c,i){return '<div class="item-edit" style="flex-wrap:wrap;gap:6px"><input class="ie-txt" style="min-width:110px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento"><input style="width:75px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão"><input style="width:85px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade"><select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value">'+selOpts(c.status)+'</select><button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
 }
-
-function esc(s){return (s||'').replace(/"/g,'&quot;');}
-
 function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'warn'});renderAdmin();}
 function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}
 function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
 function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'gray'});renderAdmin();}
-
-function salvarAlertas(){
-  localStorage.setItem('asi_alertas',JSON.stringify(dadosAdmin.alertas));
-  renderAlertas();alert('✅ Alertas salvos!');
-}
-function salvarRealizacoes(){
-  localStorage.setItem('asi_realizacoes',JSON.stringify(dadosAdmin.realizacoes));
-  renderRealizacoes();alert('✅ Realizações salvas!');
-}
-function salvarProjetos(){
-  localStorage.setItem('asi_projetos',JSON.stringify(dadosAdmin.projetos));
-  renderProjetosAdmin();alert('✅ Projetos salvos!');
-}
-function salvarContratos(){
-  localStorage.setItem('asi_contratos',JSON.stringify(dadosAdmin.contratos));
-  renderContratosAdmin();alert('✅ Contratos salvos!');
-}
-
-function iconeAlerta(s){return s==='bad'?'🔴':s==='warn'?'🟡':s==='blue'?'🔵':'🟢';}
+function salvarAlertas(){localStorage.setItem('asi_alertas',JSON.stringify(dadosAdmin.alertas));renderAlertas();alert('✅ Salvos!');}
+function salvarRealizacoes(){localStorage.setItem('asi_realizacoes',JSON.stringify(dadosAdmin.realizacoes));renderRealizacoes();alert('✅ Salvos!');}
+function salvarProjetos(){localStorage.setItem('asi_projetos',JSON.stringify(dadosAdmin.projetos));renderProjetosAdmin();alert('✅ Salvos!');}
+function salvarContratos(){localStorage.setItem('asi_contratos',JSON.stringify(dadosAdmin.contratos));renderContratosAdmin();alert('✅ Salvos!');}
+function salvarTarefas(){localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));renderTarefas();alert('✅ Tarefas salvas!');}
 
 function renderAlertas(){
-  var el=document.getElementById('lista-alertas');
-  if(!el)return;
-  var corIco={bad:'#fdecea',warn:'#fff3e0',blue:'#e3f0fb',ok:'#e8f5e9',gray:'#f0efe8'};
-  el.innerHTML=dadosAdmin.alertas.map(function(a){
-    return '<div class="file-row"><div class="file-ico" style="background:'+corIco[a.status]+'">'+iconeAlerta(a.status)+'</div>'+
-      '<div style="flex:1"><div style="font-weight:600">'+a.txt+'</div><div style="font-size:12px;color:var(--txt3)">'+a.sub+'</div></div>'+
-      '<span class="badge '+a.status+'">'+statusLabel[a.status]+'</span></div>';
-  }).join('');
+  var el=document.getElementById('lista-alertas');if(!el)return;
+  var cor={bad:'#fdecea',warn:'#fff3e0',blue:'#e3f0fb',ok:'#e8f5e9'};
+  var ico={bad:'🔴',warn:'🟡',blue:'🔵',ok:'🟢'};
+  el.innerHTML=dadosAdmin.alertas.map(function(a){return '<div class="file-row"><div class="file-ico" style="background:'+(cor[a.status]||'#f0efe8')+'">'+ico[a.status]+'</div><div style="flex:1"><div style="font-weight:600">'+a.txt+'</div><div style="font-size:12px;color:var(--txt3)">'+a.sub+'</div></div><span class="badge '+a.status+'">'+stMap[a.status]+'</span></div>';}).join('');
 }
-
 function renderRealizacoes(){
-  var el=document.getElementById('lista-realizacoes');
-  if(!el)return;
-  el.innerHTML=dadosAdmin.realizacoes.map(function(r){
-    return '<div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">'+r.data+'</div>'+
-      '<div style="flex:1">'+r.txt+'</div><span class="badge ok">✓</span></div>';
-  }).join('');
+  var el=document.getElementById('lista-realizacoes');if(!el)return;
+  el.innerHTML=dadosAdmin.realizacoes.map(function(r){return '<div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">'+r.data+'</div><div style="flex:1">'+r.txt+'</div><span class="badge ok">✓</span></div>';}).join('');
 }
-
 function renderProjetosAdmin(){
-  var el=document.getElementById('lista-projetos-admin');
-  if(!el)return;
+  var el=document.getElementById('lista-projetos-admin');if(!el)return;
   var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',gray:'#888'};
-  el.innerHTML=dadosAdmin.projetos.map(function(p){
-    return '<div class="card clickable" style="margin-bottom:8px">'+
-      '<div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div>'+
-      '<div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(p.status==='warn'?'Em Projeto':p.status==='blue'?'Em Orçamento':p.status==='ok'?'Concluído':'Em andamento')+'</span></div>'+
-      '<div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div>'+
-      '<div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+corBar[p.status]+'"></div></div>'+
-    '</div>';
-  }).join('');
+  var lblBar={warn:'Em Projeto',blue:'Em Orçamento',ok:'Concluído',bad:'Urgente',gray:'Andamento'};
+  el.innerHTML=dadosAdmin.projetos.map(function(p){return '<div class="card clickable" style="margin-bottom:8px"><div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(lblBar[p.status]||p.status)+'</span></div><div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div><div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+(corBar[p.status]||'#888')+'"></div></div></div>';}).join('');
 }
-
 function renderContratosAdmin(){
-  var el=document.getElementById('tbody-contratos');
-  if(!el)return;
-  el.innerHTML=dadosAdmin.contratos.map(function(c){
-    return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td>'+
-      '<td><span class="badge '+c.status+'">'+statusLabel[c.status]+'</span></td></tr>';
-  }).join('');
+  var el=document.getElementById('tbody-contratos');if(!el)return;
+  el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+stMap[c.status]+'</span></td></tr>';}).join('');
 }
 
-// Render dinâmico ao carregar
-window.addEventListener('DOMContentLoaded',function(){
-  renderAlertas();
-  renderRealizacoes();
-  renderProjetosAdmin();
-  renderContratosAdmin();
-  renderPrestadores();
-  renderOrcamentos();
-  renderTarefas();
-  sincronizarFinanceiro();
-});
-
+// ===== CHURRASQUEIRA SINCRONIZADA COM FINANCEIRO =====
 function sincronizarFinanceiro(){
   try{
     var fin=JSON.parse(localStorage.getItem('asi_financeiro_v3')||'null');
-    if(!fin||!fin.periodos||!fin.periodos.length) return;
-    // Merge churrasqueira de todos os períodos
-    var totalChurr=0, mesesChurr=[];
-    fin.periodos.forEach(function(p){
-      if(p.churr) p.churr.forEach(function(v,i){
-        totalChurr+=v;
-        if(v>0) mesesChurr.push(p.meses[i]);
-      });
-    });
+    if(!fin||!fin.periodos||!fin.periodos.length)return;
+    var totalChurr=0,mesesChurr=[];
+    fin.periodos.forEach(function(p){if(p.churr)p.churr.forEach(function(v,i){totalChurr+=v;if(v>0)mesesChurr.push(p.meses[i]);});});
     var allMeses=[];
-    fin.periodos.forEach(function(p){p.meses.forEach(function(m){if(!allMeses.includes(m)) allMeses.push(m);});});
-    var nMeses=allMeses.length||1;
+    fin.periodos.forEach(function(p){p.meses.forEach(function(m){if(!allMeses.includes(m))allMeses.push(m);});});
     if(totalChurr>0){
-      var el1=document.getElementById('churr-total-rec');
-      var el2=document.getElementById('churr-media');
-      var el3=document.getElementById('churr-fonte');
-      var el4=document.getElementById('churr-total-loc');
-      if(el1) el1.textContent='R$ '+totalChurr.toLocaleString('pt-BR',{minimumFractionDigits:2});
-      if(el2) el2.textContent='R$ '+Math.round(totalChurr/nMeses);
-      if(el3) el3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
-      if(el4) el4.textContent=mesesChurr.length+'x';
-      // Atualizar tabela histórico
-      var tbody=document.querySelector('#pg-churrasqueira table tbody');
+      var e1=document.getElementById('churr-total-rec'),e2=document.getElementById('churr-media'),e3=document.getElementById('churr-fonte'),e4=document.getElementById('churr-total-loc');
+      if(e1)e1.textContent='R$ '+totalChurr.toLocaleString('pt-BR',{minimumFractionDigits:2});
+      if(e2)e2.textContent='R$ '+Math.round(totalChurr/(allMeses.length||1));
+      if(e3)e3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
+      if(e4)e4.textContent=mesesChurr.length+'x';
+      var tbody=document.getElementById('churr-tbody');
       if(tbody&&allMeses.length>0){
-        var rows='';
         var allChurr=[];
-        fin.periodos.forEach(function(p){p.meses.forEach(function(m,i){if(!allChurr.find(function(x){return x.m===m;})) allChurr.push({m:m,v:p.churr[i]||0});});});
-        allChurr.forEach(function(c){
-          if(c.v>0) rows+='<tr><td>'+c.m+'</td><td>—</td><td>R$ '+c.v.toFixed(2).replace('.',',')+'</td></tr>';
-        });
+        fin.periodos.forEach(function(p){p.meses.forEach(function(m,i){if(!allChurr.find(function(x){return x.m===m;}))allChurr.push({m:m,v:p.churr[i]||0});});});
+        var rows=allChurr.filter(function(c){return c.v>0;}).map(function(c){return '<tr><td>'+c.m+'</td><td>—</td><td>R$ '+c.v.toFixed(2).replace('.',',')+'</td></tr>';}).join('');
         rows+='<tr style="font-weight:700"><td>Total</td><td>'+mesesChurr.length+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
         tbody.innerHTML=rows;
       }
@@ -897,107 +781,18 @@ function sincronizarFinanceiro(){
   }catch(e){}
 }
 
-// ============ TAREFAS EDITÁVEIS ============
-var tarefas = JSON.parse(localStorage.getItem('asi_tarefas')||'null') || [
-  {txt:'Regra de bloqueio facial / controle',sub:'Jan/2025 · Fácil',status:'gray'},
-  {txt:'Ajustar cargo Marcos',sub:'Jan/2025 · Médio',status:'gray'},
-  {txt:'Revisar tarefas Zeladoria',sub:'Jan/2025 · Médio',status:'warn'},
-  {txt:'Revisar câmeras',sub:'Jan/2025 · Fácil',status:'gray'},
-  {txt:'Liberar acesso câmeras — conselho',sub:'Jan/2025 · Fácil',status:'ok'},
-  {txt:'Avaliar árvores da Quadra',sub:'Fev/2025 · Fácil',status:'gray'},
-  {txt:'Alterar abertura do portão',sub:'Fev/2025 · Fácil',status:'ok'},
-  {txt:'Comprar bebedouro da Quadra',sub:'Fev/2025 · Médio',status:'gray'},
-  {txt:'Avaliar infiltrações — Ap Robson e Edvaldo',sub:'Jan/2025 · Fácil',status:'gray'},
-  {txt:'Revisar contratos: Garbens, Concierge, Jardinagem, Elevador',sub:'Jan–Mar/2025',status:'warn'},
-  {txt:'Orçamentos: Pintura, Portaria, Quiosque, Espelho Elevador T2',sub:'Fev–Jul/2025',status:'warn'},
-  {txt:'Troca de LED nas coberturas',sub:'Resolvido',status:'ok'},
-  {txt:'Vistoria noturna no condomínio',sub:'Jan/2025 · Fácil',status:'gray'},
-  {txt:'Disponibilizar regras do condômino aos moradores',sub:'Enviado parcialmente',status:'warn'},
-  {txt:'Acesso ao e-mail do condomínio',sub:'Priscila acompanhando',status:'ok'}
-];
+window.addEventListener('DOMContentLoaded',function(){
+  renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
+  renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();
+});
 
-var statusTarefaLabel={ok:'Concluído',warn:'Parcial',gray:'Pendente',bad:'Urgente',blue:'Andamento'};
-
-function salvarTarefas(){localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));}
-
-function renderTarefas(){
-  var el=document.getElementById('proj-lista');
-  if(!el)return;
-  var q=document.getElementById('busca-proj')?document.getElementById('busca-proj').value.toLowerCase():'';
-  var icoMap={ok:'✅',warn:'📦',gray:'📌',bad:'🔴',blue:'📌'};
-  var filtrados=tarefas.filter(function(t){return (t.txt+t.sub).toLowerCase().includes(q);});
-  var html='<div class="card" style="padding:0 15px">';
-  filtrados.forEach(function(t,i){
-    html+='<div class="file-row">'+
-      '<div class="file-ico" style="background:'+(t.status==='ok'?'#e8f5e9':'#fff3e0')+'">'+(icoMap[t.status]||'📌')+'</div>'+
-      '<div style="flex:1"><div style="font-weight:500">'+t.txt+'</div><div style="font-size:11px;color:var(--txt3)">'+t.sub+'</div></div>'+
-      '<span class="badge '+t.status+'">'+statusTarefaLabel[t.status]+'</span>'+
-    '</div>';
-  });
-  html+='</div>';
-  el.innerHTML=html;
-  // atualizar métricas
-  var tot=document.querySelector('#pg-projetos .mc-val');
-  if(tot) tot.textContent=tarefas.length;
-  var conc=document.querySelectorAll('#pg-projetos .mc-val')[1];
-  if(conc){conc.textContent=tarefas.filter(function(t){return t.status==='ok';}).length;}
-  var pend=document.querySelectorAll('#pg-projetos .mc-val')[2];
-  if(pend){pend.textContent=tarefas.filter(function(t){return t.status!=='ok';}).length;}
-}
-
-function renderTarefasAdmin(){
-  var ea=document.getElementById('edit-tarefas');
-  if(!ea)return;
-  var statusOpts3=['ok','warn','gray','bad','blue'];
-  ea.innerHTML=tarefas.map(function(t,i){
-    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
-      '<input class="ie-txt" style="min-width:140px" value="'+esc(t.txt)+'" onchange="tarefas['+i+'].txt=this.value" placeholder="Tarefa">'+
-      '<input class="ie-sub" value="'+esc(t.sub)+'" onchange="tarefas['+i+'].sub=this.value" placeholder="Detalhe">'+
-      '<select class="ie-sel" onchange="tarefas['+i+'].status=this.value">'+
-        statusOpts3.map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+statusTarefaLabel[s]+'</option>';}).join('')+
-      '</select>'+
-      '<button class="del-btn" onclick="tarefas.splice('+i+',1);renderTarefasAdmin()">✕</button>'+
-    '</div>';
-  }).join('');
-}
-
-function addTarefa(){
-  tarefas.push({txt:'Nova tarefa',sub:'',status:'gray'});
-  renderTarefasAdmin();
-}
-
-function salvarTarefas(){
-  localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));
-  renderTarefas();
-  alert('✅ Tarefas salvas!');
-}
-
-function renderPrestadoresAdmin(){
-  var ea=document.getElementById('edit-prestadores');
-  if(!ea)return;
-  ea.innerHTML=prestadores.map(function(p,i){
-    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
-      '<input class="ie-txt" style="min-width:100px" value="'+esc(p.nome)+'" onchange="prestadores['+i+'].nome=this.value" placeholder="Nome">'+
-      '<select class="ie-sel" style="width:130px" onchange="prestadores['+i+'].cat=this.value">'+
-        CATS_PREST.map(function(c){return '<option value="'+c+'"'+(p.cat===c?' selected':'')+'>'+c+'</option>';}).join('')+
-      '</select>'+
-      '<input style="width:120px" value="'+esc(p.tel)+'" onchange="prestadores['+i+'].tel=this.value" placeholder="Telefone">'+
-      '<input class="ie-sub" value="'+esc(p.ind)+'" onchange="prestadores['+i+'].ind=this.value" placeholder="Indicação">'+
-      '<button class="del-btn" onclick="prestadores.splice('+i+',1);salvarPrestadores();renderPrestadoresAdmin();renderPrestadores()">✕</button>'+
-    '</div>';
-  }).join('');
-}
-
-// ============ FIM TAREFAS ============
-
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function(){});
-var deferredPrompt;
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
 window.addEventListener('beforeinstallprompt',function(e){
-  e.preventDefault();deferredPrompt=e;
+  e.preventDefault();var d=e;
   var btn=document.createElement('button');
   btn.textContent='📲 Instalar app';
   btn.style='position:fixed;bottom:80px;right:14px;z-index:999;font-size:12px;padding:8px 14px;border-radius:99px;background:#1a3a5c;color:#fff;border:none;cursor:pointer;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.25)';
-  btn.onclick=function(){deferredPrompt.prompt();btn.remove();};
+  btn.onclick=function(){d.prompt();btn.remove();};
   document.body.appendChild(btn);
 });
 </script>

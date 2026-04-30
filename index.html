@@ -572,7 +572,7 @@ function renderPrestadores(){
       var idx=prestadores.indexOf(p);
       var tel=p.tel.replace(/[^0-9]/g,''); if(tel.length>=10) tel='55'+tel;
       html+='<div class="file-row">'+
-        '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0)'"+'">'+( catIcos[cat]||'👤')+'</div>'+
+        '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0')+'">'+(catIcos[cat]||'👤')+'</div>'+
         '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>'+
         '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>'+
         (adminLogado?'<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>':'')+

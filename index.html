@@ -71,9 +71,9 @@ textarea.fi{height:75px;resize:vertical}
 /* ADMIN */
 .admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
 .admin-overlay.on{display:flex}
-.admin-box{background:var(--card);border-radius:16px;padding:24px;width:92%;max-width:560px;max-height:90vh;overflow-y:auto}
-.admin-box h2{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--azul)}
-.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.admin-box{background:var(--card);border-radius:16px;padding:24px;width:92%;max-width:560px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+.admin-box h2{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--azul);flex-shrink:0}
+.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;padding-bottom:4px}
 .admin-tabs::-webkit-scrollbar{display:none}
 .at{font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;white-space:nowrap}
 .at.on{background:var(--azul);color:#fff;border-color:var(--azul)}

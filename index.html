@@ -100,14 +100,19 @@ textarea.fi{height:75px;resize:vertical}
   .mc-val{font-size:18px}
 }
 </style>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-logo">🏢</div>
-  <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p>Condomínio Altos Santa Izabel</p></div>
+  <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p id="hdr-usuario">Condomínio Altos Santa Izabel</p></div>
   <div class="hdr-ico" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
-  <div class="hdr-ico" onclick="abrirAdmin()">⚙️</div>
+  <div class="hdr-ico" onclick="abrirAdmin()" id="btn-admin" style="display:none">⚙️</div>
+  <div class="hdr-ico" onclick="fazerLogout()" title="Sair">🚪</div>
 </div>
 
 <div class="nav-wrap"><div class="nav">
@@ -430,6 +435,69 @@ textarea.fi{height:75px;resize:vertical}
 </div></div>
 
 <script>
+// ===== FIREBASE AUTH =====
+firebase.initializeApp({
+  apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",
+  authDomain:"portal-altos-santa-izabel.firebaseapp.com",
+  projectId:"portal-altos-santa-izabel",
+  storageBucket:"portal-altos-santa-izabel.firebasestorage.app",
+  messagingSenderId:"314879065622",
+  appId:"1:314879065622:web:76be1b38e018a0cbed3f37"
+});
+var auth=firebase.auth();
+var db=firebase.firestore();
+var usuarioAtual=null;
+
+auth.onAuthStateChanged(function(user){
+  if(!user){
+    window.location.href='auth.html';
+    return;
+  }
+  // Verificar se ainda tem acesso
+  db.collection('usuarios').doc(user.uid).get().then(function(doc){
+    if(!doc.exists||doc.data().status!=='aprovado'){
+      auth.signOut();
+      localStorage.removeItem('asi_usuario');
+      window.location.href='auth.html';
+      return;
+    }
+    usuarioAtual=Object.assign({uid:user.uid},doc.data());
+    localStorage.setItem('asi_usuario',JSON.stringify(usuarioAtual));
+    // Atualizar header
+    var hdr=document.getElementById('hdr-usuario');
+    if(hdr) hdr.textContent=usuarioAtual.nome+' · '+usuarioAtual.unidade;
+    // Mostrar botão admin se for admin
+    if(usuarioAtual.perfil==='admin'){
+      var btnAdmin=document.getElementById('btn-admin');
+      if(btnAdmin) btnAdmin.style.display='flex';
+      adminLogado=true;
+      // Adicionar link gerenciar usuários no admin
+      var tabsEl=document.querySelector('.admin-tabs');
+      if(tabsEl&&!document.getElementById('tab-usuarios')){
+        var btn=document.createElement('button');
+        btn.className='at'; btn.id='tab-usuarios';
+        btn.innerHTML='👥 Usuários';
+        btn.onclick=function(){window.open('usuarios.html','_blank');};
+        tabsEl.appendChild(btn);
+      }
+    }
+    // Inicializar portal
+    renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
+    renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();
+  }).catch(function(){
+    window.location.href='auth.html';
+  });
+});
+
+function fazerLogout(){
+  if(!confirm('Deseja sair do portal?')) return;
+  auth.signOut().then(function(){
+    localStorage.removeItem('asi_usuario');
+    window.location.href='auth.html';
+  });
+}
+// ===== FIM AUTH =====
+
 var WA='SUBSTITUIR_NUMERO';
 var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos'];
 var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
@@ -781,10 +849,7 @@ function sincronizarFinanceiro(){
   }catch(e){}
 }
 
-window.addEventListener('DOMContentLoaded',function(){
-  renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
-  renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();
-});
+// O portal é inicializado após autenticação (ver auth.onAuthStateChanged acima)
 
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
 window.addEventListener('beforeinstallprompt',function(e){

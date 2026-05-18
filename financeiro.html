@@ -304,14 +304,21 @@ function processarPDFs(files){
   if(!arr.length){alert('Selecione arquivos PDF válidos.');return;}
   document.getElementById('spinner').classList.add('on');
   Promise.all(arr.map(lerPDF)).then(function(rs){
+    var ignorados=[];
     rs.forEach(function(r){
       if(!r) return;
       var arr2=Array.isArray(r)?r:[r];
-      arr2.forEach(function(p){adicionarPeriodo(p);});
+      arr2.forEach(function(p){
+        var ok=adicionarPeriodo(p);
+        if(ok===false) ignorados.push(p.mes+' ('+p.tipo+')');
+      });
     });
     save();
     document.getElementById('spinner').classList.remove('on');
     renderTudo();
+    if(ignorados.length){
+      alert('\u26a0\ufe0f '+ignorados.length+' per\u00edodo(s) ignorado(s) pois j\u00e1 existe um arquivo de maior prioridade para o mesmo m\u00eas:\n\n'+ignorados.join('\n')+'\n\nPrioridade: 16A > 11A > 20C');
+    }
   }).catch(function(err){
     document.getElementById('spinner').classList.remove('on');
     alert('Erro ao ler PDF: '+err.message);
@@ -520,9 +527,22 @@ function parsePDF(pages,filename){
 
 // ===== ESTADO =====
 function adicionarPeriodo(p){
-  estado.periodos=estado.periodos.filter(function(x){return !(x.mes===p.mes&&x.tipo===p.tipo);});
+  // Regra de prioridade: 16A > 11A > 20C para o mesmo mês
+  var prioridade={'16A':3,'11A':2,'20C':1};
+  var existente=estado.periodos.find(function(x){return x.mes===p.mes;});
+  if(existente){
+    var priExist=prioridade[existente.tipo]||0;
+    var priNovo=prioridade[p.tipo]||0;
+    if(priNovo<=priExist){
+      console.log('Ignorando '+p.tipo+' de '+p.mes+' — já existe '+existente.tipo+' com maior prioridade');
+      return false; // não adiciona
+    }
+    // Novo tem maior prioridade — substituir
+    estado.periodos=estado.periodos.filter(function(x){return x.mes!==p.mes;});
+  }
   estado.periodos.push(p);
   estado.periodos.sort(function(a,b){return a.periodo.localeCompare(b.periodo);});
+  return true;
 }
 function limparTudo(){if(!confirm('Limpar todo o histórico financeiro?'))return;estado={periodos:[]};save();renderTudo();}
 function removerPeriodo(id){estado.periodos=estado.periodos.filter(function(p){return p.id!==id;});save();renderTudo();}

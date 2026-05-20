@@ -37,7 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .row{display:flex;align-items:center;gap:10px}
 .badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600;flex-shrink:0}
 .badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
-.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}
+.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}.badge.purple{background:#f3e8ff;color:#7c3aed}
 .pl{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-bottom:3px}
 .bw{height:7px;background:#f0efe8;border-radius:99px;overflow:hidden}
 .br{height:100%;border-radius:99px}
@@ -73,8 +73,10 @@ textarea.fi{height:75px;resize:vertical}
 .admin-overlay.on{display:flex}
 .admin-box{background:var(--card);border-radius:16px;padding:24px;width:92%;max-width:560px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
 .admin-box h2{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--azul);flex-shrink:0}
-.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;padding-bottom:4px}
-.admin-tabs::-webkit-scrollbar{display:none}
+.admin-tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;padding-bottom:6px;scroll-behavior:smooth}
+.admin-tabs::-webkit-scrollbar{height:3px}
+.admin-tabs::-webkit-scrollbar-track{background:#f0f0f0;border-radius:99px}
+.admin-tabs::-webkit-scrollbar-thumb{background:#1a3a5c;border-radius:99px}
 .at{font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;white-space:nowrap}
 .at.on{background:var(--azul);color:#fff;border-color:var(--azul)}
 .admin-sec{display:none}.admin-sec.on{display:block}
@@ -755,8 +757,8 @@ var dadosAdmin={
     {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'}
   ]
 };
-var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Atenção'},{v:'blue',l:'🔵 Info'},{v:'ok',l:'🟢 OK'}];
-var stMap={bad:'Urgente',warn:'Atenção',blue:'Info',ok:'OK',gray:'Normal'};
+var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:'blue',l:'🔵 Em Orçamento'},{v:'ok',l:'🟢 Em Andamento'},{v:'purple',l:'🟣 Concluído'},{v:'gray',l:'⚪ Não Aprovado'}];
+var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',purple:'Concluído',gray:'Não Aprovado'};
 function esc(s){return (s||'').replace(/"/g,'&quot;');}
 function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
@@ -768,7 +770,21 @@ function abrirAdmin(){
   document.getElementById('adminOverlay').classList.add('on');
   document.getElementById('adminLogin').style.display='none';
   document.getElementById('adminPainel').style.display='block';
+  // Resetar para aba Alertas
+  document.querySelectorAll('.admin-sec').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.at').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('asec-alertas').classList.add('on');
+  document.querySelector('.at').classList.add('on');
   renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
+  // Adicionar aba Usuários se ainda não existe
+  if(!document.getElementById('tab-usuarios')){
+    var tabsEl=document.querySelector('.admin-tabs');
+    var btn=document.createElement('button');
+    btn.className='at'; btn.id='tab-usuarios';
+    btn.innerHTML='👥 Usuários';
+    btn.onclick=function(){window.open('usuarios.html','_blank');};
+    tabsEl.appendChild(btn);
+  }
 }
 function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('on');}
 function verificarSenha(){
@@ -816,8 +832,8 @@ function renderRealizacoes(){
 }
 function renderProjetosAdmin(){
   var el=document.getElementById('lista-projetos-admin');if(!el)return;
-  var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',gray:'#888'};
-  var lblBar={warn:'Em Projeto',blue:'Em Orçamento',ok:'Concluído',bad:'Urgente',gray:'Andamento'};
+  var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',purple:'#7c3aed',gray:'#888'};
+  var lblBar={warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',bad:'Urgente',purple:'Concluído',gray:'Não Aprovado'};
   el.innerHTML=dadosAdmin.projetos.map(function(p){return '<div class="card clickable" style="margin-bottom:8px"><div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(lblBar[p.status]||p.status)+'</span></div><div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div><div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+(corBar[p.status]||'#888')+'"></div></div></div>';}).join('');
 }
 function renderContratosAdmin(){

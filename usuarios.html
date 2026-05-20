@@ -70,7 +70,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
+emailjs.init('miJa0S-Koq1F9XyMS');
+var EJS_SERVICE='service_gfgtirr';
+var EJS_TPL_APROVADO='template_p8ekuti';
 firebase.initializeApp({
   apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",
   authDomain:"portal-altos-santa-izabel.firebaseapp.com",
@@ -155,9 +159,16 @@ function renderLista(elId,users,isPend){
 function aprovar(uid,nome,email){
   if(!confirm('Aprovar acesso de '+nome+'?'))return;
   db.collection('usuarios').doc(uid).update({status:'aprovado'}).then(function(){
-    var assunto=encodeURIComponent('[Portal ASI] Seu acesso foi aprovado!');
-    var corpo=encodeURIComponent('Olá, '+nome+'!\n\nSeu acesso ao Portal Altos Santa Izabel foi aprovado.\n\nAcesse: https://condaltosstaizabel.github.io/portal-asi/auth.html\n\nCondomínio Altos Santa Izabel');
-    window.open('mailto:'+email+'?subject='+assunto+'&body='+corpo);
+    // Enviar e-mail automático de aprovação via EmailJS
+    emailjs.send(EJS_SERVICE, EJS_TPL_APROVADO, {
+      nome: nome,
+      email: email,
+      link_portal: 'https://condaltosstaizabel.github.io/portal-asi/auth.html'
+    }).then(function(){
+      alert('✅ Acesso aprovado! E-mail enviado automaticamente para '+email);
+    }).catch(function(){
+      alert('✅ Acesso aprovado! (Falha no e-mail — notifique o morador manualmente)');
+    });
     carregarUsuarios();
   });
 }

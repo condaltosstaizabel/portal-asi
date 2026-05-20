@@ -761,11 +761,14 @@ function esc(s){return (s||'').replace(/"/g,'&quot;');}
 function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
 function abrirAdmin(){
+  if(!adminLogado){
+    alert('Acesso restrito ao administrador.');
+    return;
+  }
   document.getElementById('adminOverlay').classList.add('on');
-  document.getElementById('adminLogin').style.display='block';
-  document.getElementById('adminPainel').style.display='none';
-  document.getElementById('adminSenha').value='';
-  document.getElementById('erroSenha').style.display='none';
+  document.getElementById('adminLogin').style.display='none';
+  document.getElementById('adminPainel').style.display='block';
+  renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
 }
 function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('on');}
 function verificarSenha(){

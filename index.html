@@ -83,7 +83,9 @@ textarea.fi{height:75px;resize:vertical}
 .item-edit{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
 .item-edit:last-child{border-bottom:none}
 .item-edit input,.item-edit select{font-size:12px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit;background:#fafafa}
-.ie-txt{flex:1;min-width:120px}.ie-sub{width:130px}.ie-sel{width:100px}
+.item-edit .ordem-btns{display:flex;gap:2px;flex-shrink:0}
+.item-edit .ordem-btns button{padding:3px 7px;border:1px solid var(--border);border-radius:5px;background:#f8f8f4;cursor:pointer;font-size:11px;line-height:1}
+.ie-txt{flex:1;min-width:100px}.ie-sub{width:110px}.ie-sel{width:110px}
 .del-btn{width:28px;height:28px;border-radius:7px;border:none;background:#fdecea;color:#c0392b;cursor:pointer;font-size:14px;flex-shrink:0}
 .add-btn{width:100%;padding:8px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--azul);cursor:pointer;font-size:13px;margin-top:8px}
 .save-btn{width:100%;padding:11px;border-radius:9px;background:var(--azul);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
@@ -725,7 +727,7 @@ function renderTarefasAdmin(){
       ordemBtns.replace('{UP}','moverItem(tarefas,'+i+',-1,renderTarefasAdmin)').replace('{DOWN}','moverItem(tarefas,'+i+',1,renderTarefasAdmin)')+
       '<input class="ie-txt" style="min-width:140px" value="'+esc(t.txt)+'" onchange="tarefas['+i+'].txt=this.value">'+
       '<input class="ie-sub" value="'+esc(t.sub)+'" onchange="tarefas['+i+'].sub=this.value" placeholder="Detalhe">'+
-      '<select class="ie-sel" onchange="tarefas['+i+'].status=this.value">'+['ok','warn','gray','bad','blue'].map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+stLabel[s]+'</option>';}).join('')+'</select>'+
+      '<select class="ie-sel" onchange="onStatusChange(tarefas,'+i+',this.value,renderTarefasAdmin)">'+['ok','warn','gray','bad','blue'].map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+stLabel[s]+'</option>';}).join('')+'</select>'+
       '<button class="del-btn" onclick="tarefas.splice('+i+',1);renderTarefasAdmin()">✕</button></div>';
   }).join('');
 }
@@ -762,7 +764,16 @@ var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:
 var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',construction:'Em Construção',approved:'Aprovado',purple:'Concluído',canceled:'Cancelado',gray:'Não Aprovado'};
 function esc(s){return (s||'').replace(/"/g,'&quot;');}
 function moverItem(arr,i,dir,renderFn){var j=i+dir;if(j<0||j>=arr.length)return;var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;renderFn();}
-var ordemBtns='<button onclick="{UP}" style="padding:2px 6px;border:1px solid var(--border);border-radius:5px;background:#f8f8f4;cursor:pointer;font-size:11px">▲</button><button onclick="{DOWN}" style="padding:2px 6px;border:1px solid var(--border);border-radius:5px;background:#f8f8f4;cursor:pointer;font-size:11px;margin-left:2px">▼</button>';
+function onStatusChange(arr,i,val,renderFn){
+  arr[i].status=val;
+  // Se concluído ou cancelado, mover para o final
+  if(val==='purple'||val==='canceled'||val==='gray'){
+    var item=arr.splice(i,1)[0];
+    arr.push(item);
+  }
+  renderFn();
+}
+var ordemBtns='<div class="ordem-btns"><button onclick="{UP}">▲</button><button onclick="{DOWN}">▼</button></div>';
 function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
 function abrirAdmin(){
@@ -808,7 +819,7 @@ function renderAdmin(){
   ea.innerHTML=dadosAdmin.alertas.map(function(a,i){
     return '<div class="item-edit">'+
       ordemBtns.replace('{UP}','moverItem(dadosAdmin.alertas,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.alertas,'+i+',1,renderAdmin)')+
-      '<select class="ie-sel" onchange="dadosAdmin.alertas['+i+'].status=this.value">'+selOpts(a.status)+'</select>'+
+      '<select class="ie-sel" onchange="onStatusChange(dadosAdmin.alertas,'+i+',this.value,renderAdmin)">'+selOpts(a.status)+'</select>'+
       '<input class="ie-txt" value="'+esc(a.txt)+'" onchange="dadosAdmin.alertas['+i+'].txt=this.value" placeholder="Título">'+
       '<input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe">'+
       '<button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button></div>';
@@ -830,7 +841,7 @@ function renderAdmin(){
       '<input class="ie-txt" style="min-width:130px" value="'+esc(p.nome)+'" onchange="dadosAdmin.projetos['+i+'].nome=this.value">'+
       '<input class="ie-sub" value="'+esc(p.sub)+'" onchange="dadosAdmin.projetos['+i+'].sub=this.value" placeholder="Detalhe">'+
       '<input style="width:55px" type="number" min="0" max="100" value="'+p.pct+'" onchange="dadosAdmin.projetos['+i+'].pct=+this.value" placeholder="%">'+
-      '<select class="ie-sel" onchange="dadosAdmin.projetos['+i+'].status=this.value">'+selOpts(p.status)+'</select>'+
+      '<select class="ie-sel" onchange="onStatusChange(dadosAdmin.projetos,'+i+',this.value,renderAdmin)">'+selOpts(p.status)+'</select>'+
       '<button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button></div>';
   }).join('');
 
@@ -841,7 +852,7 @@ function renderAdmin(){
       '<input class="ie-txt" style="min-width:110px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento">'+
       '<input style="width:75px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão">'+
       '<input style="width:85px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade">'+
-      '<select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value">'+selOpts(c.status)+'</select>'+
+      '<select class="ie-sel" onchange="onStatusChange(dadosAdmin.contratos,'+i+',this.value,renderAdmin)">'+selOpts(c.status)+'</select>'+
       '<button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button></div>';
   }).join('');
 }

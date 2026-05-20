@@ -722,6 +722,7 @@ function renderTarefasAdmin(){
   var el=document.getElementById('edit-tarefas');if(!el)return;
   el.innerHTML=tarefas.map(function(t,i){
     return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      ordemBtns.replace('{UP}','moverItem(tarefas,'+i+',-1,renderTarefasAdmin)').replace('{DOWN}','moverItem(tarefas,'+i+',1,renderTarefasAdmin)')+
       '<input class="ie-txt" style="min-width:140px" value="'+esc(t.txt)+'" onchange="tarefas['+i+'].txt=this.value">'+
       '<input class="ie-sub" value="'+esc(t.sub)+'" onchange="tarefas['+i+'].sub=this.value" placeholder="Detalhe">'+
       '<select class="ie-sel" onchange="tarefas['+i+'].status=this.value">'+['ok','warn','gray','bad','blue'].map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+stLabel[s]+'</option>';}).join('')+'</select>'+
@@ -760,6 +761,8 @@ var dadosAdmin={
 var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:'blue',l:'🔵 Em Orçamento'},{v:'ok',l:'🟢 Em Andamento'},{v:'construction',l:'🟠 Em Construção'},{v:'approved',l:'✅ Aprovado'},{v:'purple',l:'🟣 Concluído'},{v:'canceled',l:'🚫 Cancelado'},{v:'gray',l:'⚪ Não Aprovado'}];
 var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',construction:'Em Construção',approved:'Aprovado',purple:'Concluído',canceled:'Cancelado',gray:'Não Aprovado'};
 function esc(s){return (s||'').replace(/"/g,'&quot;');}
+function moverItem(arr,i,dir,renderFn){var j=i+dir;if(j<0||j>=arr.length)return;var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;renderFn();}
+var ordemBtns='<button onclick="{UP}" style="padding:2px 6px;border:1px solid var(--border);border-radius:5px;background:#f8f8f4;cursor:pointer;font-size:11px">▲</button><button onclick="{DOWN}" style="padding:2px 6px;border:1px solid var(--border);border-radius:5px;background:#f8f8f4;cursor:pointer;font-size:11px;margin-left:2px">▼</button>';
 function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
 function abrirAdmin(){
@@ -802,13 +805,45 @@ function adminTab(id,btn){
 }
 function renderAdmin(){
   var ea=document.getElementById('edit-alertas');
-  ea.innerHTML=dadosAdmin.alertas.map(function(a,i){return '<div class="item-edit"><select class="ie-sel" onchange="dadosAdmin.alertas['+i+'].status=this.value">'+selOpts(a.status)+'</select><input class="ie-txt" value="'+esc(a.txt)+'" onchange="dadosAdmin.alertas['+i+'].txt=this.value" placeholder="Título"><input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe"><button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
+  ea.innerHTML=dadosAdmin.alertas.map(function(a,i){
+    return '<div class="item-edit">'+
+      ordemBtns.replace('{UP}','moverItem(dadosAdmin.alertas,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.alertas,'+i+',1,renderAdmin)')+
+      '<select class="ie-sel" onchange="dadosAdmin.alertas['+i+'].status=this.value">'+selOpts(a.status)+'</select>'+
+      '<input class="ie-txt" value="'+esc(a.txt)+'" onchange="dadosAdmin.alertas['+i+'].txt=this.value" placeholder="Título">'+
+      '<input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button></div>';
+  }).join('');
+
   var er=document.getElementById('edit-realizacoes');
-  er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){return '<div class="item-edit"><input style="width:80px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data"><input class="ie-txt" value="'+esc(r.txt)+'" onchange="dadosAdmin.realizacoes['+i+'].txt=this.value" placeholder="Descrição"><button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
+  er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){
+    return '<div class="item-edit">'+
+      ordemBtns.replace('{UP}','moverItem(dadosAdmin.realizacoes,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.realizacoes,'+i+',1,renderAdmin)')+
+      '<input style="width:80px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data">'+
+      '<input class="ie-txt" value="'+esc(r.txt)+'" onchange="dadosAdmin.realizacoes['+i+'].txt=this.value" placeholder="Descrição">'+
+      '<button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">✕</button></div>';
+  }).join('');
+
   var ep=document.getElementById('edit-projetos');
-  ep.innerHTML=dadosAdmin.projetos.map(function(p,i){return '<div class="item-edit" style="flex-wrap:wrap;gap:6px"><input class="ie-txt" style="min-width:130px" value="'+esc(p.nome)+'" onchange="dadosAdmin.projetos['+i+'].nome=this.value"><input class="ie-sub" value="'+esc(p.sub)+'" onchange="dadosAdmin.projetos['+i+'].sub=this.value" placeholder="Detalhe"><input style="width:55px" type="number" min="0" max="100" value="'+p.pct+'" onchange="dadosAdmin.projetos['+i+'].pct=+this.value" placeholder="%"><select class="ie-sel" onchange="dadosAdmin.projetos['+i+'].status=this.value">'+selOpts(p.status)+'</select><button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
+  ep.innerHTML=dadosAdmin.projetos.map(function(p,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      ordemBtns.replace('{UP}','moverItem(dadosAdmin.projetos,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.projetos,'+i+',1,renderAdmin)')+
+      '<input class="ie-txt" style="min-width:130px" value="'+esc(p.nome)+'" onchange="dadosAdmin.projetos['+i+'].nome=this.value">'+
+      '<input class="ie-sub" value="'+esc(p.sub)+'" onchange="dadosAdmin.projetos['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<input style="width:55px" type="number" min="0" max="100" value="'+p.pct+'" onchange="dadosAdmin.projetos['+i+'].pct=+this.value" placeholder="%">'+
+      '<select class="ie-sel" onchange="dadosAdmin.projetos['+i+'].status=this.value">'+selOpts(p.status)+'</select>'+
+      '<button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button></div>';
+  }).join('');
+
   var ec=document.getElementById('edit-contratos');
-  ec.innerHTML=dadosAdmin.contratos.map(function(c,i){return '<div class="item-edit" style="flex-wrap:wrap;gap:6px"><input class="ie-txt" style="min-width:110px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento"><input style="width:75px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão"><input style="width:85px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade"><select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value">'+selOpts(c.status)+'</select><button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button></div>';}).join('');
+  ec.innerHTML=dadosAdmin.contratos.map(function(c,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      ordemBtns.replace('{UP}','moverItem(dadosAdmin.contratos,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.contratos,'+i+',1,renderAdmin)')+
+      '<input class="ie-txt" style="min-width:110px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento">'+
+      '<input style="width:75px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão">'+
+      '<input style="width:85px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade">'+
+      '<select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value">'+selOpts(c.status)+'</select>'+
+      '<button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button></div>';
+  }).join('');
 }
 function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'warn'});renderAdmin();}
 function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}

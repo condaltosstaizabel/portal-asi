@@ -37,7 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .row{display:flex;align-items:center;gap:10px}
 .badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600;flex-shrink:0}
 .badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
-.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}.badge.purple{background:#f3e8ff;color:#7c3aed}
+.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}.badge.purple{background:#f3e8ff;color:#7c3aed}.badge.construction{background:#fff3e0;color:#d97706}.badge.approved{background:#e8f5e9;color:#2d7a3a}.badge.canceled{background:#f1f1f1;color:#666}
 .pl{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-bottom:3px}
 .bw{height:7px;background:#f0efe8;border-radius:99px;overflow:hidden}
 .br{height:100%;border-radius:99px}
@@ -757,8 +757,8 @@ var dadosAdmin={
     {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'}
   ]
 };
-var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:'blue',l:'🔵 Em Orçamento'},{v:'ok',l:'🟢 Em Andamento'},{v:'purple',l:'🟣 Concluído'},{v:'gray',l:'⚪ Não Aprovado'}];
-var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',purple:'Concluído',gray:'Não Aprovado'};
+var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:'blue',l:'🔵 Em Orçamento'},{v:'ok',l:'🟢 Em Andamento'},{v:'construction',l:'🟠 Em Construção'},{v:'approved',l:'✅ Aprovado'},{v:'purple',l:'🟣 Concluído'},{v:'canceled',l:'🚫 Cancelado'},{v:'gray',l:'⚪ Não Aprovado'}];
+var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',construction:'Em Construção',approved:'Aprovado',purple:'Concluído',canceled:'Cancelado',gray:'Não Aprovado'};
 function esc(s){return (s||'').replace(/"/g,'&quot;');}
 function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
@@ -832,8 +832,8 @@ function renderRealizacoes(){
 }
 function renderProjetosAdmin(){
   var el=document.getElementById('lista-projetos-admin');if(!el)return;
-  var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',purple:'#7c3aed',gray:'#888'};
-  var lblBar={warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',bad:'Urgente',purple:'Concluído',gray:'Não Aprovado'};
+  var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',purple:'#7c3aed',gray:'#888',construction:'#d97706',approved:'#2d7a3a',canceled:'#999'};
+  var lblBar=stMap;
   el.innerHTML=dadosAdmin.projetos.map(function(p){return '<div class="card clickable" style="margin-bottom:8px"><div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(lblBar[p.status]||p.status)+'</span></div><div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div><div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+(corBar[p.status]||'#888')+'"></div></div></div>';}).join('');
 }
 function renderContratosAdmin(){

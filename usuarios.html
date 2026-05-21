@@ -12,31 +12,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .hdr h1{font-size:16px;font-weight:700}.hdr p{font-size:11px;opacity:.65;margin-top:2px}
 .back-btn{font-size:12px;padding:7px 14px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;cursor:pointer;text-decoration:none}
 .wrap{max-width:900px;margin:0 auto;padding:16px}
-.tab-bar{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);padding:0 16px}
+.tabs{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--border);padding:0 16px}
 .tab{font-size:13px;padding:11px 16px;border:none;background:transparent;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
 .tab.on{color:var(--azul);border-bottom-color:var(--azul)}
-.sec{display:none}.sec.on{display:block}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;margin-top:16px}
-.mc{background:var(--card);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
-.mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.mc-val{font-size:20px;font-weight:700;color:var(--azul)}
-.mc-val.ok{color:var(--ok)}.mc-val.warn{color:var(--warn)}.mc-val.bad{color:var(--bad)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 16px}
+.sec{display:none}.sec.on{display:block;padding:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 16px;margin-bottom:12px}
 .user-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
 .user-row:last-child{border-bottom:none}
-.avatar{width:38px;height:38px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
 .user-info{flex:1;min-width:0}
 .user-nome{font-weight:600;font-size:14px}
 .user-meta{font-size:12px;color:var(--txt3);margin-top:2px}
 .badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600}
 .badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
-.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}
-.btn-sm{padding:6px 12px;border-radius:7px;border:none;font-size:12px;cursor:pointer;font-weight:600;margin:2px}
+.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}
+.badge.gray{background:#f0efe8;color:#555}
+.btn-sm{padding:6px 12px;border-radius:7px;border:none;font-size:12px;cursor:pointer;font-weight:600}
 .btn-sm.ok{background:#e8f5e9;color:#2d7a3a}.btn-sm.bad{background:#fdecea;color:#c0392b}
-.btn-sm.warn{background:#fff3e0;color:#b8630a}.btn-sm.blue{background:#e3f0fb;color:#1565c0}
+.btn-sm.warn{background:#fff3e0;color:#b8630a}
 .empty{text-align:center;padding:32px;color:var(--txt3);font-size:13px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+.mc{background:var(--card);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
+.mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.mc-val{font-size:20px;font-weight:700;color:var(--azul)}
+.mc-val.ok{color:var(--ok)}.mc-val.warn{color:var(--warn)}.mc-val.bad{color:var(--bad)}
 .alert{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;border:1px solid;display:flex;gap:10px}
 .alert.warn{background:#fff3e0;border-color:#ffe0b2;color:#b8630a}
+@media(max-width:600px){.user-row{gap:8px}}
 </style>
 </head>
 <body>
@@ -44,11 +46,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   <div><h1>👥 Gerenciar Usuários</h1><p>Portal Altos Santa Izabel</p></div>
   <a href="index.html" class="back-btn">← Voltar ao portal</a>
 </div>
-<div class="tab-bar">
+
+<div class="tabs">
   <button class="tab on" onclick="trocarTab('pendentes',this)">🔔 Pendentes <span id="badge-pend"></span></button>
   <button class="tab" onclick="trocarTab('aprovados',this)">✅ Aprovados</button>
   <button class="tab" onclick="trocarTab('rejeitados',this)">❌ Rejeitados</button>
 </div>
+
 <div class="wrap">
   <div class="metrics">
     <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val warn" id="cnt-pend">—</div></div>
@@ -56,25 +60,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <div class="mc"><div class="mc-lbl">Rejeitados</div><div class="mc-val bad" id="cnt-rej">—</div></div>
     <div class="mc"><div class="mc-lbl">Total</div><div class="mc-val" id="cnt-total">—</div></div>
   </div>
+
   <div class="sec on" id="sec-pendentes">
     <div class="alert warn" id="alerta-pend" style="display:none"><span>🔔</span><div>Há solicitações pendentes de aprovação.</div></div>
     <div class="card" id="lista-pendentes"><div class="empty">Carregando...</div></div>
   </div>
+
   <div class="sec" id="sec-aprovados">
     <div class="card" id="lista-aprovados"><div class="empty">Carregando...</div></div>
   </div>
+
   <div class="sec" id="sec-rejeitados">
     <div class="card" id="lista-rejeitados"><div class="empty">Carregando...</div></div>
   </div>
 </div>
+
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-emailjs.init('miJa0S-Koq1F9XyMS');
-var EJS_SERVICE='service_gfgtirr';
-var EJS_TPL_APROVADO='template_p8ekuti';
 firebase.initializeApp({
   apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",
   authDomain:"portal-altos-santa-izabel.firebaseapp.com",
@@ -86,10 +90,11 @@ firebase.initializeApp({
 var auth=firebase.auth();
 var db=firebase.firestore();
 
+// Verificar se é admin
 auth.onAuthStateChanged(function(user){
   if(!user){window.location.href='auth.html';return;}
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
-  if(u.perfil!=='admin'){alert('Acesso restrito ao administrador.');window.location.href='index.html';return;}
+  if(u.perfil!=='admin'){window.location.href='index.html';return;}
   carregarUsuarios();
 });
 
@@ -102,86 +107,94 @@ function trocarTab(id,btn){
 
 function carregarUsuarios(){
   db.collection('usuarios').get().then(function(snap){
-    var pend=[],aprov=[],rej=[];
+    var todos=[], pend=[], aprov=[], rej=[];
     snap.forEach(function(doc){
       var d=Object.assign({uid:doc.id},doc.data());
+      todos.push(d);
       if(d.status==='pendente') pend.push(d);
       else if(d.status==='aprovado') aprov.push(d);
-      else rej.push(d);
+      else if(d.status==='rejeitado') rej.push(d);
     });
-    var tot=pend.length+aprov.length+rej.length;
+
     document.getElementById('cnt-pend').textContent=pend.length;
     document.getElementById('cnt-aprov').textContent=aprov.length;
     document.getElementById('cnt-rej').textContent=rej.length;
-    document.getElementById('cnt-total').textContent=tot;
-    if(pend.length){
+    document.getElementById('cnt-total').textContent=todos.length;
+
+    if(pend.length>0){
       document.getElementById('alerta-pend').style.display='flex';
       document.getElementById('badge-pend').innerHTML='<span style="background:#e74c3c;color:#fff;border-radius:99px;padding:1px 7px;font-size:11px;margin-left:4px">'+pend.length+'</span>';
     }
-    renderLista('lista-pendentes',pend,true);
-    renderLista('lista-aprovados',aprov,false);
-    renderLista('lista-rejeitados',rej,false);
+
+    renderLista('lista-pendentes', pend, true);
+    renderLista('lista-aprovados', aprov, false);
+    renderLista('lista-rejeitados', rej, false);
   });
 }
 
-var CORES=['#1a3a5c','#2d7a3a','#7c3aed','#b8630a','#c0392b','#0891b2'];
-function getColor(c){return CORES[c.charCodeAt(0)%CORES.length];}
-
-function renderLista(elId,users,isPend){
+function renderLista(elId, usuarios, isPendente){
   var el=document.getElementById(elId);
-  if(!users.length){el.innerHTML='<div class="empty">Nenhum usuário nesta categoria.</div>';return;}
-  el.innerHTML=users.map(function(u){
+  if(!usuarios.length){el.innerHTML='<div class="empty">Nenhum usuário nesta categoria.</div>';return;}
+  el.innerHTML=usuarios.map(function(u){
     var ini=(u.nome||'?').charAt(0).toUpperCase();
+    var badgeTipo=u.tipo==='Proprietário'?'blue':'gray';
     var data=u.criadoEm&&u.criadoEm.toDate?u.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
-    var bTipo=u.tipo==='Proprietário'?'blue':'gray';
-    return '<div class="user-row">'+
+    return '<div class="user-row" id="row_'+u.uid+'">'+
       '<div class="avatar" style="background:'+getColor(ini)+'">'+ini+'</div>'+
       '<div class="user-info">'+
         '<div class="user-nome">'+u.nome+'</div>'+
-        '<div class="user-meta">'+u.email+' · '+u.unidade+' · Solicitado em '+data+'</div>'+
+        '<div class="user-meta">'+u.email+' · '+u.unidade+' · '+data+'</div>'+
       '</div>'+
-      '<span class="badge '+bTipo+'">'+u.tipo+'</span>'+
-      (u.perfil==='admin'?'<span class="badge blue">Admin</span>':'')+
-      (isPend
+      '<span class="badge '+badgeTipo+'">'+u.tipo+'</span>'+
+      (isPendente
         ?'<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+u.nome+'\',\''+u.email+'\')">✅ Aprovar</button>'+
           '<button class="btn-sm bad" onclick="rejeitar(\''+u.uid+'\',\''+u.nome+'\')">❌ Rejeitar</button>'
         :(u.status==='aprovado'
-          ?'<button class="btn-sm warn" onclick="rejeitar(\''+u.uid+'\',\''+u.nome+'\')">Revogar</button>'+
+          ?'<span class="badge ok">Aprovado</span>'+
+            '<button class="btn-sm warn" onclick="rejeitar(\''+u.uid+'\',\''+u.nome+'\')">Revogar</button>'+
             (u.perfil==='admin'
-              ?'<button class="btn-sm warn" onclick="tornarMorador(\''+u.uid+'\')">→ Morador</button>'
+              ?'<button class="btn-sm gray" onclick="tornarMorador(\''+u.uid+'\')">→ Morador</button>'
               :'<button class="btn-sm blue" onclick="tornarAdmin(\''+u.uid+'\')">→ Admin</button>')
-          :'<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+u.nome+'\',\''+u.email+'\')">Aprovar</button>'
+          :'<span class="badge bad">Rejeitado</span>'+
+            '<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+u.nome+'\',\''+u.email+'\')">Aprovar</button>'
         )
       )+'</div>';
   }).join('');
 }
 
+function getColor(c){
+  var cores=['#1a3a5c','#2d7a3a','#7c3aed','#b8630a','#c0392b','#0891b2'];
+  return cores[c.charCodeAt(0)%cores.length];
+}
+
 function aprovar(uid,nome,email){
-  if(!confirm('Aprovar acesso de '+nome+'?'))return;
+  if(!confirm('Aprovar acesso de '+nome+'?')) return;
   db.collection('usuarios').doc(uid).update({status:'aprovado'}).then(function(){
-    // Enviar e-mail automático de aprovação via EmailJS
-    emailjs.send(EJS_SERVICE, EJS_TPL_APROVADO, {
-      nome: nome,
-      email: email,
-      link_portal: 'https://condaltosstaizabel.github.io/portal-asi/auth.html'
-    }).then(function(){
-      alert('✅ Acesso aprovado! E-mail enviado automaticamente para '+email);
-    }).catch(function(){
-      alert('✅ Acesso aprovado! (Falha no e-mail — notifique o morador manualmente)');
-    });
+    // Enviar e-mail de aprovação
+    var assunto=encodeURIComponent('[Portal ASI] Seu acesso foi aprovado!');
+    var corpo=encodeURIComponent(
+      'Olá, '+nome+'!\n\n'+
+      'Seu acesso ao Portal Altos Santa Izabel foi aprovado.\n\n'+
+      'Acesse agora em: https://condaltosstaizabel.github.io/portal-asi/auth.html\n\n'+
+      'Condomínio Altos Santa Izabel'
+    );
+    window.open('mailto:'+email+'?subject='+assunto+'&body='+corpo);
     carregarUsuarios();
   });
 }
+
 function rejeitar(uid,nome){
-  if(!confirm('Rejeitar/revogar acesso de '+nome+'?'))return;
+  if(!confirm('Rejeitar/revogar acesso de '+nome+'?')) return;
   db.collection('usuarios').doc(uid).update({status:'rejeitado'}).then(carregarUsuarios);
 }
+
 function tornarAdmin(uid){
-  if(!confirm('Tornar este usuário administrador?'))return;
+  if(!confirm('Tornar este usuário administrador?')) return;
   db.collection('usuarios').doc(uid).update({perfil:'admin'}).then(carregarUsuarios);
 }
+
 function tornarMorador(uid){
-  if(!confirm('Remover permissão de admin?'))return;
+  if(!confirm('Remover permissão de admin deste usuário?')) return;
   db.collection('usuarios').doc(uid).update({perfil:'morador'}).then(carregarUsuarios);
 }
 </script>

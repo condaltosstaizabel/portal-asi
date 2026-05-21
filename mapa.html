@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de Apartamentos — Portal ASI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--azul:#1a3a5c;--ok:#2d7a3a;--warn:#b8630a;--bad:#c0392b;--bg:#f4f4ef;--card:#fff;--border:#e4e4dc;--txt:#1a1a1a;--txt2:#666;--txt3:#999}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg);padding-bottom:40px}
+.hdr{background:var(--azul);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.hdr h1{font-size:16px;font-weight:700}.hdr p{font-size:11px;opacity:.65;margin-top:2px}
+.back-btn{font-size:12px;padding:7px 14px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;cursor:pointer;text-decoration:none}
+.wrap{max-width:960px;margin:0 auto;padding:16px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+.mc{background:var(--card);border-radius:12px;padding:13px 15px;border:1px solid var(--border)}
+.mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.mc-val{font-size:20px;font-weight:700;color:var(--azul)}.mc-val.ok{color:var(--ok)}.mc-val.warn{color:var(--warn)}
+.mc-sub{font-size:11px;color:var(--txt3);margin-top:3px}
+.torres{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.torre{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.torre-titulo{font-size:14px;font-weight:700;color:var(--azul);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.torre-sub{font-size:12px;color:var(--txt3);margin-bottom:14px}
+.andar{margin-bottom:8px}
+.andar-label{font-size:10px;color:var(--txt3);font-weight:600;margin-bottom:4px;letter-spacing:.04em}
+.aptos{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.apto{border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;transition:transform .1s;border:2px solid transparent;position:relative}
+.apto:hover{transform:scale(1.05)}
+.apto:active{transform:scale(.95)}
+.apto.vazio{background:#f0f0ea;border-color:#e0e0d8}
+.apto.pendente{background:#fff8e1;border-color:#ffe082}
+.apto.parcial{background:#fff3e0;border-color:#ffcc80}
+.apto.completo{background:#e8f5e9;border-color:#a5d6a7}
+.apto-num{font-size:11px;font-weight:700;display:block;color:#444}
+.apto.vazio .apto-num{color:#bbb}
+.apto.pendente .apto-num{color:#f59e0b}
+.apto.parcial .apto-num{color:var(--warn)}
+.apto.completo .apto-num{color:var(--ok)}
+.apto-count{font-size:10px;display:block;margin-top:2px}
+.apto.vazio .apto-count{color:#ccc}
+.apto-dot{position:absolute;top:-3px;right:-3px;width:12px;height:12px;border-radius:50%;background:#f59e0b;border:2px solid #fff;font-size:7px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.legenda{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2)}
+.leg-cor{width:14px;height:14px;border-radius:4px;border:2px solid}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.on{display:flex}
+.modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:380px;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:16px;font-weight:700;color:var(--azul);margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--txt3);margin-bottom:16px}
+.morador-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4ef}
+.morador-row:last-child{border-bottom:none}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.badge{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600}
+.badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.pend{background:#fff8e1;color:#f59e0b}.badge.gray{background:#f0efe8;color:#555}
+.close-modal{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--txt3)}
+.empty-apto{text-align:center;padding:24px;color:var(--txt3);font-size:13px}
+.spinner{text-align:center;padding:30px;color:var(--txt3);font-size:13px}
+@media(max-width:600px){
+  .torres{grid-template-columns:1fr}
+  .apto-num{font-size:10px}
+  .apto{padding:6px 2px}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div><h1>🏢 Mapa de Apartamentos</h1><p>Altos de Santa Izabel — 128 unidades</p></div>
+  <a href="index.html" class="back-btn">← Voltar ao portal</a>
+</div>
+<div class="wrap">
+  <div class="spinner" id="loading">⏳ Carregando dados dos moradores...</div>
+  <div id="conteudo" style="display:none">
+    <div class="metrics">
+      <div class="mc"><div class="mc-lbl">Total aptos</div><div class="mc-val">128</div><div class="mc-sub">64 por torre</div></div>
+      <div class="mc"><div class="mc-lbl">Com acesso</div><div class="mc-val ok" id="cnt-com">0</div><div class="mc-sub">aprovados</div></div>
+      <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val" style="color:#f59e0b" id="cnt-pend">0</div><div class="mc-sub">aguardando</div></div>
+      <div class="mc"><div class="mc-lbl">Sem cadastro</div><div class="mc-val warn" id="cnt-sem">128</div><div class="mc-sub">não cadastrado</div></div>
+      <div class="mc"><div class="mc-lbl">Moradores</div><div class="mc-val" id="cnt-total">0</div><div class="mc-sub">total de pessoas</div></div>
+      <div class="mc"><div class="mc-lbl">Adesão</div><div class="mc-val ok" id="cnt-pct">0%</div><div class="mc-sub">dos apartamentos</div></div>
+    </div>
+    <div class="legenda">
+      <span style="font-size:12px;font-weight:600;color:var(--txt2)">Legenda:</span>
+      <span class="leg-item"><span class="leg-cor" style="background:#f0f0ea;border-color:#e0e0d8"></span>Sem cadastro</span>
+      <span class="leg-item"><span class="leg-cor" style="background:#fff8e1;border-color:#ffe082"></span>Pendente</span>
+      <span class="leg-item"><span class="leg-cor" style="background:#fff3e0;border-color:#ffcc80"></span>1 aprovado</span>
+      <span class="leg-item"><span class="leg-cor" style="background:#e8f5e9;border-color:#a5d6a7"></span>2+ aprovados</span>
+    </div>
+    <div class="torres">
+      <div class="torre">
+        <div class="torre-titulo">Torre 1 <span style="font-size:12px;font-weight:400;color:var(--txt3)" id="t1-stat"></span></div>
+        <div class="torre-sub">Ap. 1001 a 1164</div>
+        <div id="grade-t1"></div>
+      </div>
+      <div class="torre">
+        <div class="torre-titulo">Torre 2 <span style="font-size:12px;font-weight:400;color:var(--txt3)" id="t2-stat"></span></div>
+        <div class="torre-sub">Ap. 2001 a 2164</div>
+        <div id="grade-t2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)fecharModal()">
+  <div class="modal">
+    <button class="close-modal" onclick="fecharModal()">✕</button>
+    <h2 id="modal-titulo"></h2>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div id="modal-moradores"></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",
+  authDomain:"portal-altos-santa-izabel.firebaseapp.com",
+  projectId:"portal-altos-santa-izabel",
+  storageBucket:"portal-altos-santa-izabel.firebasestorage.app",
+  messagingSenderId:"314879065622",
+  appId:"1:314879065622:web:76be1b38e018a0cbed3f37"
+});
+var auth=firebase.auth();
+var db=firebase.firestore();
+
+auth.onAuthStateChanged(function(user){
+  if(!user){window.location.href='auth.html';return;}
+  carregarDados();
+});
+
+// Gerar apartamentos: torre=1 ou 2, 16 andares x 4 unidades = 64
+function gerarAptos(torre){
+  var lista=[];
+  for(var andar=0;andar<16;andar++){
+    for(var u=1;u<=4;u++){
+      lista.push((torre*1000+andar*10+u).toString());
+    }
+  }
+  return lista;
+}
+
+var aptos1=gerarAptos(1); // 1001,1002,1003,1004,1011,...,1164
+var aptos2=gerarAptos(2); // 2001,...,2164
+var mapaAptos={};
+
+function normalizeApto(s){
+  return (s||'').toString().replace(/[^0-9]/g,'').trim();
+}
+
+function carregarDados(){
+  db.collection('usuarios').get().then(function(snap){
+    mapaAptos={};
+    snap.forEach(function(doc){
+      var d=doc.data();
+      var apto=normalizeApto(d.unidade);
+      if(!apto||apto.length<4) return;
+      if(!mapaAptos[apto]) mapaAptos[apto]=[];
+      mapaAptos[apto].push({
+        nome:d.nome||'—',email:d.email||'',
+        tipo:d.tipo||'',status:d.status||'pendente',
+        perfil:d.perfil||'morador'
+      });
+    });
+    document.getElementById('loading').style.display='none';
+    document.getElementById('conteudo').style.display='block';
+    renderTudo();
+  }).catch(function(e){
+    document.getElementById('loading').textContent='Erro: '+e.message;
+  });
+}
+
+function renderTudo(){
+  renderGrade('grade-t1',aptos1,1);
+  renderGrade('grade-t2',aptos2,2);
+  renderMetricas();
+}
+
+function renderGrade(elId,aptos,torre){
+  var el=document.getElementById(elId);
+  var html='';
+  for(var andar=0;andar<16;andar++){
+    html+='<div class="andar">';
+    html+='<div class="andar-label">'+(andar+1)+'º andar</div>';
+    html+='<div class="aptos">';
+    for(var u=1;u<=4;u++){
+      var num=(torre*1000+andar*10+u).toString();
+      var moradores=mapaAptos[num]||[];
+      var aprov=moradores.filter(function(m){return m.status==='aprovado';}).length;
+      var pend=moradores.filter(function(m){return m.status==='pendente';}).length;
+      var cls=aprov>=2?'completo':aprov===1?'parcial':pend>0?'pendente':'vazio';
+      var countTxt=moradores.length>0?(aprov+(pend>0?'+'+pend+'⏳':'')):'—';
+      html+='<div class="apto '+cls+'" onclick="abrirApto(\''+num+'\')" title="Ap. '+num+'">';
+      html+='<span class="apto-num">'+num+'</span>';
+      html+='<span class="apto-count">'+countTxt+'</span>';
+      if(pend>0) html+='<div class="apto-dot">!</div>';
+      html+='</div>';
+    }
+    html+='</div></div>';
+  }
+  el.innerHTML=html;
+  var comAcesso=aptos.filter(function(n){return (mapaAptos[n]||[]).some(function(m){return m.status==='aprovado';});}).length;
+  document.getElementById('t'+torre+'-stat').textContent=comAcesso+'/64';
+}
+
+function renderMetricas(){
+  var todos=aptos1.concat(aptos2);
+  var comAcesso=todos.filter(function(n){return (mapaAptos[n]||[]).some(function(m){return m.status==='aprovado';});}).length;
+  var comPend=todos.filter(function(n){return (mapaAptos[n]||[]).some(function(m){return m.status==='pendente';});}).length;
+  var semCad=todos.filter(function(n){return !(mapaAptos[n]||[]).length;}).length;
+  var totalM=Object.values(mapaAptos).reduce(function(a,b){return a+b.length;},0);
+  document.getElementById('cnt-com').textContent=comAcesso;
+  document.getElementById('cnt-pend').textContent=comPend;
+  document.getElementById('cnt-sem').textContent=semCad;
+  document.getElementById('cnt-total').textContent=totalM;
+  document.getElementById('cnt-pct').textContent=Math.round(comAcesso/128*100)+'%';
+}
+
+var CORES=['#1a3a5c','#2d7a3a','#7c3aed','#b8630a','#c0392b','#0891b2','#059669'];
+function getColor(s){return CORES[(s||'A').charCodeAt(0)%CORES.length];}
+
+function abrirApto(num){
+  var moradores=mapaAptos[num]||[];
+  document.getElementById('modal-titulo').textContent='Apartamento '+num;
+  document.getElementById('modal-sub').textContent=
+    moradores.length?moradores.length+' morador(es) cadastrado(s)':'Nenhum morador cadastrado';
+  var html='';
+  if(!moradores.length){
+    html='<div class="empty-apto">🏠<br><br>Nenhum morador cadastrado neste apartamento ainda.</div>';
+  } else {
+    moradores.forEach(function(m){
+      var ini=(m.nome||'?').charAt(0).toUpperCase();
+      var st=m.status==='aprovado'?'ok':m.status==='pendente'?'pend':'gray';
+      var stTxt=m.status==='aprovado'?'Aprovado':m.status==='pendente'?'Pendente':'Rejeitado';
+      html+='<div class="morador-row">'+
+        '<div class="avatar" style="background:'+getColor(ini)+'">'+ini+'</div>'+
+        '<div style="flex:1"><div style="font-weight:600;font-size:13px">'+m.nome+'</div>'+
+        '<div style="font-size:11px;color:var(--txt3)">'+m.email+'</div>'+
+        '<div style="font-size:11px;color:var(--txt3)">'+m.tipo+(m.perfil==='admin'?' · Admin':'')+'</div></div>'+
+        '<span class="badge '+st+'">'+stTxt+'</span>'+
+      '</div>';
+    });
+  }
+  document.getElementById('modal-moradores').innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('on');
+}
+function fecharModal(){document.getElementById('modalOverlay').classList.remove('on');}
+</script>
+</body>
+</html>

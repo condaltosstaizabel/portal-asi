@@ -916,7 +916,13 @@ function sincronizarFinanceiro(){
       allChurr[p.mes]={v:p.churr||0,tipo:p.tipo};
       if(!allMeses.includes(p.mes)) allMeses.push(p.mes);
     });
-    allMeses.sort();
+    allMeses.sort(function(a,b){
+      var mMap={Jan:1,Fev:2,Mar:3,Abr:4,Mai:5,Jun:6,Jul:7,Ago:8,Set:9,Out:10,Nov:11,Dez:12};
+      var pa=a.split('/'), pb=b.split('/');
+      var ya=parseInt(pa[1]), yb=parseInt(pb[1]);
+      if(ya!==yb) return ya-yb;
+      return (mMap[pa[0]]||0)-(mMap[pb[0]]||0);
+    });
     totalChurr=allMeses.reduce(function(acc,m){return acc+(allChurr[m]?allChurr[m].v:0);},0);
     var mesesComValor=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;});
     if(totalChurr>0){
@@ -931,10 +937,19 @@ function sincronizarFinanceiro(){
       // Atualizar tabela historico sem duplicar
       var tbody=document.getElementById('churr-tbody');
       if(tbody){
+        var totalLocacoes=0;
         var rows=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;})
-          .map(function(m){return '<tr><td>'+m+'</td><td>—</td><td>R$ '+allChurr[m].v.toFixed(2).replace('.',',')+'</td></tr>';}).join('');
-        rows+='<tr style="font-weight:700"><td>Total</td><td>'+mesesComValor.length+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
+          .map(function(m){
+            var receita=allChurr[m].v;
+            var locacoes=Math.round(receita/30);
+            totalLocacoes+=locacoes;
+            return '<tr><td>'+m+'</td><td>'+locacoes+'x</td><td>R$ '+receita.toFixed(2).replace('.',',')+'</td></tr>';
+          }).join('');
+        rows+='<tr style="font-weight:700"><td>Total</td><td>'+totalLocacoes+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
         tbody.innerHTML=rows;
+        // Atualizar metrica de total locacoes
+        var e4=document.getElementById('churr-total-loc');
+        if(e4) e4.textContent=totalLocacoes+'x';
       }
     }
   }).catch(function(e){console.log('Erro ao sincronizar churrasqueira:',e);});

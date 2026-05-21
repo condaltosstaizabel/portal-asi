@@ -228,43 +228,19 @@ textarea.fi{height:75px;resize:vertical}
 <!-- CHURRASQUEIRA -->
 <div id="pg-churrasqueira" class="pg">
   <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Total locações</div><div class="mc-val" id="churr-total-loc">47</div></div>
-    <div class="mc"><div class="mc-lbl">Receita total</div><div class="mc-val ok" id="churr-total-rec">R$ 1.470</div></div>
-    <div class="mc"><div class="mc-lbl">Média/mês</div><div class="mc-val" id="churr-media">R$ 122</div></div>
-    <div class="mc"><div class="mc-lbl">Fonte</div><div class="mc-val" style="font-size:11px;margin-top:6px;color:var(--txt3)" id="churr-fonte">Manual</div></div>
+    <div class="mc"><div class="mc-lbl">Total locações</div><div class="mc-val" id="churr-total-loc">—</div></div>
+    <div class="mc"><div class="mc-lbl">Receita total</div><div class="mc-val ok" id="churr-total-rec">—</div></div>
+    <div class="mc"><div class="mc-lbl">Média/mês</div><div class="mc-val" id="churr-media">—</div></div>
+    <div class="mc"><div class="mc-lbl">Fonte</div><div class="mc-val" style="font-size:11px;margin-top:6px;color:var(--txt3)" id="churr-fonte">Demonstrativo</div></div>
   </div>
-  <div class="sec">Fazer nova reserva</div>
-  <div class="card">
-    <label class="fl">Apartamento</label><input class="fi" id="res-apto" placeholder="Ex: Ap. 1121">
-    <label class="fl">Data desejada</label><input class="fi" type="date" id="res-data">
-    <label class="fl">Horário</label><select class="fi" id="res-hora"><option>12h–18h (tarde)</option><option>18h–23h (noite)</option><option>Dia todo</option></select>
-    <label class="fl">Número de pessoas</label><input class="fi" type="number" id="res-pessoas" placeholder="Ex: 20" min="1">
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn primary" onclick="fazerReserva()">Confirmar reserva</button>
-      <button class="btn success" onclick="reservaWA()">Solicitar pelo WhatsApp</button>
-    </div>
-  </div>
+  <div class="alert blue"><span>ℹ️</span><div>Para reservar a churrasqueira entre em contato com o síndico pelo WhatsApp.</div></div>
   <div class="sec">Histórico de uso</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead>
     <tbody id="churr-tbody">
-      <tr><td>Jan/25</td><td>1</td><td>R$ 30,00</td></tr>
-      <tr><td>Fev/25</td><td>7</td><td>R$ 210,00</td></tr>
-      <tr><td>Mar/25</td><td>1</td><td>R$ 30,00</td></tr>
-      <tr><td>Abr/25</td><td>3</td><td>R$ 90,00</td></tr>
-      <tr><td>Mai/25</td><td>1</td><td>R$ 30,00</td></tr>
-      <tr><td>Jun/25</td><td>7</td><td>R$ 210,00</td></tr>
-      <tr><td>Jul/25</td><td>5</td><td>R$ 150,00</td></tr>
-      <tr><td>Ago/25</td><td>5</td><td>R$ 150,00</td></tr>
-      <tr><td>Set/25</td><td>3</td><td>R$ 90,00</td></tr>
-      <tr><td>Out/25</td><td>6</td><td>R$ 180,00</td></tr>
-      <tr><td>Nov/25</td><td>3</td><td>R$ 90,00</td></tr>
-      <tr><td>Dez/25</td><td>5</td><td>R$ 150,00</td></tr>
-      <tr style="font-weight:700"><td>Total</td><td>47</td><td>R$ 1.470,00</td></tr>
+      <tr><td colspan="3" style="text-align:center;color:var(--txt3)">Carregando...</td></tr>
     </tbody>
   </table></div></div>
-  <div class="sec">Reservas desta sessão</div>
-  <div class="card" id="lista-reservas"><div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div></div>
 </div>
 
 <!-- FINANCEIRO -->

@@ -6,25 +6,21 @@
 <title>Financeiro — Altos Santa Izabel</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--azul:#1a3a5c;--ok:#2d7a3a;--warn:#b8630a;--bad:#c0392b;--bg:#f4f4ef;--card:#fff;--border:#e4e4dc;--txt:#1a1a1a;--txt2:#666;--txt3:#999}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg);color:var(--txt);padding-bottom:40px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg);padding-bottom:40px}
 .hdr{background:var(--azul);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .hdr h1{font-size:16px;font-weight:700}.hdr p{font-size:11px;opacity:.65;margin-top:2px}
-.back-btn{font-size:12px;padding:7px 14px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-btn{font-size:12px;padding:7px 14px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;cursor:pointer;text-decoration:none}
 .wrap{max-width:960px;margin:0 auto;padding:16px}
 .upload-area{border:2px dashed var(--border);border-radius:14px;padding:24px 20px;text-align:center;background:var(--card);margin-bottom:12px;cursor:pointer;transition:all .2s}
 .upload-area:hover,.upload-area.drag{border-color:var(--azul);background:#f0f5fb}
 .upload-area input{display:none}
-.upload-icon{font-size:32px;margin-bottom:8px}
-.upload-title{font-weight:600;font-size:14px;margin-bottom:4px}
-.upload-sub{font-size:12px;color:var(--txt3)}
 .upload-btn{display:inline-block;margin-top:10px;padding:8px 18px;background:var(--azul);color:#fff;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
-.upload-btn:disabled{opacity:.5;cursor:default}
-.periodos-wrap{margin-bottom:16px}
-.periodo-tag{display:inline-flex;align-items:center;gap:6px;background:#e3f0fb;color:#1565c0;border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;margin:3px}
-.periodo-tag button{background:none;border:none;cursor:pointer;color:#1565c0;font-size:14px;line-height:1;padding:0 0 0 4px}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
 .mc{background:var(--card);border-radius:12px;padding:13px 15px;border:1px solid var(--border)}
 .mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
@@ -35,7 +31,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .chart-wrap{position:relative;width:100%}
 .badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600}
 .badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
-.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}.badge.gray{background:#f0efe8;color:#555}
+.badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}
 .item-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f4f4ef;cursor:pointer}
 .item-row:last-child{border-bottom:none}
 .item-row:hover{background:#fafaf8;margin:0 -4px;padding:9px 4px;border-radius:6px}
@@ -49,11 +45,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .detail-panel{background:#f8f8f4;border-radius:0 0 10px 10px;padding:12px 16px;display:none;border-top:1px solid var(--border)}
 .detail-panel.open{display:block}
 .alert{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;border:1px solid;display:flex;gap:10px;align-items:flex-start}
-.alert.warn{background:#fff3e0;border-color:#ffe0b2;color:#b8630a}
 .alert.blue{background:#e3f0fb;border-color:#bbdefb;color:#1565c0}
 .alert.ok{background:#e8f5e9;border-color:#c8e6c9;color:#2d7a3a}
-.spinner{display:none;text-align:center;padding:30px;font-size:13px;color:var(--txt3)}
-.spinner.on{display:block}
+.spinner{text-align:center;padding:30px;font-size:13px;color:var(--txt3)}
+.periodo-tag{display:inline-flex;align-items:center;gap:6px;background:#e3f0fb;color:#1565c0;border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;margin:3px}
+.periodo-tag button{background:none;border:none;cursor:pointer;color:#1565c0;font-size:14px;line-height:1;padding:0 0 0 4px}
 .cat-section{margin-bottom:16px}
 .cat-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;margin-bottom:6px}
 .cat-header-name{font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
@@ -63,600 +59,327 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .conta-nome{font-size:11px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
 .conta-saldo{font-size:18px;font-weight:700}
 .conta-saldo.pos{color:var(--ok)}.conta-saldo.neg{color:var(--bad)}
-.drive-file-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f4f4ef}
-.drive-file-row:last-child{border-bottom:none}
 @media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.contas-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="hdr">
-  <div><h1>📊 Painel Financeiro</h1><p>Condomínio Altos de Santa Izabel</p></div>
-  <a href="index.html" class="back-btn">← Voltar ao portal</a>
+  <div><h1>Financeiro</h1><p>Condominio Altos de Santa Izabel</p></div>
+  <a href="index.html" class="back-btn">Voltar ao portal</a>
 </div>
 <div class="wrap">
-
-  <!-- SINCRONIZAR COM DRIVE -->
-  <div class="card" style="margin-bottom:12px">
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <span style="font-size:24px">📂</span>
-      <div style="flex:1">
-        <div style="font-weight:600;font-size:14px">Sincronizar com Google Drive</div>
-        <div style="font-size:12px;color:var(--txt3)">Pasta: Demonstrativos Financeiros · Detecta arquivos novos automaticamente</div>
-      </div>
-      <button class="upload-btn" onclick="listarDrive()" id="btnDrive">🔄 Verificar Drive</button>
+  <div id="areaAdmin" style="display:none">
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('filePdf').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <input type="file" id="filePdf" accept=".pdf" multiple onchange="processarPDFs(this.files)">
+      <div style="font-size:32px;margin-bottom:8px">PDF</div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:4px">Carregar demonstrativo financeiro</div>
+      <div style="font-size:12px;color:var(--txt3)">Formatos 11A, 16A ou 20C - Dados salvos para todos os moradores</div>
+      <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('filePdf').click()">Selecionar PDF</button>
     </div>
-    <div id="driveStatus" style="margin-top:12px;display:none"></div>
-    <div id="driveArquivos"></div>
+    <div id="periodosWrap" style="display:none;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:600;color:var(--txt3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Periodos no historico</div>
+      <div id="periodosTags"></div>
+      <button onclick="limparTudo()" style="font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid #ffcdd2;background:#fdecea;color:#c0392b;cursor:pointer;margin-top:6px">Limpar historico</button>
+    </div>
   </div>
-
-  <!-- UPLOAD MANUAL -->
-  <div class="upload-area" id="uploadArea" onclick="document.getElementById('filePdf').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
-    <input type="file" id="filePdf" accept=".pdf" multiple onchange="processarPDFs(this.files)">
-    <div class="upload-icon">📄</div>
-    <div class="upload-title">Ou carregar PDF manualmente</div>
-    <div class="upload-sub">Arraste ou clique · Formatos: <strong>11A</strong>, <strong>16A</strong> ou <strong>20C</strong></div>
-    <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('filePdf').click()">Selecionar PDF</button>
-  </div>
-
-  <div class="spinner" id="spinner">⏳ Lendo PDF e extraindo dados...</div>
-
-  <div id="periodosWrap" class="periodos-wrap" style="display:none">
-    <div style="font-size:12px;font-weight:600;color:var(--txt3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Períodos no histórico</div>
-    <div id="periodosTags"></div>
-    <button onclick="limparTudo()" style="font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid #ffcdd2;background:#fdecea;color:#c0392b;cursor:pointer;margin-top:6px">🗑 Limpar histórico</button>
-  </div>
-
+  <div class="spinner" id="loading">Carregando dados financeiros...</div>
+  <div id="spinner2" style="display:none;text-align:center;padding:20px;font-size:13px;color:var(--txt3)">Processando PDF...</div>
   <div id="painelPrincipal" style="display:none">
     <div class="metrics" id="metricas"></div>
-    <div class="sec">Saldos por conta — último período</div>
+    <div class="sec">Saldos por conta - ultimo periodo</div>
     <div class="contas-grid" id="contasGrid"></div>
     <div class="sec">Receitas e despesas mensais</div>
     <div class="card">
       <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;font-size:12px">
-        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#2d7a3a;display:inline-block"></span>Receitas</span>
-        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#c0392b;display:inline-block"></span>Despesas</span>
-        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#1a3a5c;display:inline-block"></span>Saldo ordinário</span>
+        <span>Verde=Receitas | Vermelho=Despesas | Azul=Saldo</span>
       </div>
       <div class="chart-wrap" style="height:280px"><canvas id="chartSaldo"></canvas></div>
     </div>
     <div class="sec">Despesas por categoria</div>
     <div id="catSections"></div>
-    <div class="sec">Churrasqueira — receita mensal</div>
+    <div class="sec">Churrasqueira - receita mensal</div>
     <div class="card"><div class="chart-wrap" style="height:160px"><canvas id="chartChurr"></canvas></div></div>
-    <div class="sec"><span>Análise detalhada por item</span><span style="font-size:11px;color:var(--txt3);font-weight:400;text-transform:none;letter-spacing:0">clique ▼</span></div>
-    <div class="filter-bar" id="filtros">
+    <div class="sec">Analise detalhada por item - clique para ver por mes</div>
+    <div class="filter-bar">
       <button class="fbtn on" onclick="filtrarCat('todos',this)">Todos</button>
       <button class="fbtn" onclick="filtrarCat('terceiros',this)">Terceiros</button>
       <button class="fbtn" onclick="filtrarCat('tarifas',this)">Tarifas</button>
-      <button class="fbtn" onclick="filtrarCat('preventiva',this)">Prev. preventiva</button>
-      <button class="fbtn" onclick="filtrarCat('conservacao',this)">Manutenção</button>
+      <button class="fbtn" onclick="filtrarCat('preventiva',this)">Prev preventiva</button>
+      <button class="fbtn" onclick="filtrarCat('conservacao',this)">Manutencao</button>
       <button class="fbtn" onclick="filtrarCat('admin',this)">Administrativa</button>
     </div>
     <div id="listaItens"></div>
     <div class="sec">Top 10 maiores despesas</div>
     <div class="card" id="top10" style="padding:0 16px"></div>
   </div>
-
-  <div id="estadoVazio">
-    <div class="alert blue"><span>ℹ️</span><div>Clique em <strong>Verificar Drive</strong> para carregar os demonstrativos automaticamente, ou use o upload manual acima.</div></div>
+  <div id="estadoVazio" style="display:none">
+    <div class="alert blue">Nenhum demonstrativo carregado. O administrador precisa carregar os PDFs financeiros.</div>
   </div>
-
 </div>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-var SK='asi_financeiro_v4';
-var FOLDER_ID='1bMHViXOBcrcjL0U1f4kD4xueWeH2wVux';
-var estado=load();
-var chartSaldo,chartChurr,filtroAtual='todos';
+firebase.initializeApp({apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",authDomain:"portal-altos-santa-izabel.firebaseapp.com",projectId:"portal-altos-santa-izabel",storageBucket:"portal-altos-santa-izabel.firebasestorage.app",messagingSenderId:"314879065622",appId:"1:314879065622:web:76be1b38e018a0cbed3f37"});
+var auth=firebase.auth(),db=firebase.firestore(),chartSaldo,chartChurr,filtroAtual='todos',isAdmin=false,periodos=[];
+var PRIO={'16A':3,'11A':2,'20C':1};
+var catCores={terceiros:'#1a3a5c',tarifas:'#b8630a',preventiva:'#2d7a3a',conservacao:'#7c3aed',admin:'#c0392b',bancarias:'#888'};
+var catNomes={terceiros:'Despesas com Terceiros',tarifas:'Tarifas Publicas',preventiva:'Manutencao Preventiva',conservacao:'Manutencao e Conservacao',admin:'Despesas Administrativas',bancarias:'Despesas Bancarias'};
+var catMap={'Servicos Gerais':'terceiros','Monitoramento':'terceiros','PIS-COFINS':'terceiros','INSS':'terceiros','IR ':'terceiros','Energia Eletrica':'tarifas','Agua e Esgoto':'tarifas','Telefone':'tarifas','Gas':'tarifas','Manutencao Elevador':'preventiva','Recarga':'preventiva','Limpeza de Caixa':'preventiva','Seguro':'preventiva','Taxa de Administracao':'admin','Honorarios':'admin','Correios':'admin','Pasta mensal':'admin','Copias':'admin','Manutencao de Conta':'bancarias','Tarifa Bancaria':'bancarias'};
 
-function load(){try{return JSON.parse(localStorage.getItem(SK))||{periodos:[]};}catch(e){return{periodos:[]};}}
-function save(){localStorage.setItem(SK,JSON.stringify(estado));}
+auth.onAuthStateChanged(function(user){
+  if(!user){window.location.href='auth.html';return;}
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  isAdmin=u.perfil==='admin';
+  if(isAdmin) document.getElementById('areaAdmin').style.display='block';
+  carregarFirestore();
+});
 
-// ===== DRIVE =====
-function listarDrive(){
-  var btn=document.getElementById('btnDrive');
-  var status=document.getElementById('driveStatus');
-  btn.disabled=true; btn.textContent='⏳ Verificando...';
-  status.style.display='block';
-  status.innerHTML='<div style="font-size:13px;color:var(--txt3)">Conectando ao Google Drive...</div>';
-  document.getElementById('driveArquivos').innerHTML='';
-
-  // Usar API pública do Drive (sem autenticação, pasta pública)
-  var url='https://www.googleapis.com/drive/v3/files'
-    +'?q=%22'+FOLDER_ID+'%22+in+parents+and+mimeType%3D%22application%2Fpdf%22+and+trashed%3Dfalse'
-    +'&fields=files(id%2Cname%2CmodifiedTime)'
-    +'&orderBy=name'
-    +'&key=AIzaSyC3RDNO_xGJ_6bBGLQVEjcJHTRBHAJ_E6M';
-
-  fetch(url)
-    .then(function(r){return r.json();})
-    .then(function(data){
-      btn.disabled=false; btn.textContent='🔄 Verificar Drive';
-      if(data.error||!data.files){
-        mostrarFallbackDrive();
-        return;
-      }
-      renderArquivosDrive(data.files||[]);
-    })
-    .catch(function(){
-      btn.disabled=false; btn.textContent='🔄 Verificar Drive';
-      mostrarFallbackDrive();
-    });
+function carregarFirestore(){
+  db.collection('financeiro').orderBy('periodo').get().then(function(snap){
+    periodos=[];
+    snap.forEach(function(doc){periodos.push(Object.assign({id:doc.id},doc.data()));});
+    document.getElementById('loading').style.display='none';
+    renderPeriodosTags();
+    renderTudo();
+  }).catch(function(e){document.getElementById('loading').textContent='Erro: '+e.message;});
 }
 
-function mostrarFallbackDrive(){
-  var status=document.getElementById('driveStatus');
-  status.innerHTML='<div class="alert warn" style="margin:0"><span>ℹ️</span><div>'+
-    'Cole o link de compartilhamento do PDF para carregá-lo diretamente:</div></div>';
-  document.getElementById('driveArquivos').innerHTML=
-    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+
-    '<input id="linkPdf" class="upload-area" style="flex:1;min-width:200px;padding:8px 12px;font-size:13px;cursor:text;border-radius:8px;border:1px solid var(--border);background:#fafafa;text-align:left" placeholder="https://drive.google.com/file/d/...">'+
-    '<button class="upload-btn" style="margin:0" onclick="carregarPorLink()">Carregar PDF</button>'+
-    '</div>'+
-    '<div style="margin-top:10px">'+
-    '<a href="https://drive.google.com/drive/folders/'+FOLDER_ID+'" target="_blank" '+
-    'style="display:inline-flex;align-items:center;gap:6px;color:#1565c0;font-size:13px;font-weight:600;text-decoration:none">'+
-    '📂 Abrir pasta Demonstrativos Financeiros</a></div>';
+function salvarFirestore(p){
+  var id=p.mes.replace('/','_')+'_'+p.tipo;
+  p.id=id;
+  return db.collection('financeiro').doc(id).set(p);
 }
 
-function renderArquivosDrive(files){
-  var status=document.getElementById('driveStatus');
-  var el=document.getElementById('driveArquivos');
-  var carregados=estado.periodos.map(function(p){return p.driveId||'';});
-  var novos=files.filter(function(f){return !carregados.includes(f.id);});
-
-  if(!files.length){
-    status.innerHTML='<div class="alert blue" style="margin:0"><span>ℹ️</span><div>Nenhum PDF encontrado na pasta. Adicione os demonstrativos na pasta do Drive.</div></div>';
-    return;
-  }
-
-  status.innerHTML='<div style="font-size:13px;margin-bottom:8px">'+
-    '<span style="color:var(--ok);font-weight:600">✅ '+files.length+' arquivo(s) encontrado(s)</span> · '+
-    '<span style="color:'+(novos.length?'var(--warn)':'var(--txt3)')+';font-weight:600">'+
-    (novos.length?'🔔 '+novos.length+' novo(s) para carregar':'✓ Todos já carregados')+
-    '</span></div>';
-
-  el.innerHTML='<div class="card" style="padding:0 16px;margin-top:8px">'+
-    files.map(function(f){
-      var jaCarregado=carregados.includes(f.id);
-      var data=f.modifiedTime?new Date(f.modifiedTime).toLocaleDateString('pt-BR'):'';
-      return '<div class="drive-file-row">'+
-        '<span style="font-size:15px">📄</span>'+
-        '<div style="flex:1"><div style="font-size:13px;font-weight:500">'+f.name+'</div>'+
-        '<div style="font-size:11px;color:var(--txt3)">'+data+'</div></div>'+
-        (jaCarregado
-          ?'<span class="badge ok">✓ No histórico</span>'
-          :'<button class="upload-btn" style="padding:5px 12px;font-size:12px" id="btn_'+f.id+'" onclick="carregarDriveFile(\''+f.id+'\',\''+f.name+'\')">Carregar</button>'
-        )+'</div>';
-    }).join('')+
-    '</div>'+
-    (novos.length?'<button class="upload-btn" style="width:100%;margin-top:8px" onclick="carregarTodos()">⬇️ Carregar todos os novos ('+novos.length+')</button>':'');
-
-  // Guardar lista para carregarTodos
-  window._driveNovos=novos;
-}
-
-function carregarDriveFile(fileId,nome){
-  var btn=document.getElementById('btn_'+fileId);
-  if(btn){btn.disabled=true;btn.textContent='⏳...';}
-  document.getElementById('spinner').classList.add('on');
-
-  // Tentar download via proxy CORS
-  var urls=[
-    'https://drive.google.com/uc?export=download&id='+fileId,
-    'https://docs.google.com/uc?export=download&id='+fileId
-  ];
-
-  function tentarUrl(idx){
-    if(idx>=urls.length){
-      document.getElementById('spinner').classList.remove('on');
-      if(btn){btn.disabled=false;btn.textContent='Carregar';}
-      // Fallback: abrir para download manual
-      alert('Download automático bloqueado pelo Drive.\n\nO arquivo será aberto para você baixar manualmente e depois subir pelo upload.');
-      window.open('https://drive.google.com/file/d/'+fileId+'/view','_blank');
-      return;
-    }
-    fetch(urls[idx],{mode:'cors'})
-      .then(function(r){
-        if(!r.ok) throw new Error('HTTP '+r.status);
-        return r.blob();
-      })
-      .then(function(blob){
-        var file=new File([blob],nome,{type:'application/pdf'});
-        return lerPDF(file).then(function(r){
-          if(!r) return;
-          var arr=Array.isArray(r)?r:[r];
-          arr.forEach(function(p){p.driveId=fileId;adicionarPeriodo(p);});
-          save();renderTudo();
-          document.getElementById('spinner').classList.remove('on');
-          if(btn){btn.textContent='✓';btn.style.background='var(--ok)';btn.disabled=true;}
-          setTimeout(listarDrive,500);
-        });
-      })
-      .catch(function(){tentarUrl(idx+1);});
-  }
-  tentarUrl(0);
-}
-
-function carregarTodos(){
-  var novos=window._driveNovos||[];
-  if(!novos.length) return;
-  novos.forEach(function(f,i){
-    setTimeout(function(){carregarDriveFile(f.id,f.name);},i*800);
-  });
-}
-
-function carregarPorLink(){
-  var link=(document.getElementById('linkPdf')||{}).value||'';
-  link=link.trim();
-  var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/)||link.match(/id=([a-zA-Z0-9_-]+)/);
-  if(!m){alert('Link inválido. Use o link de compartilhamento do Google Drive.');return;}
-  carregarDriveFile(m[1],'demonstrativo.pdf');
-}
-
-// ===== UPLOAD MANUAL =====
 function dragOver(e){e.preventDefault();document.getElementById('uploadArea').classList.add('drag');}
 function dragLeave(){document.getElementById('uploadArea').classList.remove('drag');}
 function dropFile(e){e.preventDefault();document.getElementById('uploadArea').classList.remove('drag');processarPDFs(e.dataTransfer.files);}
 
 function processarPDFs(files){
+  if(!isAdmin){alert('Apenas administradores podem carregar.');return;}
   var arr=Array.from(files).filter(function(f){return f.type==='application/pdf';});
-  if(!arr.length){alert('Selecione arquivos PDF válidos.');return;}
-  document.getElementById('spinner').classList.add('on');
+  if(!arr.length) return;
+  document.getElementById('spinner2').style.display='block';
   Promise.all(arr.map(lerPDF)).then(function(rs){
-    var ignorados=[];
+    var ignorados=[],saves=[];
     rs.forEach(function(r){
       if(!r) return;
-      var arr2=Array.isArray(r)?r:[r];
-      arr2.forEach(function(p){
+      (Array.isArray(r)?r:[r]).forEach(function(p){
         var ok=adicionarPeriodo(p);
-        if(ok===false) ignorados.push(p.mes+' ('+p.tipo+')');
+        if(ok===false) ignorados.push(p.mes);
+        else saves.push(salvarFirestore(p));
       });
     });
-    save();
-    document.getElementById('spinner').classList.remove('on');
-    renderTudo();
-    if(ignorados.length){
-      alert('\u26a0\ufe0f '+ignorados.length+' per\u00edodo(s) ignorado(s) pois j\u00e1 existe um arquivo de maior prioridade para o mesmo m\u00eas:\n\n'+ignorados.join('\n')+'\n\nPrioridade: 16A > 11A > 20C');
-    }
-  }).catch(function(err){
-    document.getElementById('spinner').classList.remove('on');
-    alert('Erro ao ler PDF: '+err.message);
-  });
+    Promise.all(saves).then(function(){
+      document.getElementById('spinner2').style.display='none';
+      renderPeriodosTags();renderTudo();
+      sincronizarChurr();
+      var msg=saves.length+' periodo(s) salvo(s) com sucesso para todos os moradores!';
+      if(ignorados.length) msg+='\n\nIgnorados (ja existe versao melhor): '+ignorados.join(', ');
+      alert(msg);
+    }).catch(function(e){document.getElementById('spinner2').style.display='none';alert('Erro ao salvar: '+e.message);});
+  }).catch(function(e){document.getElementById('spinner2').style.display='none';alert('Erro PDF: '+e.message);});
+}
+
+function adicionarPeriodo(p){
+  var ex=periodos.find(function(x){return x.mes===p.mes;});
+  if(ex){
+    if((PRIO[p.tipo]||0)<=(PRIO[ex.tipo]||0)) return false;
+    periodos=periodos.filter(function(x){return x.mes!==p.mes;});
+    db.collection('financeiro').doc(ex.id).delete();
+  }
+  periodos.push(p);
+  periodos.sort(function(a,b){return a.periodo.localeCompare(b.periodo);});
+  return true;
+}
+
+function limparTudo(){
+  if(!confirm('Remover TODO o historico financeiro do servidor?')) return;
+  Promise.all(periodos.map(function(p){return db.collection('financeiro').doc(p.id).delete();})).then(function(){periodos=[];renderPeriodosTags();renderTudo();});
+}
+
+function removerPeriodo(id){
+  if(!isAdmin||!confirm('Remover este periodo?')) return;
+  db.collection('financeiro').doc(id).delete().then(function(){periodos=periodos.filter(function(p){return p.id!==id;});renderPeriodosTags();renderTudo();});
 }
 
 function lerPDF(file){
   return new Promise(function(resolve,reject){
-    var reader=new FileReader();
-    reader.onload=function(e){
+    var r=new FileReader();
+    r.onload=function(e){
       pdfjsLib.getDocument({data:new Uint8Array(e.target.result)}).promise.then(function(pdf){
         var pp=[];
         for(var i=1;i<=pdf.numPages;i++) pp.push(pdf.getPage(i).then(function(p){return p.getTextContent();}));
-        Promise.all(pp).then(function(pages){
-          try{resolve(parsePDF(pages,file.name));}
-          catch(err){reject(err);}
-        });
+        Promise.all(pp).then(function(pages){try{resolve(parsePDF(pages,file.name));}catch(err){reject(err);}});
       }).catch(reject);
     };
-    reader.readAsArrayBuffer(file);
+    r.readAsArrayBuffer(file);
   });
 }
 
-// ===== PARSER =====
 function parsePDF(pages,filename){
   var linhas=[];
   pages.forEach(function(page){
-    var grupos={};
-    page.items.forEach(function(item){
-      var y=Math.round(item.transform[5]);
-      if(!grupos[y]) grupos[y]=[];
-      grupos[y].push({x:item.transform[4],s:item.str});
-    });
-    Object.keys(grupos).sort(function(a,b){return b-a;}).forEach(function(y){
-      var l=grupos[y].sort(function(a,b){return a.x-b.x;}).map(function(i){return i.s;}).join(' ').trim();
-      if(l) linhas.push(l);
-    });
+    var g={};
+    page.items.forEach(function(item){var y=Math.round(item.transform[5]);if(!g[y])g[y]=[];g[y].push({x:item.transform[4],s:item.str});});
+    Object.keys(g).sort(function(a,b){return b-a;}).forEach(function(y){var l=g[y].sort(function(a,b){return a.x-b.x;}).map(function(i){return i.s;}).join(' ').trim();if(l)linhas.push(l);});
   });
-
   function toNum(s){if(!s)return 0;try{return parseFloat(s.replace(/\./g,'').replace(',','.'));}catch(e){return 0;}}
-  function numFim(l){var m=l.match(/(-?\d{1,3}(?:\.\d{3})*,\d{2})$/);return m?m[1]:null;}
+  function nf(l){var m=l.match(/(-?\d{1,3}(?:\.\d{3})*,\d{2})$/);return m?m[1]:null;}
+  function getCat(n){for(var k in catMap){if(n.indexOf(k)>=0)return catMap[k];}return 'conservacao';}
+  var t11=linhas.some(function(l){return l.indexOf('Comparativo de')>=0;});
+  var t16=!t11&&linhas.some(function(l){return l.indexOf('Conta Ordinaria')>=0||l.indexOf('Conta Ordin\u00e1ria')>=0;});
+  var t20=!t11&&!t16;
 
-  var catMap={
-    'Serviços Gerais':'terceiros','Monitoramento':'terceiros','PIS-COFINS':'terceiros',
-    'INSS':'terceiros','IR ':'terceiros','IR S':'terceiros',
-    'Energia Elétrica':'tarifas','Água e Esgoto':'tarifas','Telefone':'tarifas','Gás':'tarifas',
-    'Manutenção Elevador':'preventiva','Recarga de Extintores':'preventiva',
-    'Limpeza de Caixa':'preventiva','Seguro':'preventiva',
-    'Taxa de Administração':'admin','Honorários':'admin','Correios':'admin',
-    'Pasta mensal':'admin','Cópias':'admin','Renovação de Certificado':'admin',
-    'Manutenção de Conta':'bancarias','Tarifa Bancaria':'bancarias'
-  };
-  function getCat(nome){for(var k in catMap){if(nome.indexOf(k)>=0)return catMap[k];}return 'conservacao';}
-
-  // Detectar tipo
-  var tipo11A=linhas.some(function(l){return l.indexOf('Comparativo de')>=0;});
-  var tipo16A=!tipo11A&&linhas.some(function(l){return l.indexOf('Conta Ordinária')>=0;});
-  var tipo20C=!tipo11A&&!tipo16A&&linhas.some(function(l){return l.indexOf('Demonstrativo de Despesas Analítico')>=0;});
-
-  // === PARSER 11A (múltiplos meses) ===
-  if(tipo11A){
-    var mesesLinha=null;
+  if(t11){
+    var ml=null;
+    for(var i=0;i<linhas.length;i++){var m=linhas[i].match(/\b(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)\/20\d\d\b/g);if(m&&m.length>=3){ml=m;break;}}
+    if(!ml) throw new Error('Meses nao encontrados.');
+    var nM=ml.length,rA=new Array(nM).fill(0),dA=new Array(nM).fill(0),sA=new Array(nM).fill(0),cA=new Array(nM).fill(0),ctA=[];
+    for(var k=0;k<nM;k++) ctA.push({terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0});
+    var iA={};
     for(var i=0;i<linhas.length;i++){
-      var m11=linhas[i].match(/\b(Jan|Fev|Mar|Abr|Mai|Jun|Jul|Ago|Set|Out|Nov|Dez)\/20\d\d\b/g);
-      if(m11&&m11.length>=3){mesesLinha=m11;break;}
-    }
-    if(!mesesLinha) throw new Error('Meses não encontrados no PDF 11A.');
-    var nM=mesesLinha.length;
-    var recArr=new Array(nM).fill(0),despArr=new Array(nM).fill(0);
-    var saldArr=new Array(nM).fill(0),chArr=new Array(nM).fill(0);
-    var catArr=[]; for(var k=0;k<nM;k++) catArr.push({terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0});
-    var itensArr={};
-    for(var i=0;i<linhas.length;i++){
-      var l11=linhas[i].trim();
-      var ns=l11.match(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g)||[];
+      var l=linhas[i].trim(),ns=l.match(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g)||[];
       if(ns.length<2) continue;
-      var off=ns[0]==='0,00'?1:0;
-      var vals=ns.slice(off,nM+off).map(toNum);
+      var off=ns[0]==='0,00'?1:0,vals=ns.slice(off,nM+off).map(toNum);
       if(vals.length<nM-1) continue;
-      var nome11=l11.replace(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g,'').replace(/\s+/g,' ').trim();
-      if(l11.indexOf('Total de Receitas')>=0) recArr=vals;
-      else if(l11.indexOf('Total de Despesas')>=0&&!/TERCEIROS|PÚBLICAS|PREVENTIVA|CONSERVAÇÃO|ADMINISTRATIVAS|BANCÁRIAS|RETIDOS/.test(l11)) despArr=vals;
-      else if(l11.indexOf('Saldo Final')>=0) saldArr=vals;
-      else if(l11.indexOf('Cota Churrasqueira')>=0) chArr=vals;
-      else if(l11.indexOf('Total de DESPESAS COM TERCEIROS')>=0) vals.forEach(function(v,k){catArr[k].terceiros+=v;});
-      else if(l11.indexOf('Total de TARIFAS')>=0) vals.forEach(function(v,k){catArr[k].tarifas+=v;});
-      else if(l11.indexOf('Total de MANUTENÇÃO PREVENTIVA')>=0) vals.forEach(function(v,k){catArr[k].preventiva+=v;});
-      else if(l11.indexOf('Total de MANUTENÇÃO E CONSERVAÇÃO')>=0) vals.forEach(function(v,k){catArr[k].conservacao+=v;});
-      else if(l11.indexOf('Total de DESPESAS ADMINISTRATIVAS')>=0) vals.forEach(function(v,k){catArr[k].admin+=v;});
-      else if(l11.indexOf('Total de DESPESAS BANCÁRIAS')>=0) vals.forEach(function(v,k){catArr[k].bancarias+=v;});
-      else if(!nome11.startsWith('Total')&&nome11.length>2&&vals.some(function(v){return v>0;})){
-        var cat11=getCat(nome11);
-        if(['terceiros','tarifas','preventiva','conservacao','admin','bancarias'].indexOf(cat11)>=0){
-          if(!itensArr[nome11]) itensArr[nome11]={cat:cat11,vals:new Array(nM).fill(0)};
-          vals.forEach(function(v,k){itensArr[nome11].vals[k]+=v;});
-        }
+      var nm=l.replace(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g,'').replace(/\s+/g,' ').trim();
+      if(l.indexOf('Total de Receitas')>=0) rA=vals;
+      else if(l.indexOf('Total de Despesas')>=0&&!/TERCEIROS|P.BLICAS|PREVENTIVA|CONSERVA|ADMINISTRATIVAS|BANC.RIAS|RETIDOS/.test(l)) dA=vals;
+      else if(l.indexOf('Saldo Final')>=0) sA=vals;
+      else if(l.indexOf('Cota Churrasqueira')>=0) cA=vals;
+      else if(l.indexOf('Total de DESPESAS COM TERCEIROS')>=0) vals.forEach(function(v,k){ctA[k].terceiros+=v;});
+      else if(l.indexOf('Total de TARIFAS')>=0) vals.forEach(function(v,k){ctA[k].tarifas+=v;});
+      else if(l.indexOf('Total de MANUTENCAO PREVENTIVA')>=0||l.indexOf('Total de MANUTEN\u00c7\u00c3O PREVENTIVA')>=0) vals.forEach(function(v,k){ctA[k].preventiva+=v;});
+      else if(l.indexOf('Total de MANUTENCAO E CONSERVACAO')>=0||l.indexOf('Total de MANUTEN\u00c7\u00c3O E CONSERVA\u00c7\u00c3O')>=0) vals.forEach(function(v,k){ctA[k].conservacao+=v;});
+      else if(l.indexOf('Total de DESPESAS ADMINISTRATIVAS')>=0) vals.forEach(function(v,k){ctA[k].admin+=v;});
+      else if(l.indexOf('Total de DESPESAS BANCARIAS')>=0||l.indexOf('Total de DESPESAS BANC\u00c1RIAS')>=0) vals.forEach(function(v,k){ctA[k].bancarias+=v;});
+      else if(!nm.startsWith('Total')&&nm.length>2&&vals.some(function(v){return v>0;})){
+        var c=getCat(nm);if(['terceiros','tarifas','preventiva','conservacao','admin','bancarias'].indexOf(c)>=0){if(!iA[nm])iA[nm]={cat:c,vals:new Array(nM).fill(0)};vals.forEach(function(v,k){iA[nm].vals[k]+=v;});}
       }
     }
-    return mesesLinha.map(function(m,k){
-      var itensK=Object.keys(itensArr).filter(function(n){return itensArr[n].vals[k]>0;})
-        .map(function(n){return{nome:n,cat:itensArr[n].cat,v:itensArr[n].vals[k]};});
-      return{id:Date.now()+k,filename:filename,tipo:'11A',mes:m,periodo:m,
-        receitas:recArr[k]||0,despesas:despArr[k]||0,churr:chArr[k]||0,
-        saldoOrdinario:saldArr[k]||0,catTotais:catArr[k],itens:itensK,contas:[]};
+    return ml.map(function(m,k){
+      var it=Object.keys(iA).filter(function(n){return iA[n].vals[k]>0;}).map(function(n){return{nome:n,cat:iA[n].cat,v:iA[n].vals[k]};});
+      var id=m.replace('/','_')+'_11A';
+      return{id:id,filename:filename,tipo:'11A',mes:m,periodo:m,receitas:rA[k]||0,despesas:dA[k]||0,churr:cA[k]||0,saldoOrdinario:sA[k]||0,catTotais:ctA[k],itens:it,contas:[]};
     });
   }
 
-  // Detectar período para 16A e 20C
-  var mes='?',periodo='?',mesIdx=-1;
+  var mes='?',periodo='?',mi=-1;
   for(var i=0;i<linhas.length;i++){
-    var l=linhas[i];
-    var m16=l.match(/De (\d{2})\/(\d{2})\/(\d{4}) até/);
-    if(m16){
-      var mn=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-      mes=mn[parseInt(m16[2])]+'/'+m16[3].slice(2);
-      periodo=m16[1]+'/'+m16[2]+'/'+m16[3]; mesIdx=i; break;
-    }
-    var m20=l.match(/Entre (\d{2})\/(\d{2})\/(\d{4}) e/);
-    if(m20){
-      var mn=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-      mes=mn[parseInt(m20[2])]+'/'+m20[3].slice(2);
-      periodo=m20[1]+'/'+m20[2]+'/'+m20[3]; mesIdx=i; break;
-    }
+    var l=linhas[i],m16=l.match(/De (\d{2})\/(\d{2})\/(\d{4}) at/),m20x=l.match(/Entre (\d{2})\/(\d{2})\/(\d{4}) e/);
+    var mx=m16||m20x;
+    if(mx){var mn=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];mes=mn[parseInt(mx[2])]+'/'+mx[3].slice(2);periodo=mx[1]+'/'+mx[2]+'/'+mx[3];mi=i;break;}
   }
-  if(mesIdx<0) throw new Error('Período não encontrado no PDF.');
+  if(mi<0) throw new Error('Periodo nao encontrado.');
 
-  var receitas=0,despesas=0,churr=0,saldoOrdinario=0;
-  var catTotais={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0};
-  var itens={},contas=[];
+  var rec=0,desp=0,ch=0,saldo=0,ct={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0},its={},contas=[];
 
-  // === PARSER 16A ===
-  if(tipo16A){
-    var inOrd=false,inDesp=false;
+  if(t16){
+    var inO=false,inD=false;
     for(var i=0;i<linhas.length;i++){
-      var l=linhas[i].trim(),nf=numFim(l);
-      if(l.indexOf('Conta Ordinária')>=0) inOrd=true;
-      if(l.indexOf('Fundo de Reserva')>=0||l.indexOf('Fundo de Melhoria')>=0||l.indexOf('Fundo Troca')>=0) inOrd=false;
-      if(inOrd){
-        if(l==='Despesas') inDesp=true;
-        if(l.startsWith('Total de Receitas')&&nf) receitas=toNum(nf);
-        if(l.startsWith('Total de Despesas')&&nf&&!/COM |PÚBLICAS|PREVENTIVA|CONSERVAÇÃO|ADMINISTRATIVAS|BANCÁRIAS|RETIDOS/.test(l)) despesas=toNum(nf);
-        if(l.startsWith('Cota Churrasqueira')&&nf) churr=toNum(nf);
-        if(/^Saldo em \d{2}\/\d{2}\/\d{4}/.test(l)&&nf&&inDesp) saldoOrdinario=toNum(nf);
-        if(l.startsWith('Total de DESPESAS COM TERCEIROS')&&nf) catTotais.terceiros=toNum(nf);
-        if(l.startsWith('Total de TARIFAS')&&nf) catTotais.tarifas=toNum(nf);
-        if(l.startsWith('Total de MANUTENÇÃO PREVENTIVA')&&nf) catTotais.preventiva=toNum(nf);
-        if(l.startsWith('Total de MANUTENÇÃO E CONSERVAÇÃO')&&nf) catTotais.conservacao=toNum(nf);
-        if(l.startsWith('Total de DESPESAS ADMINISTRATIVAS')&&nf) catTotais.admin=toNum(nf);
-        if(l.startsWith('Total de DESPESAS BANCÁRIAS')&&nf) catTotais.bancarias=toNum(nf);
-        if(inDesp&&nf&&!l.startsWith('Total')&&!l.startsWith('Saldo')&&!l.startsWith('Mov.')&&!l.startsWith('Transf')){
-          var v=toNum(nf);
-          if(v>0){
-            var nome=l.slice(0,l.lastIndexOf(nf)).trim();
-            nome=nome.replace(/\s+(NF-\S+|\d{2}\/\d{4}|\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();
-            if(nome&&nome.length>2){var cat=getCat(nome);if(!itens[nome])itens[nome]={cat:cat,v:0};itens[nome].v+=v;}
-          }
+      var l=linhas[i].trim(),v=nf(l);
+      if(l.indexOf('Conta Ordin')>=0) inO=true;
+      if(l.indexOf('Fundo de Reserva')>=0||l.indexOf('Fundo de Melhoria')>=0||l.indexOf('Fundo Troca')>=0) inO=false;
+      if(inO){
+        if(l==='Despesas') inD=true;
+        if(l.startsWith('Total de Receitas')&&v) rec=toNum(v);
+        if(l.startsWith('Total de Despesas')&&v&&!/COM |P.BLICAS|PREVENTIVA|CONSERVA|ADMINISTRATIVAS|BANC.RIAS|RETIDOS/.test(l)) desp=toNum(v);
+        if(l.startsWith('Cota Churrasqueira')&&v) ch=toNum(v);
+        if(/^Saldo em \d{2}\/\d{2}\/\d{4}/.test(l)&&v&&inD) saldo=toNum(v);
+        if(l.startsWith('Total de DESPESAS COM TERCEIROS')&&v) ct.terceiros=toNum(v);
+        if(l.startsWith('Total de TARIFAS')&&v) ct.tarifas=toNum(v);
+        if((l.startsWith('Total de MANUTENCAO PREVENTIVA')||l.startsWith('Total de MANUTEN\u00c7\u00c3O PREVENTIVA'))&&v) ct.preventiva=toNum(v);
+        if((l.startsWith('Total de MANUTENCAO E CONSERVACAO')||l.startsWith('Total de MANUTEN\u00c7\u00c3O E CONSERVA\u00c7\u00c3O'))&&v) ct.conservacao=toNum(v);
+        if(l.startsWith('Total de DESPESAS ADMINISTRATIVAS')&&v) ct.admin=toNum(v);
+        if((l.startsWith('Total de DESPESAS BANCARIAS')||l.startsWith('Total de DESPESAS BANC\u00c1RIAS'))&&v) ct.bancarias=toNum(v);
+        if(inD&&v&&!l.startsWith('Total')&&!l.startsWith('Saldo')&&!l.startsWith('Mov.')&&!l.startsWith('Transf')){
+          var vv=toNum(v);
+          if(vv>0){var nm=l.slice(0,l.lastIndexOf(v)).trim().replace(/\s+(NF-\S+|\d{2}\/\d{4}|\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();if(nm&&nm.length>2){var c=getCat(nm);if(!its[nm])its[nm]={cat:c,v:0};its[nm].v+=vv;}}
         }
       }
       if(l.indexOf('Resumo Financeiro')>=0){
         for(var j=i+1;j<Math.min(i+12,linhas.length);j++){
-          var lc=linhas[j].trim();
-          if(lc.startsWith('Conta ')) continue;
-          var nums=lc.match(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g)||[];
-          if(nums.length>=4){
-            var nc=lc.replace(/-?\d{1,3}(?:\.\d{3})*,\d{2}.*/,'').trim();
-            if(nc&&nc.length>2) contas.push({nome:nc,saldo:toNum(nums[nums.length-1])});
-          }
+          var lc=linhas[j].trim(),ns=lc.match(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g)||[];
+          if(ns.length>=4){var nc=lc.replace(/-?\d{1,3}(?:\.\d{3})*,\d{2}.*/,'').trim();if(nc&&nc.length>2)contas.push({nome:nc,saldo:toNum(ns[ns.length-1])});}
         }
       }
     }
   }
 
-  // === PARSER 20C ===
-  if(tipo20C){
-    var inD=false;
+  if(t20){
+    var inD2=false;
     for(var i=0;i<linhas.length;i++){
-      var l=linhas[i].trim(),nf=numFim(l);
-      if(l.indexOf('DESPESAS COM TERCEIROS')>=0) inD=true;
-      if(l.startsWith('Total de Despesas')&&nf) despesas=toNum(nf);
-      if(l.startsWith('Total de DESPESAS COM TERCEIROS')&&nf) catTotais.terceiros=toNum(nf);
-      if(l.startsWith('Total de TARIFAS')&&nf) catTotais.tarifas=toNum(nf);
-      if(l.startsWith('Total de MANUTENÇÃO PREVENTIVA')&&nf) catTotais.preventiva=toNum(nf);
-      if(l.startsWith('Total de MANUTENÇÃO E CONSERVAÇÃO')&&nf) catTotais.conservacao=toNum(nf);
-      if(l.startsWith('Total de DESPESAS ADMINISTRATIVAS')&&nf) catTotais.admin=toNum(nf);
-      if(l.startsWith('Total de DESPESAS BANCÁRIAS')&&nf) catTotais.bancarias=toNum(nf);
-      if(inD&&nf&&!l.startsWith('Total')&&!l.startsWith('Saldo')){
-        var v=toNum(nf);
-        var mPct=l.match(/(\d+,\d{2}%)\s+(-?\d{1,3}(?:\.\d{3})*,\d{2})$/);
-        if(mPct) v=toNum(mPct[2]);
-        if(v>0){
-          var nome=l.slice(0,l.lastIndexOf(nf)).trim();
-          nome=nome.replace(/\s+\d+,\d{2}%\s*$/,'').replace(/\s+(NF-\S+|\d{2}\/\d{4}|\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();
-          if(nome&&nome.length>2&&!nome.match(/^\d/)&&!nome.startsWith('Grupo')){
-            var cat=getCat(nome);if(!itens[nome])itens[nome]={cat:cat,v:0};itens[nome].v+=v;
-          }
-        }
+      var l=linhas[i].trim(),v=nf(l);
+      if(l.indexOf('DESPESAS COM TERCEIROS')>=0) inD2=true;
+      if(l.startsWith('Total de Despesas')&&v) desp=toNum(v);
+      if(l.startsWith('Total de DESPESAS COM TERCEIROS')&&v) ct.terceiros=toNum(v);
+      if(l.startsWith('Total de TARIFAS')&&v) ct.tarifas=toNum(v);
+      if((l.startsWith('Total de MANUTENCAO PREVENTIVA')||l.indexOf('Total de MANUTEN\u00c7\u00c3O PREVENTIVA')>=0)&&v) ct.preventiva=toNum(v);
+      if((l.indexOf('Total de MANUTENCAO E CONSERVACAO')>=0||l.indexOf('Total de MANUTEN\u00c7\u00c3O E CONSERVA\u00c7\u00c3O')>=0)&&v) ct.conservacao=toNum(v);
+      if(l.startsWith('Total de DESPESAS ADMINISTRATIVAS')&&v) ct.admin=toNum(v);
+      if((l.indexOf('Total de DESPESAS BANCARIAS')>=0||l.indexOf('Total de DESPESAS BANC\u00c1RIAS')>=0)&&v) ct.bancarias=toNum(v);
+      if(inD2&&v&&!l.startsWith('Total')&&!l.startsWith('Saldo')){
+        var vv=toNum(v);
+        var mp=l.match(/(\d+,\d{2}%)\s+(-?\d{1,3}(?:\.\d{3})*,\d{2})$/);if(mp) vv=toNum(mp[2]);
+        if(vv>0){var nm=l.slice(0,l.lastIndexOf(v)).trim().replace(/\s+\d+,\d{2}%\s*$/,'').replace(/\s+(NF-\S+|\d{2}\/\d{4}|\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();
+          if(nm&&nm.length>2&&!nm.match(/^\d/)&&!nm.startsWith('Grupo')){var c=getCat(nm);if(!its[nm])its[nm]={cat:c,v:0};its[nm].v+=vv;}}
       }
     }
   }
 
-  return{id:Date.now(),filename:filename,tipo:tipo16A?'16A':'20C',mes:mes,periodo:periodo,
-    receitas:receitas,despesas:despesas,churr:churr,saldoOrdinario:saldoOrdinario,
-    catTotais:catTotais,itens:Object.keys(itens).map(function(k){return{nome:k,cat:itens[k].cat,v:itens[k].v};}),
-    contas:contas};
+  var docId=mes.replace('/','_')+'_'+(t16?'16A':'20C');
+  return{id:docId,filename:filename,tipo:t16?'16A':'20C',mes:mes,periodo:periodo,receitas:rec,despesas:desp,churr:ch,saldoOrdinario:saldo,catTotais:ct,itens:Object.keys(its).map(function(k){return{nome:k,cat:its[k].cat,v:its[k].v};}),contas:contas};
 }
-
-// ===== ESTADO =====
-function adicionarPeriodo(p){
-  // Regra de prioridade: 16A > 11A > 20C para o mesmo mês
-  var prioridade={'16A':3,'11A':2,'20C':1};
-  var existente=estado.periodos.find(function(x){return x.mes===p.mes;});
-  if(existente){
-    var priExist=prioridade[existente.tipo]||0;
-    var priNovo=prioridade[p.tipo]||0;
-    if(priNovo<=priExist){
-      console.log('Ignorando '+p.tipo+' de '+p.mes+' — já existe '+existente.tipo+' com maior prioridade');
-      return false; // não adiciona
-    }
-    // Novo tem maior prioridade — substituir
-    estado.periodos=estado.periodos.filter(function(x){return x.mes!==p.mes;});
-  }
-  estado.periodos.push(p);
-  estado.periodos.sort(function(a,b){return a.periodo.localeCompare(b.periodo);});
-  return true;
-}
-function limparTudo(){if(!confirm('Limpar todo o histórico financeiro?'))return;estado={periodos:[]};save();renderTudo();}
-function removerPeriodo(id){estado.periodos=estado.periodos.filter(function(p){return p.id!==id;});save();renderTudo();}
 
 function merge(){
-  if(!estado.periodos.length) return null;
-  var meses=[],rec=[],desp=[],sald=[],ch=[];
-  var iM={},catT={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0};
-  var tR=0,tD=0,tC=0,contasU={};
-  estado.periodos.forEach(function(p){
-    if(!meses.includes(p.mes)){meses.push(p.mes);rec.push(p.receitas);desp.push(p.despesas);sald.push(p.saldoOrdinario);ch.push(p.churr);}
-    p.itens.forEach(function(it){
-      if(!iM[it.nome]) iM[it.nome]={nome:it.nome,cat:it.cat,meses:[],vals:[]};
-      if(!iM[it.nome].meses.includes(p.mes)){iM[it.nome].meses.push(p.mes);iM[it.nome].vals.push(it.v);}
-    });
-    Object.keys(catT).forEach(function(k){catT[k]+=(p.catTotais[k]||0);});
-    tR+=p.receitas;tD+=p.despesas;tC+=p.churr;
+  if(!periodos.length) return null;
+  var meses=[],rec=[],desp=[],sald=[],ch=[],iM={},catT={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0},tR=0,tD=0,tC=0,contasU={};
+  periodos.forEach(function(p){
+    if(!meses.includes(p.mes)){meses.push(p.mes);rec.push(p.receitas||0);desp.push(p.despesas||0);sald.push(p.saldoOrdinario||0);ch.push(p.churr||0);}
+    (p.itens||[]).forEach(function(it){if(!iM[it.nome])iM[it.nome]={nome:it.nome,cat:it.cat,meses:[],vals:[]};if(!iM[it.nome].meses.includes(p.mes)){iM[it.nome].meses.push(p.mes);iM[it.nome].vals.push(it.v);}});
+    Object.keys(catT).forEach(function(k){catT[k]+=((p.catTotais||{})[k]||0);});
+    tR+=p.receitas||0;tD+=p.despesas||0;tC+=p.churr||0;
     if(p.contas&&p.contas.length) p.contas.forEach(function(c){contasU[c.nome]=c.saldo;});
   });
   var itArr=Object.values(iM).map(function(it){return{nome:it.nome,cat:it.cat,meses:it.meses,vals:it.vals,total:it.vals.reduce(function(a,b){return a+b;},0)};});
-  return{meses:meses,receitas:rec,despesas:desp,saldos:sald,churr:ch,itens:itArr,catTotais:catT,
-    totalReceitas:tR,totalDespesas:tD,totalChurr:tC,saldoFinal:sald[sald.length-1]||0,
-    contas:Object.keys(contasU).map(function(k){return{nome:k,saldo:contasU[k]};})};
+  return{meses:meses,receitas:rec,despesas:desp,saldos:sald,churr:ch,itens:itArr,catTotais:catT,totalReceitas:tR,totalDespesas:tD,totalChurr:tC,saldoFinal:sald[sald.length-1]||0,contas:Object.keys(contasU).map(function(k){return{nome:k,saldo:contasU[k]};})};
 }
 
-// ===== RENDER =====
-var catCores={terceiros:'#1a3a5c',tarifas:'#b8630a',preventiva:'#2d7a3a',conservacao:'#7c3aed',admin:'#c0392b',bancarias:'#888'};
-var catNomes={terceiros:'Despesas com Terceiros',tarifas:'Tarifas Públicas',preventiva:'Manutenção Preventiva',conservacao:'Manutenção e Conservação',admin:'Despesas Administrativas',bancarias:'Despesas Bancárias'};
+function renderPeriodosTags(){
+  var w=document.getElementById('periodosWrap'),el=document.getElementById('periodosTags');
+  if(!periodos.length){w.style.display='none';return;}
+  w.style.display='block';
+  el.innerHTML=periodos.map(function(p){return '<span class="periodo-tag">'+p.mes+' ('+p.tipo+')'+(isAdmin?'<button onclick="removerPeriodo(\''+p.id+'\')">x</button>':'')+'</span>';}).join('');
+}
+
 function fmt(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtK(v){return Math.abs(v)>=1000?'R$ '+(v/1000).toFixed(1)+'k':'R$ '+Math.round(v);}
+function mc(l,v,cls,s){return '<div class="mc"><div class="mc-lbl">'+l+'</div><div class="mc-val '+cls+'">'+v+'</div>'+(s?'<div class="mc-sub">'+s+'</div>':'')+'</div>';}
 
 function renderTudo(){
   var d=merge(),tem=d&&d.meses.length>0;
   document.getElementById('estadoVazio').style.display=tem?'none':'block';
   document.getElementById('painelPrincipal').style.display=tem?'block':'none';
-  document.getElementById('periodosWrap').style.display=estado.periodos.length?'block':'none';
-  renderPeriodosTags();
-  if(!tem) return;
-  renderMetricas(d);renderContas(d);renderChartSaldo(d);renderCatSections(d);renderChartChurr(d);renderItens(d);renderTop10(d);
-  sincronizar(d);
-}
-
-function renderPeriodosTags(){
-  document.getElementById('periodosTags').innerHTML=estado.periodos.map(function(p){
-    return '<span class="periodo-tag">'+p.mes+' <small style="opacity:.7">('+p.tipo+')</small><button onclick="removerPeriodo('+p.id+')">×</button></span>';
-  }).join('');
-}
-
-function renderMetricas(d){
+  if(!tem)return;
   var liq=d.totalReceitas-d.totalDespesas;
-  document.getElementById('metricas').innerHTML=
-    mc('Total receitas',fmtK(d.totalReceitas),'ok',d.meses.length+' meses')+
-    mc('Total despesas',fmtK(d.totalDespesas),'bad',d.meses.length+' meses')+
-    mc('Resultado líquido',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','')+
-    mc('Churrasqueira total',fmtK(d.totalChurr),'',d.meses.length+' meses');
-}
-function mc(l,v,cls,s){return '<div class="mc"><div class="mc-lbl">'+l+'</div><div class="mc-val '+cls+'">'+v+'</div>'+(s?'<div class="mc-sub">'+s+'</div>':'')+'</div>';}
-
-function renderContas(d){
-  var el=document.getElementById('contasGrid');
-  if(!d.contas||!d.contas.length){el.style.display='none';return;}
-  el.style.display='grid';
-  el.innerHTML=d.contas.map(function(c){return '<div class="conta-card"><div class="conta-nome">'+c.nome+'</div><div class="conta-saldo '+(c.saldo>=0?'pos':'neg')+'">'+fmt(c.saldo)+'</div></div>';}).join('');
-}
-
-function renderChartSaldo(d){
-  if(chartSaldo) chartSaldo.destroy();
-  chartSaldo=new Chart(document.getElementById('chartSaldo'),{type:'bar',
-    data:{labels:d.meses,datasets:[
-      {label:'Receitas',data:d.receitas,backgroundColor:'rgba(45,122,58,0.6)',order:2},
-      {label:'Despesas',data:d.despesas,backgroundColor:'rgba(192,57,43,0.6)',order:2},
-      {label:'Saldo ordinário',data:d.saldos,backgroundColor:'rgba(26,58,92,0.85)',order:1}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmtK(c.raw);}}}},
-      scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}
-    }
-  });
-}
-
-function renderCatSections(d){
-  var el=document.getElementById('catSections');
-  el.innerHTML=['terceiros','tarifas','preventiva','conservacao','admin','bancarias'].map(function(cat){
-    var total=d.catTotais[cat]||0; if(total<=0) return '';
-    var cor=catCores[cat];
-    var itsCat=d.itens.filter(function(i){return i.cat===cat;}).sort(function(a,b){return b.total-a.total;});
-    return '<div class="cat-section">'+
-      '<div class="cat-header" style="background:'+cor+'18;border-left:4px solid '+cor+'">'+
-        '<div class="cat-header-name"><span style="width:10px;height:10px;border-radius:50%;background:'+cor+';display:inline-block"></span>'+catNomes[cat]+'</div>'+
-        '<div class="cat-header-total">'+fmt(total)+'</div>'+
-      '</div>'+
-      '<div class="card" style="padding:0 16px">'+
-        itsCat.map(function(it){var pct=Math.round(it.total/total*100);return '<div style="padding:8px 0;border-bottom:1px solid #f4f4ef;display:flex;align-items:center;gap:10px"><div style="flex:1;font-size:13px">'+it.nome+'</div><div style="width:100px"><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+cor+'"></div></div></div><div style="min-width:90px;text-align:right;font-size:13px;font-weight:600;color:var(--azul)">'+fmt(it.total)+'</div><div style="min-width:30px;text-align:right;font-size:11px;color:var(--txt3)">'+pct+'%</div></div>';}).join('')+
-      '</div></div>';
+  document.getElementById('metricas').innerHTML=mc('Total receitas',fmtK(d.totalReceitas),'ok',d.meses.length+' meses')+mc('Total despesas',fmtK(d.totalDespesas),'bad',d.meses.length+' meses')+mc('Resultado liquido',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','')+mc('Churrasqueira',fmtK(d.totalChurr),'',d.meses.length+' meses');
+  var cg=document.getElementById('contasGrid');
+  if(d.contas&&d.contas.length){cg.style.display='grid';cg.innerHTML=d.contas.map(function(c){return '<div class="conta-card"><div class="conta-nome">'+c.nome+'</div><div class="conta-saldo '+(c.saldo>=0?'pos':'neg')+'">'+fmt(c.saldo)+'</div></div>';}).join('');}else cg.style.display='none';
+  if(chartSaldo)chartSaldo.destroy();
+  chartSaldo=new Chart(document.getElementById('chartSaldo'),{type:'bar',data:{labels:d.meses,datasets:[{label:'Receitas',data:d.receitas,backgroundColor:'rgba(45,122,58,0.6)',order:2},{label:'Despesas',data:d.despesas,backgroundColor:'rgba(192,57,43,0.6)',order:2},{label:'Saldo',data:d.saldos,backgroundColor:'rgba(26,58,92,0.85)',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmtK(c.raw);}}}},scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}}});
+  document.getElementById('catSections').innerHTML=['terceiros','tarifas','preventiva','conservacao','admin','bancarias'].map(function(cat){
+    var total=d.catTotais[cat]||0;if(total<=0)return '';
+    var cor=catCores[cat],its=d.itens.filter(function(i){return i.cat===cat;}).sort(function(a,b){return b.total-a.total;});
+    return '<div class="cat-section"><div class="cat-header" style="background:'+cor+'18;border-left:4px solid '+cor+'"><div class="cat-header-name">'+catNomes[cat]+'</div><div class="cat-header-total">'+fmt(total)+'</div></div><div class="card" style="padding:0 16px">'+its.map(function(it){var pct=Math.round(it.total/total*100);return '<div style="padding:8px 0;border-bottom:1px solid #f4f4ef;display:flex;align-items:center;gap:10px"><div style="flex:1;font-size:13px">'+it.nome+'</div><div style="width:100px"><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+cor+'"></div></div></div><div style="min-width:90px;text-align:right;font-size:13px;font-weight:600;color:var(--azul)">'+fmt(it.total)+'</div><div style="min-width:30px;text-align:right;font-size:11px;color:var(--txt3)">'+pct+'%</div></div>';}).join('')+'</div></div>';
   }).join('');
+  if(chartChurr)chartChurr.destroy();
+  chartChurr=new Chart(document.getElementById('chartChurr'),{type:'bar',data:{labels:d.meses,datasets:[{label:'Receita',data:d.churr,backgroundColor:'rgba(45,122,58,0.7)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return fmt(c.raw);}}}},scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}}});
+  renderItens(d);
+  var sorted=d.itens.slice().sort(function(a,b){return b.total-a.total;}),el=document.getElementById('top10'),mx=sorted[0]?sorted[0].total:1;
+  el.innerHTML=sorted.slice(0,10).map(function(item,i){var cor=catCores[item.cat];return '<div class="item-row"><div style="width:20px;font-size:12px;font-weight:700;color:var(--txt3)">'+(i+1)+'</div><div class="item-name">'+item.nome+'<div style="font-size:10px;color:var(--txt3)">'+catNomes[item.cat]+'</div></div><div style="flex:1;margin:0 12px"><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round(item.total/mx*100)+'%;background:'+cor+'"></div></div></div><div class="item-total">'+fmt(item.total)+'</div></div>';}).join('');
+  sincronizarChurr();
 }
 
-function renderChartChurr(d){
-  if(chartChurr) chartChurr.destroy();
-  chartChurr=new Chart(document.getElementById('chartChurr'),{type:'bar',
-    data:{labels:d.meses,datasets:[{label:'Receita',data:d.churr,backgroundColor:'rgba(45,122,58,0.7)'}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return fmt(c.raw);}}}},
-      scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}
-    }
-  });
-}
-
-function filtrarCat(cat,btn){
-  filtroAtual=cat;
-  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('on');});
-  btn.classList.add('on');
-  var d=merge(); if(d) renderItens(d);
-}
+function filtrarCat(cat,btn){filtroAtual=cat;document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');var d=merge();if(d)renderItens(d);}
 
 function renderItens(d){
   var el=document.getElementById('listaItens');
@@ -666,41 +389,13 @@ function renderItens(d){
   el.innerHTML=filtrados.map(function(item,idx){
     var cor=catCores[item.cat],id='det_'+idx+'_'+filtroAtual;
     var grid=d.meses.map(function(m,mi){var vi=item.meses.indexOf(m),v=vi>=0?item.vals[vi]:0;return '<div style="background:'+(v>0?'#e3f0fb':'#f8f8f4')+';border-radius:8px;padding:7px 9px"><div style="font-size:10px;color:var(--txt3)">'+m+'</div><div style="font-weight:700;font-size:12px;color:'+(v>0?'#1565c0':'var(--txt3)')+'">'+fmt(v)+'</div></div>';}).join('');
-    return '<div class="card" style="padding:0;margin-bottom:8px">'+
-      '<div class="item-row" onclick="document.getElementById(\''+id+'\').classList.toggle(\'open\')" style="padding:12px 16px">'+
-        '<div style="width:8px;height:8px;border-radius:50%;background:'+cor+';flex-shrink:0"></div>'+
-        '<div class="item-name">'+item.nome+'<div style="font-size:10px;color:var(--txt3)">'+catNomes[item.cat]+'</div></div>'+
-        '<div style="flex:1;margin:0 12px"><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round(item.total/max*100)+'%;background:'+cor+'"></div></div></div>'+
-        '<div class="item-total">'+fmt(item.total)+'</div><span style="color:var(--txt3);font-size:11px;margin-left:6px">▼</span>'+
-      '</div>'+
-      '<div class="detail-panel" id="'+id+'"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px">'+grid+'</div></div>'+
-    '</div>';
+    return '<div class="card" style="padding:0;margin-bottom:8px"><div class="item-row" onclick="document.getElementById(\''+id+'\').classList.toggle(\'open\')" style="padding:12px 16px"><div style="width:8px;height:8px;border-radius:50%;background:'+cor+';flex-shrink:0"></div><div class="item-name">'+item.nome+'<div style="font-size:10px;color:var(--txt3)">'+catNomes[item.cat]+'</div></div><div style="flex:1;margin:0 12px"><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round(item.total/max*100)+'%;background:'+cor+'"></div></div></div><div class="item-total">'+fmt(item.total)+'</div><span style="color:var(--txt3);font-size:11px;margin-left:6px">v</span></div><div class="detail-panel" id="'+id+'"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px">'+grid+'</div></div></div>';
   }).join('');
 }
 
-function renderTop10(d){
-  var sorted=d.itens.slice().sort(function(a,b){return b.total-a.total;});
-  var el=document.getElementById('top10'),max=sorted[0]?sorted[0].total:1;
-  el.innerHTML=sorted.slice(0,10).map(function(item,i){
-    var cor=catCores[item.cat];
-    return '<div class="item-row"><div style="width:20px;font-size:12px;font-weight:700;color:var(--txt3)">'+(i+1)+'</div>'+
-      '<div class="item-name">'+item.nome+'<div style="font-size:10px;color:var(--txt3)">'+catNomes[item.cat]+'</div></div>'+
-      '<div style="flex:1;margin:0 12px"><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round(item.total/max*100)+'%;background:'+cor+'"></div></div></div>'+
-      '<div class="item-total">'+fmt(item.total)+'</div></div>';
-  }).join('');
+function sincronizarChurr(){
+  try{localStorage.setItem('asi_financeiro_v3',JSON.stringify({periodos:periodos.map(function(p){return{meses:[p.mes],churr:[p.churr||0],receitas:[p.receitas||0],despesas:[p.despesas||0],saldos:[p.saldoOrdinario||0]};})}));}catch(e){}
 }
-
-function sincronizar(d){
-  // Sincroniza dados com portal principal (churrasqueira)
-  localStorage.setItem('asi_financeiro_v3',JSON.stringify({
-    periodos:estado.periodos.map(function(p){return{meses:[p.mes],churr:[p.churr],receitas:[p.receitas],despesas:[p.despesas],saldos:[p.saldoOrdinario]};})
-  }));
-}
-
-// Inicializar
-renderTudo();
-// Auto-verificar Drive se já tem histórico
-if(estado.periodos.length>0) setTimeout(listarDrive,1000);
 </script>
 </body>
 </html>

@@ -910,31 +910,47 @@ function renderContratosAdmin(){
   el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+stMap[c.status]+'</span></td></tr>';}).join('');
 }
 
-// ===== CHURRASQUEIRA SINCRONIZADA COM FINANCEIRO =====
+// ===== CHURRASQUEIRA SINCRONIZADA COM FIRESTORE =====
 function sincronizarFinanceiro(){
-  try{
-    var fin=JSON.parse(localStorage.getItem('asi_financeiro_v3')||'null');
-    if(!fin||!fin.periodos||!fin.periodos.length)return;
-    var totalChurr=0,mesesChurr=[];
-    fin.periodos.forEach(function(p){if(p.churr)p.churr.forEach(function(v,i){totalChurr+=v;if(v>0)mesesChurr.push(p.meses[i]);});});
+  db.collection('financeiro').orderBy('periodo').get().then(function(snap){
+    if(snap.empty) return;
+    var allChurr={}; // mes -> valor (sem duplicata)
+    var totalChurr=0;
     var allMeses=[];
-    fin.periodos.forEach(function(p){p.meses.forEach(function(m){if(!allMeses.includes(m))allMeses.push(m);});});
+    snap.forEach(function(doc){
+      var p=doc.data();
+      if(!p.mes) return;
+      // Prioridade: 16A > 11A > 20C para mesmo mes
+      var PRIO={'16A':3,'11A':2,'20C':1};
+      if(allChurr[p.mes]!==undefined){
+        // ja existe — so substitui se novo tem maior prioridade
+        if((PRIO[p.tipo]||0)<=(PRIO[allChurr[p.mes].tipo]||0)) return;
+      }
+      allChurr[p.mes]={v:p.churr||0,tipo:p.tipo};
+      if(!allMeses.includes(p.mes)) allMeses.push(p.mes);
+    });
+    allMeses.sort();
+    totalChurr=allMeses.reduce(function(acc,m){return acc+(allChurr[m]?allChurr[m].v:0);},0);
+    var mesesComValor=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;});
     if(totalChurr>0){
-      var e1=document.getElementById('churr-total-rec'),e2=document.getElementById('churr-media'),e3=document.getElementById('churr-fonte'),e4=document.getElementById('churr-total-loc');
-      if(e1)e1.textContent='R$ '+totalChurr.toLocaleString('pt-BR',{minimumFractionDigits:2});
-      if(e2)e2.textContent='R$ '+Math.round(totalChurr/(allMeses.length||1));
-      if(e3)e3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
-      if(e4)e4.textContent=mesesChurr.length+'x';
+      var e1=document.getElementById('churr-total-rec');
+      var e2=document.getElementById('churr-media');
+      var e3=document.getElementById('churr-fonte');
+      var e4=document.getElementById('churr-total-loc');
+      if(e1) e1.textContent='R$ '+totalChurr.toLocaleString('pt-BR',{minimumFractionDigits:2});
+      if(e2) e2.textContent='R$ '+Math.round(totalChurr/(allMeses.length||1));
+      if(e3) e3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
+      if(e4) e4.textContent=mesesComValor.length+'x';
+      // Atualizar tabela historico sem duplicar
       var tbody=document.getElementById('churr-tbody');
-      if(tbody&&allMeses.length>0){
-        var allChurr=[];
-        fin.periodos.forEach(function(p){p.meses.forEach(function(m,i){if(!allChurr.find(function(x){return x.m===m;}))allChurr.push({m:m,v:p.churr[i]||0});});});
-        var rows=allChurr.filter(function(c){return c.v>0;}).map(function(c){return '<tr><td>'+c.m+'</td><td>—</td><td>R$ '+c.v.toFixed(2).replace('.',',')+'</td></tr>';}).join('');
-        rows+='<tr style="font-weight:700"><td>Total</td><td>'+mesesChurr.length+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
+      if(tbody){
+        var rows=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;})
+          .map(function(m){return '<tr><td>'+m+'</td><td>—</td><td>R$ '+allChurr[m].v.toFixed(2).replace('.',',')+'</td></tr>';}).join('');
+        rows+='<tr style="font-weight:700"><td>Total</td><td>'+mesesComValor.length+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
         tbody.innerHTML=rows;
       }
     }
-  }catch(e){}
+  }).catch(function(e){console.log('Erro ao sincronizar churrasqueira:',e);});
 }
 
 // ===== DOCUMENTOS =====

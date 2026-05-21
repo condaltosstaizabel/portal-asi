@@ -130,6 +130,7 @@ textarea.fi{height:75px;resize:vertical}
   <button class="nb" onclick="nav('prestadores')">Prestadores</button>
   <button class="nb" onclick="nav('assembleias')">Assembleias</button>
   <button class="nb" onclick="nav('defeitos')">Defeitos</button>
+  <button class="nb" onclick="nav('mapa')">🏢 Mapa</button>
 </div></div>
 
 <!-- INÍCIO -->
@@ -314,6 +315,11 @@ textarea.fi{height:75px;resize:vertical}
   </div>
 </div>
 
+<!-- MAPA -->
+<div id="pg-mapa" class="pg">
+  <iframe src="mapa.html" style="width:100%;height:calc(100vh - 120px);border:none;border-radius:12px" title="Mapa de Apartamentos"></iframe>
+</div>
+
 <!-- DEFEITOS -->
 <div id="pg-defeitos" class="pg">
   <div class="metrics">
@@ -484,7 +490,7 @@ function fazerLogout(){
 // ===== FIM AUTH =====
 
 var WA='5519989360523';
-var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos'];
+var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos','mapa'];
 var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
 var adminLogado=false;
 

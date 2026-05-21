@@ -282,17 +282,10 @@ textarea.fi{height:75px;resize:vertical}
 <!-- DOCUMENTOS -->
 <div id="pg-documentos" class="pg">
   <div class="alert bad"><span>🚨</span><div>AVCB vencido em Mar/2026 — renovar urgentemente.</div></div>
-  <a class="drive-btn" href="https://drive.google.com/drive/folders/15bxdMPA0cwPYm1WmqGXEz14m_WhR8YOm" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir Documentos Importantes no Drive</div><div style="font-size:11px;color:#1976d2">Convenção, regimento, CNPJ, vagas...</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
-  <div class="sec">Documentos obrigatórios</div>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">📄</div><div style="flex:1"><div style="font-weight:600">AVCB</div><div style="font-size:11px;color:var(--txt3)">Emitido Mar/2021 · Válido até Mar/2026</div></div><span class="badge bad">Vencido</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#fff3e0">📄</div><div style="flex:1"><div style="font-weight:600">Seguro do Condomínio</div><div style="font-size:11px;color:var(--txt3)">Validade não verificada</div></div><span class="badge warn">Verificar</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Regimento Interno</div></div><span class="badge ok">✓</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">CNPJ — Inscrição Cadastral</div></div><span class="badge ok">✓</span></div>
-  </div>
-  <div class="sec">Plantas e projetos técnicos</div>
-  <a class="drive-btn" href="https://drive.google.com/drive/folders/1u1Z2CBCPdJ5JZxlZxSgqrc3Qd8ihhU2k" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir Plantas Condomínio no Drive</div><div style="font-size:11px;color:#1976d2">Hidráulica (11 folhas), Elétrica (22 folhas), Arquitetura</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
+  <div class="sec">Documentos</div>
+  <div class="card" style="padding:0 15px" id="lista-documentos"></div>
+  <div class="sec" style="margin-top:16px">Plantas e projetos técnicos</div>
+  <div class="card" style="padding:0 15px" id="lista-plantas"></div>
 </div>
 
 <!-- PRESTADORES -->
@@ -386,6 +379,7 @@ textarea.fi{height:75px;resize:vertical}
         <button class="at" onclick="adminTab('contratos',this)">📋 Contratos</button>
         <button class="at" onclick="adminTab('prestadores',this)">👤 Prestadores</button>
         <button class="at" onclick="adminTab('orcamentos',this)">💰 Orçamentos</button>
+        <button class="at" onclick="adminTab('documentos',this)">📁 Documentos</button>
       </div>
       <div class="admin-sec on" id="asec-alertas">
         <div id="edit-alertas"></div>
@@ -424,6 +418,12 @@ textarea.fi{height:75px;resize:vertical}
         <div id="edit-orcamentos"></div>
         <button class="add-btn" onclick="addOrcamentoAdmin()">+ Adicionar orçamento</button>
         <button class="save-btn" onclick="salvarOrcamentos();renderOrcamentos();alert('✅ Orçamentos salvos!')">💾 Salvar orçamentos</button>
+      </div>
+      <div class="admin-sec" id="asec-documentos">
+        <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Gerencie os documentos. Cole o link do Drive de cada arquivo.</div>
+        <div id="edit-documentos"></div>
+        <button class="add-btn" onclick="addDocumento()">+ Adicionar documento</button>
+        <button class="save-btn" onclick="salvarDocumentos()">&#x1F4BE; Salvar documentos</button>
       </div>
       <button onclick="fecharAdmin()" style="width:100%;padding:10px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer;font-size:13px;margin-top:8px">Fechar</button>
     </div>
@@ -487,7 +487,7 @@ auth.onAuthStateChanged(function(user){
     }
     // Inicializar portal
     renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
-    renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();
+    renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();
   }).catch(function(){
     window.location.href='auth.html';
   });
@@ -789,7 +789,7 @@ function abrirAdmin(){
   document.querySelectorAll('.at').forEach(function(b){b.classList.remove('on');});
   document.getElementById('asec-alertas').classList.add('on');
   document.querySelector('.at').classList.add('on');
-  renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
+  renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();renderDocumentosAdmin();
   // Adicionar aba Usuários se ainda não existe
   if(!document.getElementById('tab-usuarios')){
     var tabsEl=document.querySelector('.admin-tabs');
@@ -827,11 +827,12 @@ function renderAdmin(){
 
   var er=document.getElementById('edit-realizacoes');
   er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){
-    return '<div class="item-edit">'+
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
       ordemBtns.replace('{UP}','moverItem(dadosAdmin.realizacoes,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.realizacoes,'+i+',1,renderAdmin)')+
-      '<input style="width:80px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data">'+
+      '<input style="width:75px" value="'+esc(r.data)+'" onchange="dadosAdmin.realizacoes['+i+'].data=this.value" placeholder="Data">'+
       '<input class="ie-txt" value="'+esc(r.txt)+'" onchange="dadosAdmin.realizacoes['+i+'].txt=this.value" placeholder="Descrição">'+
-      '<button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">✕</button></div>';
+      '<input style="width:100%;margin-top:4px;font-size:11px" value="'+esc(r.foto||'')+'" onchange="dadosAdmin.realizacoes['+i+'].foto=this.value" placeholder="🖼️ Link da foto no Drive (opcional)">'+
+      '<button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">&#x2715;</button></div>';
   }).join('');
 
   var ep=document.getElementById('edit-projetos');
@@ -874,7 +875,29 @@ function renderAlertas(){
 }
 function renderRealizacoes(){
   var el=document.getElementById('lista-realizacoes');if(!el)return;
-  el.innerHTML=dadosAdmin.realizacoes.map(function(r){return '<div class="file-row"><div style="font-size:12px;color:var(--txt3);min-width:60px">'+r.data+'</div><div style="flex:1">'+r.txt+'</div><span class="badge ok">✓</span></div>';}).join('');
+  el.innerHTML=dadosAdmin.realizacoes.map(function(r){
+    var fotoUrl=r.foto?driveUrl(r.foto):null;
+    return '<div class="file-row" style="align-items:flex-start">'+
+      (fotoUrl
+        ?'<img src="'+fotoUrl+'" onclick="abrirFoto(\''+(r.foto||'')+'\')" style="width:56px;height:56px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" onerror="this.style.display=\'none\'">'
+        :'<div class="file-ico" style="background:#e8f5e9">✅</div>'
+      )+
+      '<div style="flex:1"><div style="font-size:12px;color:var(--txt3)">'+r.data+'</div><div style="font-weight:500">'+r.txt+'</div></div>'+
+      '<span class="badge ok">✓</span></div>';
+  }).join('');
+}
+
+function driveUrl(link){
+  if(!link) return null;
+  var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w200';
+  return link;
+}
+
+function abrirFoto(link){
+  var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  var url=m?'https://drive.google.com/file/d/'+m[1]+'/view':link;
+  window.open(url,'_blank');
 }
 function renderProjetosAdmin(){
   var el=document.getElementById('lista-projetos-admin');if(!el)return;
@@ -914,7 +937,82 @@ function sincronizarFinanceiro(){
   }catch(e){}
 }
 
-// O portal é inicializado após autenticação (ver auth.onAuthStateChanged acima)
+// ===== DOCUMENTOS =====
+var documentos=JSON.parse(localStorage.getItem('asi_documentos')||'null')||[
+  {nome:'AVCB — Auto de Vistoria Bombeiros',sub:'Emitido Mar/2021 · Vencido Mar/2026',status:'bad',link:'',secao:'docs'},
+  {nome:'Seguro do Condomínio',sub:'Validade não verificada',status:'warn',link:'',secao:'docs'},
+  {nome:'Convenção do Condomínio',sub:'PDF registrado',status:'ok',link:'',secao:'docs'},
+  {nome:'Regimento Interno',sub:'PDF',status:'ok',link:'',secao:'docs'},
+  {nome:'CNPJ — Inscrição Cadastral',sub:'PDF',status:'ok',link:'',secao:'docs'},
+  {nome:'Planta Hidráulica',sub:'11 folhas',status:'ok',link:'',secao:'plantas'},
+  {nome:'Planta Elétrica',sub:'22 folhas',status:'ok',link:'',secao:'plantas'},
+  {nome:'Planta Arquitetura',sub:'',status:'ok',link:'',secao:'plantas'}
+];
+
+function salvarDocumentos(){
+  localStorage.setItem('asi_documentos',JSON.stringify(documentos));
+  renderDocumentos();
+  alert('✅ Documentos salvos!');
+}
+
+var docIco={bad:'📄',warn:'📄',ok:'📄',blue:'📄'};
+var docBg={bad:'#fdecea',warn:'#fff3e0',ok:'#e3f0fb',blue:'#e3f0fb'};
+
+function renderDocumentos(){
+  ['docs','plantas'].forEach(function(secao){
+    var elId=secao==='docs'?'lista-documentos':'lista-plantas';
+    var el=document.getElementById(elId);if(!el)return;
+    var filtrados=documentos.filter(function(d){return d.secao===secao;});
+    if(!filtrados.length){el.innerHTML='<div style="padding:12px;color:var(--txt3);font-size:13px">Nenhum documento cadastrado.</div>';return;}
+    el.innerHTML=filtrados.map(function(d){
+      var inner='<div class="file-ico" style="background:'+(docBg[d.status]||'#e3f0fb')+'">📄</div>'+
+        '<div style="flex:1"><div style="font-weight:500">'+d.nome+'</div>'+
+        (d.sub?'<div style="font-size:11px;color:var(--txt3)">'+d.sub+'</div>':'')+
+        '</div>'+
+        '<span class="badge '+d.status+'">'+stMap[d.status]+'</span>';
+      if(d.link){
+        return '<a href="'+driveLink(d.link)+'" target="_blank" class="file-row" style="text-decoration:none;color:inherit">'+inner+'<span style="color:#1565c0;font-size:12px;margin-left:6px">🔗</span></a>';
+      }
+      return '<div class="file-row">'+inner+'</div>';
+    }).join('');
+  });
+}
+
+function driveLink(link){
+  if(!link) return '#';
+  var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(m) return 'https://drive.google.com/file/d/'+m[1]+'/view';
+  var mf=link.match(/folders\/([a-zA-Z0-9_-]+)/);
+  if(mf) return 'https://drive.google.com/drive/folders/'+mf[1];
+  return link;
+}
+
+function renderDocumentosAdmin(){
+  var el=document.getElementById('edit-documentos');if(!el)return;
+  el.innerHTML=documentos.map(function(d,i){
+    return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      ordemBtns.replace('{UP}','moverItem(documentos,'+i+',-1,renderDocumentosAdmin)').replace('{DOWN}','moverItem(documentos,'+i+',1,renderDocumentosAdmin)')+
+      '<input class="ie-txt" value="'+esc(d.nome)+'" onchange="documentos['+i+'].nome=this.value" placeholder="Nome">'+
+      '<input class="ie-sub" value="'+esc(d.sub||'')+'" onchange="documentos['+i+'].sub=this.value" placeholder="Detalhe">'+
+      '<select class="ie-sel" onchange="documentos['+i+'].status=this.value">'+selOpts(d.status)+'</select>'+
+      '<select style="width:80px;font-size:11px;padding:4px 6px;border:1px solid #ddd;border-radius:6px" onchange="documentos['+i+'].secao=this.value">'+
+        '<option value="docs"'+(d.secao==='docs'?' selected':'')+'>Docs</option>'+
+        '<option value="plantas"'+(d.secao==='plantas'?' selected':'')+'>Plantas</option>'+
+      '</select>'+
+      '<input style="width:100%;margin-top:4px;font-size:11px" value="'+esc(d.link||'')+'" onchange="documentos['+i+'].link=this.value" placeholder="🔗 Link do Drive (opcional)">'+
+      '<button class="del-btn" onclick="documentos.splice('+i+',1);renderDocumentosAdmin()">✕</button>'+
+    '</div>';
+  }).join('');
+}
+
+function addDocumento(){
+  documentos.push({nome:'Novo documento',sub:'',status:'ok',link:'',secao:'docs'});
+  renderDocumentosAdmin();
+}
+
+// ===== FIM DOCUMENTOS =====
+
+
 
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
 window.addEventListener('beforeinstallprompt',function(e){

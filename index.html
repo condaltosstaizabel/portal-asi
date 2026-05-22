@@ -295,7 +295,6 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">Última</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
     <div class="mc"><div class="mc-lbl">Síndico eleito</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
   </div>
-  <a class="drive-btn" href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Assembleias no Drive</div><div style="font-size:11px;color:#1976d2">Ver e baixar todas as atas</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Atas disponíveis</div>
   <div class="card" style="padding:0 15px">
     <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">AGE — Eleição de Síndico</div><div style="font-size:11px;color:var(--txt3)">Dez/2024 · Registrada</div></div><span class="badge ok">Registrada</span></div>
@@ -333,8 +332,7 @@ textarea.fi{height:75px;resize:vertical}
     <label class="fl">Urgência</label>
     <select class="fi" id="f-urg"><option>Normal</option><option>Urgente</option><option>Emergência</option></select>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn primary" onclick="registrar()">Registrar no portal</button>
-      <button class="btn success" onclick="abrirWA()">Enviar pelo WhatsApp</button>
+      <button class="btn primary" onclick="registrar()">Registrar defeito</button>
     </div>
   </div>
   <div class="sec">Chamados registrados</div>
@@ -470,7 +468,10 @@ auth.onAuthStateChanged(function(user){
     }
     // Inicializar portal
     renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
-    renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();
+    renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();
+    // Preencher unidade do morador no campo de defeito
+    var aptoField=document.getElementById('f-apto');
+    if(aptoField&&usuarioAtual&&usuarioAtual.unidade) aptoField.value=usuarioAtual.unidade;
   }).catch(function(){
     window.location.href='auth.html';
   });
@@ -522,34 +523,102 @@ function reservaWA(){
 }
 
 // ===== DEFEITOS =====
+// ===== DEFEITOS / CHAMADOS =====
 var chamados=[];
+
+function carregarChamados(){
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  var query=db.collection('chamados').orderBy('criadoEm','desc').limit(50);
+  // Morador ve apenas os chamados da sua unidade
+  if(!isAdmin&&u.unidade){
+    var unidadeNum=(u.unidade||'').replace(/[^0-9]/g,'');
+    query=db.collection('chamados').where('apto','>=',unidadeNum).where('apto','<=',unidadeNum+'z').orderBy('apto').limit(50);
+  }
+  query.get().then(function(snap){
+    chamados=[];
+    snap.forEach(function(doc){chamados.push(Object.assign({id:doc.id},doc.data()));});
+    // Ordenar por data desc no cliente
+    chamados.sort(function(a,b){
+      var ta=a.criadoEm&&a.criadoEm.toDate?a.criadoEm.toDate():new Date(0);
+      var tb=b.criadoEm&&b.criadoEm.toDate?b.criadoEm.toDate():new Date(0);
+      return tb-ta;
+    });
+    renderChamados();
+  }).catch(function(e){console.log('Erro chamados:',e);});
+}
+
 function registrar(){
   var apto=document.getElementById('f-apto').value.trim();
   if(!apto){alert('Informe o apartamento ou local');return;}
-  var cat=document.getElementById('f-cat').value, desc=document.getElementById('f-desc').value.trim()||'Sem descrição';
-  var urg=document.getElementById('f-urg').value, data=new Date().toLocaleDateString('pt-BR');
-  chamados.push({apto:apto,cat:cat,desc:desc,urg:urg,data:data,status:'Aberto'});
-  var assunto=encodeURIComponent('[Defeito '+urg+'] '+cat+' — '+apto);
-  var corpo=encodeURIComponent('Registro de defeito\n\nLocal: '+apto+'\nCategoria: '+cat+'\nUrgência: '+urg+'\nData: '+data+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
-  window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
-  document.getElementById('f-apto').value='';document.getElementById('f-desc').value='';
-  renderChamados();alert('Chamado registrado! E-mail preparado para envio.');
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  var cat=document.getElementById('f-cat').value;
+  var desc=document.getElementById('f-desc').value.trim()||'Sem descrição';
+  var urg=document.getElementById('f-urg').value;
+  var data=new Date().toLocaleDateString('pt-BR');
+  var chamado={
+    apto:apto,cat:cat,desc:desc,urg:urg,data:data,
+    status:'Aberto',
+    usuario:u.nome||'',
+    unidade:u.unidade||'',
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  db.collection('chamados').add(chamado).then(function(ref){
+    chamado.id=ref.id;
+    chamados.unshift(chamado);
+    document.getElementById('f-apto').value='';
+    document.getElementById('f-desc').value='';
+    renderChamados();
+    alert('✅ Chamado registrado! O síndico receberá uma notificação.');
+    // Enviar email
+    var assunto=encodeURIComponent('[Defeito '+urg+'] '+cat+' — '+apto);
+    var corpo=encodeURIComponent('Registro de defeito\n\nLocal: '+apto+'\nCategoria: '+cat+'\nUrgência: '+urg+'\nData: '+data+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
+    window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
+  }).catch(function(e){alert('Erro ao registrar: '+e.message);});
 }
+
+function atualizarStatus(id,novoStatus){
+  db.collection('chamados').doc(id).update({status:novoStatus}).then(function(){
+    var c=chamados.find(function(x){return x.id===id;});
+    if(c) c.status=novoStatus;
+    renderChamados();
+  });
+}
+
 function renderChamados(){
-  document.getElementById('cnt-ab').textContent=chamados.filter(function(c){return c.status==='Aberto';}).length;
-  document.getElementById('cnt-an').textContent=chamados.filter(function(c){return c.status==='Em análise';}).length;
-  document.getElementById('cnt-re').textContent=chamados.filter(function(c){return c.status==='Resolvido';}).length;
+  var ab=chamados.filter(function(c){return c.status==='Aberto';}).length;
+  var an=chamados.filter(function(c){return c.status==='Em análise';}).length;
+  var re=chamados.filter(function(c){return c.status==='Resolvido';}).length;
+  document.getElementById('cnt-ab').textContent=ab;
+  document.getElementById('cnt-an').textContent=an;
+  document.getElementById('cnt-re').textContent=re;
   var el=document.getElementById('lista-chamados');
-  if(!chamados.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado nesta sessão.</div>';return;}
-  el.innerHTML=chamados.slice().reverse().map(function(c){
-    var cor=c.status==='Aberto'?'#c0392b':c.status==='Em análise'?'#b8630a':'#2d7a3a';
-    var bg=c.status==='Aberto'?'bad':c.status==='Em análise'?'warn':'ok';
-    return '<div class="chamado"><div class="sdot" style="background:'+cor+'"></div><div style="flex:1"><div style="font-weight:600">'+c.cat+' — '+c.apto+'</div><div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+' · '+c.data+'</div></div><span class="badge '+bg+'">'+c.status+'</span></div>';
+  if(!chamados.length){
+    el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado registrado.</div>';
+    return;
+  }
+  var corMap={Aberto:'#c0392b','Em análise':'#b8630a',Resolvido:'#2d7a3a'};
+  var bgMap={Aberto:'bad','Em análise':'warn',Resolvido:'ok'};
+  el.innerHTML=chamados.map(function(c){
+    var cor=corMap[c.status]||'#888';
+    var bg=bgMap[c.status]||'gray';
+    return '<div class="chamado">'+
+      '<div class="sdot" style="background:'+cor+'"></div>'+
+      '<div style="flex:1">'+
+        '<div style="font-weight:600">'+c.cat+' — '+c.apto+'</div>'+
+        '<div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+(c.desc.length>80?'...':'')+'</div>'+
+        '<div style="font-size:11px;color:var(--txt3);margin-top:2px">'+c.data+(c.usuario?' · '+c.usuario:'')+'</div>'+
+        (isAdmin
+          ?'<div style="margin-top:6px;display:flex;gap:6px">'+
+            ['Aberto','Em análise','Resolvido'].map(function(s){
+              return '<button onclick="atualizarStatus(\''+(c.id||'')+'\',\''+s+'\')" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:'+(c.status===s?'var(--azul)':'transparent')+';color:'+(c.status===s?'#fff':'var(--txt2)')+';cursor:pointer">'+s+'</button>';
+            }).join('')+
+          '</div>'
+          :''
+        )+
+      '</div>'+
+      '<span class="badge '+bg+'">'+c.status+'</span>'+
+    '</div>';
   }).join('');
-}
-function abrirWA(){
-  var msg='*Defeito — Altos de Santa Izabel*\n\nLocal: '+(document.getElementById('f-apto').value||'(não informado)')+'\nCategoria: '+document.getElementById('f-cat').value+'\nUrgência: '+document.getElementById('f-urg').value+'\nDescrição: '+(document.getElementById('f-desc').value||'(sem descrição)');
-  window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(msg));
 }
 
 // ===== ORÇAMENTOS =====

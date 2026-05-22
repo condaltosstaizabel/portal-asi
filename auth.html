@@ -115,9 +115,13 @@ firebase.initializeApp({
 var auth=firebase.auth();
 var db=firebase.firestore();
 
-// Verificar se já está logado
+// Verificar se já está logado — com flag para evitar loop
+var redirecionando=false;
 auth.onAuthStateChanged(function(user){
-  if(user) verificarAcesso(user);
+  if(user&&!redirecionando){
+    redirecionando=true;
+    verificarAcesso(user);
+  }
 });
 
 function trocarAba(id,btn){

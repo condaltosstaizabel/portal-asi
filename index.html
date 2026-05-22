@@ -475,8 +475,10 @@ auth.onAuthStateChanged(function(user){
     // Preencher unidade do morador no campo de defeito
     var aptoField=document.getElementById('f-apto');
     if(aptoField&&usuarioAtual&&usuarioAtual.unidade) aptoField.value=usuarioAtual.unidade;
-  }).catch(function(){
-    window.location.href='auth.html';
+  }).catch(function(e){
+    console.error('Erro ao verificar usuario:',e);
+    // Nao redirecionar em erro de rede — manter na pagina
+    document.body.innerHTML='<div style="padding:40px;text-align:center;font-family:sans-serif"><p style="color:#c0392b">Erro ao carregar o portal.</p><p style="margin-top:8px;font-size:13px;color:#666">Verifique sua conexão e <a href="index.html">tente novamente</a>.</p></div>';
   });
 });
 

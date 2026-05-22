@@ -98,6 +98,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     </div>
     <div class="sec">Despesas por categoria</div>
     <div id="catSections"></div>
+    <div class="sec">Top 10 maiores despesas</div>
+    <div class="card" id="top10" style="padding:0 16px"></div>
     <div class="sec"><span>Analise detalhada por item</span><span style="font-size:11px;color:var(--txt3);font-weight:400;text-transform:none;letter-spacing:0">clique para ver por mes</span></div>
     <div class="filter-bar">
       <button class="fbtn on" onclick="filtrarCat('todos',this)">Todos</button>
@@ -108,8 +110,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <button class="fbtn" onclick="filtrarCat('admin',this)">Administrativa</button>
     </div>
     <div id="listaItens"></div>
-    <div class="sec">Top 10 maiores despesas</div>
-    <div class="card" id="top10" style="padding:0 16px"></div>
   </div>
   <div id="estadoVazio" style="display:none">
     <div class="alert blue">Nenhum demonstrativo carregado. O administrador precisa carregar os PDFs financeiros.</div>
@@ -123,7 +123,7 @@ var PRIO={'16A':3,'11A':2,'20C':1};
 var catCores={terceiros:'#1a3a5c',tarifas:'#b8630a',preventiva:'#2d7a3a',conservacao:'#7c3aed',admin:'#c0392b',bancarias:'#888'};
 var catNomes={terceiros:'Despesas com Terceiros',tarifas:'Tarifas Publicas',preventiva:'Manutencao Preventiva',conservacao:'Manutencao e Conservacao',admin:'Despesas Administrativas',bancarias:'Despesas Bancarias'};
 
-var PALAVRAS_RECEITA=['Cota Ordinaria','Cota Fundo','Cota Extra','Cota Churrasqueira','Consumo de agua','Receitas Eventuais','Rendimentos','Taxa de Leitura','Tarifa Garantidora','Fundo de Reserva','Fundo de Melhoria','Saldo em','Mov. Liquido','Total de Receitas','Total de RECEITAS'];
+var PALAVRAS_RECEITA=['Cota Ordinaria','Cota Fundo','Cota Extra','Cota Churrasqueira','Consumo de agua','Receitas Eventuais','Rendimentos','Taxa de Leitura','Tarifa Garantidora','Fundo de Reserva','Fundo de Melhoria','Saldo em','Saldo anterior','Saldo Final','Saldo Inicial','Mov. Liquido','Transf. da conta','Transferencia','(+) Transf','(-) Transf','Total de Receitas','Total de RECEITAS','Total de Despesas','Total de DESPESAS'];
 
 var GRUPOS={
   'Manutencao Eletrica':'Manutencao Eletrica',
@@ -138,6 +138,12 @@ var GRUPOS={
   'Material de Construcao':'Material de Construcao',
   'Substituicao de Pecas':'Substituicao de Pecas Elevador',
   'Manutencao Elevador':'Manutencao de Elevador',
+  'Sistema de Seguranca':'Sistema de Seguranca',
+  'Conservacao de Jardins':'Conservacao de Jardins',
+  'Dedetizacao':'Dedetizacao',
+  'Mao de Obra':'Mao de Obra',
+  'Medicao de Agua':'Medicao de Agua',
+  'Limpeza de Caixa':'Limpeza de Caixa',
   'Servicos Gerais':'Servicos Gerais',
   'PIS-COFINS':'PIS-COFINS-CSLL',
   'INSS':'INSS',
@@ -147,7 +153,6 @@ var GRUPOS={
   'Agua e Esgoto':'Agua e Esgoto',
   'Telefone':'Telefone e Internet',
   'Gas':'Gas',
-  'Limpeza de Caixa':'Limpeza de Caixa de Gordura',
   'Seguro':'Seguro Predial',
   'Recarga':'Recarga de Extintores',
   'Taxa de Administracao':'Taxa de Administracao',
@@ -165,11 +170,14 @@ var GRUPO_CAT={
   'Manutencao de Telhado':'conservacao','Manutencoes Diversas':'conservacao',
   'Aquisicao de equipamentos':'conservacao','Material de limpeza':'conservacao',
   'Material de jardim':'conservacao','Material de Construcao':'conservacao',
+  'Conservacao de Jardins':'conservacao','Dedetizacao':'conservacao',
+  'Mao de Obra':'conservacao','Medicao de Agua':'conservacao',
   'Substituicao de Pecas':'preventiva','Manutencao Elevador':'preventiva',
+  'Sistema de Seguranca':'preventiva','Limpeza de Caixa':'preventiva',
+  'Seguro':'preventiva','Recarga':'preventiva',
   'Servicos Gerais':'terceiros','PIS-COFINS':'terceiros',
   'INSS':'terceiros','IR ':'terceiros','IR S':'terceiros','Monitoramento':'terceiros',
   'Energia Eletrica':'tarifas','Agua e Esgoto':'tarifas','Telefone':'tarifas','Gas':'tarifas',
-  'Limpeza de Caixa':'preventiva','Seguro':'preventiva','Recarga':'preventiva',
   'Taxa de Administracao':'admin','Honorarios':'admin','Pasta mensal':'admin','Copias':'admin',
   'Manutencao de Conta':'bancarias','Tarifa Bancaria':'bancarias'
 };
@@ -397,11 +405,19 @@ function parsePDF(pages,filename){
         }
       }
       if(l.indexOf('Resumo Financeiro')>=0){
-        for(var j=i+1;j<Math.min(i+12,linhas.length);j++){
-          var lc=linhas[j].trim(),ns=lc.match(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g)||[];
+        for(var j=i+1;j<Math.min(i+15,linhas.length);j++){
+          var lc=linhas[j].trim();
+          var ns=lc.match(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g)||[];
           if(ns.length>=4){
             var nc=lc.replace(/-?\d{1,3}(?:\.\d{3})*,\d{2}.*/,'').trim();
-            if(nc&&nc.length>2) contas.push({nome:nc,saldo:toNum(ns[ns.length-1])});
+            // Linha do saldo final consolidado
+            if(nc==='Saldo final'||nc.startsWith('Saldo final')){
+              rec=toNum(ns[1]);  // Creditos consolidados
+              desp=toNum(ns[2]); // Debitos consolidados (positivo)
+              saldo=toNum(ns[ns.length-1]); // Saldo final consolidado
+            } else if(nc&&nc.length>2&&!nc.startsWith('Conta ')){
+              contas.push({nome:nc,saldo:toNum(ns[ns.length-1])});
+            }
           }
         }
       }
@@ -492,8 +508,7 @@ function renderTudo(){
   document.getElementById('metricas').innerHTML=
     mc('Total receitas',fmtK(d.totalReceitas),'ok',d.meses.length+' meses')+
     mc('Total despesas',fmtK(d.totalDespesas),'bad',d.meses.length+' meses')+
-    mc('Resultado liquido',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','')+
-    mc('Churrasqueira',fmtK(d.totalChurr),'',d.meses.length+' meses');
+    mc('Resultado liquido',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','');
   var cg=document.getElementById('contasGrid');
   if(d.contas&&d.contas.length){
     cg.style.display='grid';

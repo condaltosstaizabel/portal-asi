@@ -130,7 +130,7 @@ textarea.fi{height:75px;resize:vertical}
   <button class="nb" onclick="nav('prestadores')">Prestadores</button>
   <button class="nb" onclick="nav('assembleias')">Assembleias</button>
   <button class="nb" onclick="nav('defeitos')">Defeitos</button>
-  <button class="nb" onclick="nav('mapa')">🏢 Mapa</button>
+  <button class="nb" id="nav-mapa" style="display:none" onclick="nav('mapa')">🏢 Mapa</button>
 </div></div>
 
 <!-- INÍCIO -->
@@ -456,6 +456,8 @@ auth.onAuthStateChanged(function(user){
     if(usuarioAtual.perfil==='admin'){
       var btnAdmin=document.getElementById('btn-admin');
       if(btnAdmin) btnAdmin.style.display='flex';
+      var navMapa=document.getElementById('nav-mapa');
+      if(navMapa) navMapa.style.display='block';
       adminLogado=true;
       // Adicionar link gerenciar usuários no admin
       var tabsEl=document.querySelector('.admin-tabs');

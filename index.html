@@ -174,10 +174,10 @@ textarea.fi{height:75px;resize:vertical}
 <div id="pg-projetos" class="pg">
   <input class="fi" id="busca-proj" placeholder="🔍  Buscar projeto ou tarefa..." oninput="renderTarefas()" style="margin-bottom:12px">
   <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Projetos</div><div class="mc-val" id="proj-total-proj">0</div></div>
     <div class="mc"><div class="mc-lbl">Total ações</div><div class="mc-val" id="proj-total">0</div></div>
     <div class="mc"><div class="mc-lbl">Concluídas</div><div class="mc-val ok" id="proj-conc">0</div></div>
     <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val warn" id="proj-pend">0</div></div>
-    <div class="mc"><div class="mc-lbl">Valor est.</div><div class="mc-val">R$ 154k</div></div>
   </div>
   <div class="sec">Projetos maiores 2026</div>
   <div id="lista-projetos-admin"></div>
@@ -187,8 +187,6 @@ textarea.fi{height:75px;resize:vertical}
 
 <!-- ORÇAMENTOS -->
 <div id="pg-orcamentos" class="pg">
-  <div class="alert blue"><span>📁</span><div>Orçamentos organizados por categoria. Clique em "Abrir no Drive" para visualizar os arquivos originais.</div></div>
-  <a class="drive-btn" href="https://drive.google.com/drive/folders/1hOEYGJR4KlQtS4NjOZNccKd-ygXKTYKj" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Orçamentos no Drive</div><div style="font-size:11px;color:#1976d2">Ver todos os arquivos e propostas</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">2026 — Projetos em andamento</div>
   <div id="orc-lista"></div>
   <div class="sec">2026 — Demais categorias</div>
@@ -214,7 +212,6 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">A revisar</div><div class="mc-val warn">1</div></div>
     <div class="mc"><div class="mc-lbl">Docs vencidos</div><div class="mc-val bad">1</div></div>
   </div>
-  <a class="drive-btn" href="https://drive.google.com/drive/folders/1LMJxHyz7crCqEAbSjYzbp1eC53TDE0M4" target="_blank"><span style="font-size:18px">📂</span><div style="flex:1"><div style="font-weight:600;color:#1565c0;font-size:13px">Abrir pasta Contratos no Drive</div></div><span style="font-size:13px;color:#1565c0;font-weight:600">Abrir →</span></a>
   <div class="sec">Contratos ativos</div>
   <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX</div></div><span class="badge ok">Vigente</span></div></div>
   <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo</div></div><span class="badge warn">Revisar</span></div></div>
@@ -234,7 +231,6 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">Média/mês</div><div class="mc-val" id="churr-media">—</div></div>
     <div class="mc"><div class="mc-lbl">Fonte</div><div class="mc-val" style="font-size:11px;margin-top:6px;color:var(--txt3)" id="churr-fonte">Demonstrativo</div></div>
   </div>
-  <div class="alert blue"><span>ℹ️</span><div>Para reservar a churrasqueira entre em contato com o síndico pelo WhatsApp.</div></div>
   <div class="sec">Histórico de uso</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead>
@@ -702,10 +698,11 @@ function renderTarefas(){
       '<div style="flex:1"><div style="font-weight:500">'+t.txt+'</div><div style="font-size:11px;color:var(--txt3)">'+t.sub+'</div></div>'+
       '<span class="badge '+t.status+'">'+stLabel[t.status]+'</span></div>';
   }).join('')+'</div>';
-  var tot=document.getElementById('proj-total'),conc=document.getElementById('proj-conc'),pend=document.getElementById('proj-pend');
+  var tot=document.getElementById('proj-total'),conc=document.getElementById('proj-conc'),pend=document.getElementById('proj-pend'),totalProj=document.getElementById('proj-total-proj');
   if(tot) tot.textContent=tarefas.length;
   if(conc) conc.textContent=tarefas.filter(function(t){return t.status==='ok';}).length;
   if(pend) pend.textContent=tarefas.filter(function(t){return t.status!=='ok';}).length;
+  if(totalProj) totalProj.textContent=dadosAdmin.projetos.length;
 }
 function renderTarefasAdmin(){
   var el=document.getElementById('edit-tarefas');if(!el)return;

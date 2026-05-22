@@ -441,7 +441,7 @@ auth.onAuthStateChanged(function(user){
   }
   // Verificar se ainda tem acesso
   db.collection('usuarios').doc(user.uid).get().then(function(doc){
-    if(!doc.exists||doc.data().status!=='aprovado'){
+    if(!doc.exists||!['aprovado','Aprovado'].includes(doc.data().status)){
       auth.signOut();
       localStorage.removeItem('asi_usuario');
       window.location.href='auth.html';
@@ -535,7 +535,7 @@ function carregarChamados(){
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
   var query=db.collection('chamados').orderBy('criadoEm','desc').limit(50);
   // Morador ve apenas os chamados da sua unidade
-  if(!isAdmin&&u.unidade){
+  if(!adminLogado&&u.unidade){
     var unidadeNum=(u.unidade||'').replace(/[^0-9]/g,'');
     query=db.collection('chamados').where('apto','>=',unidadeNum).where('apto','<=',unidadeNum+'z').orderBy('apto').limit(50);
   }
@@ -612,7 +612,7 @@ function renderChamados(){
         '<div style="font-weight:600">'+c.cat+' — '+c.apto+'</div>'+
         '<div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+(c.desc.length>80?'...':'')+'</div>'+
         '<div style="font-size:11px;color:var(--txt3);margin-top:2px">'+c.data+(c.usuario?' · '+c.usuario:'')+'</div>'+
-        (isAdmin
+        (adminLogado
           ?'<div style="margin-top:6px;display:flex;gap:6px">'+
             ['Aberto','Em análise','Resolvido'].map(function(s){
               return '<button onclick="atualizarStatus(\''+(c.id||'')+'\',\''+s+'\')" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:'+(c.status===s?'var(--azul)':'transparent')+';color:'+(c.status===s?'#fff':'var(--txt2)')+';cursor:pointer">'+s+'</button>';

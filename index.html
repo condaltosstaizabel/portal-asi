@@ -989,10 +989,11 @@ function sincronizarFinanceiro(){
     });
     allMeses.sort(function(a,b){
       var mMap={Jan:1,Fev:2,Mar:3,Abr:4,Mai:5,Jun:6,Jul:7,Ago:8,Set:9,Out:10,Nov:11,Dez:12};
-      var pa=a.split('/'), pb=b.split('/');
-      var ya=parseInt(pa[1]), yb=parseInt(pb[1]);
-      if(ya!==yb) return ya-yb;
-      return (mMap[pa[0]]||0)-(mMap[pb[0]]||0);
+      var pa=a.split('/'),pb=b.split('/');
+      var ya=pa[1].length===2?parseInt('20'+pa[1]):parseInt(pa[1]);
+      var yb=pb[1].length===2?parseInt('20'+pb[1]):parseInt(pb[1]);
+      if(ya!==yb)return ya-yb;
+      return(mMap[pa[0]]||0)-(mMap[pb[0]]||0);
     });
     totalChurr=allMeses.reduce(function(acc,m){return acc+(allChurr[m]?allChurr[m].v:0);},0);
     var mesesComValor=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;});

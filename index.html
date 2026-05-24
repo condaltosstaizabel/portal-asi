@@ -126,9 +126,9 @@ textarea.fi{height:75px;resize:vertical}
   <button class="nb" onclick="nav('contratos')">Contratos</button>
   <button class="nb" onclick="nav('churrasqueira')">Churrasqueira</button>
   <button class="nb" onclick="nav('financeiro')">Financeiro</button>
-  <button class="nb" onclick="nav('documentos')">Documentos</button>
+  <button class="nb admin-only" id="nav-documentos" style="display:none" onclick="nav('documentos')">Documentos</button>
   <button class="nb" onclick="nav('prestadores')">Prestadores</button>
-  <button class="nb" onclick="nav('assembleias')">Assembleias</button>
+  <button class="nb admin-only" id="nav-assembleias" style="display:none" onclick="nav('assembleias')">Assembleias</button>
   <button class="nb" onclick="nav('defeitos')">Defeitos</button>
   <button class="nb" id="nav-mapa" style="display:none" onclick="nav('mapa')">🏢 Mapa</button>
 </div></div>
@@ -136,22 +136,16 @@ textarea.fi{height:75px;resize:vertical}
 <!-- INÍCIO -->
 <div id="pg-inicio" class="pg on">
   <div class="alert bad"><span>🚨</span><div><strong>AVCB vencido</strong> — Renovar com urgência (venceu Mar/2026).</div></div>
-  <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Projetos ativos</div><div class="mc-val warn">3</div></div>
-    <div class="mc"><div class="mc-lbl">Orçamentos 2026</div><div class="mc-val">20</div></div>
-    <div class="mc"><div class="mc-lbl">Contratos</div><div class="mc-val">3</div></div>
-    <div class="mc"><div class="mc-lbl">Assembleias</div><div class="mc-val ok">9</div></div>
-  </div>
   <div class="sec">Acesso rápido</div>
-  <div class="grid2">
-    <div class="gcard" onclick="nav('projetos')"><div class="gico" style="background:#fff3e0">🔨</div><div><div style="font-weight:600;font-size:13px">Projetos</div><div style="font-size:11px;color:var(--txt3)">3 em andamento</div></div></div>
-    <div class="gcard" onclick="nav('orcamentos')"><div class="gico" style="background:#e8f5e9">💰</div><div><div style="font-weight:600;font-size:13px">Orçamentos</div><div style="font-size:11px;color:var(--txt3)">20 mapeados</div></div></div>
-    <div class="gcard" onclick="nav('contratos')"><div class="gico" style="background:#e3f0fb">📋</div><div><div style="font-weight:600;font-size:13px">Contratos</div><div style="font-size:11px;color:var(--txt3)">3 vigentes</div></div></div>
+  <div class="grid2" id="grid-acesso-rapido">
+    <div class="gcard" onclick="nav('projetos')"><div class="gico" style="background:#fff3e0">🔨</div><div><div style="font-weight:600;font-size:13px">Projetos</div><div style="font-size:11px;color:var(--txt3)">Em andamento</div></div></div>
+    <div class="gcard" onclick="nav('orcamentos')"><div class="gico" style="background:#e8f5e9">💰</div><div><div style="font-weight:600;font-size:13px">Orçamentos</div><div style="font-size:11px;color:var(--txt3)">Propostas e cotações</div></div></div>
+    <div class="gcard" onclick="nav('contratos')"><div class="gico" style="background:#e3f0fb">📋</div><div><div style="font-weight:600;font-size:13px">Contratos</div><div style="font-size:11px;color:var(--txt3)">Vigentes e vencimentos</div></div></div>
     <div class="gcard" onclick="nav('churrasqueira')"><div class="gico" style="background:#fdecea">🍖</div><div><div style="font-weight:600;font-size:13px">Churrasqueira</div><div style="font-size:11px;color:var(--txt3)">Reservas e histórico</div></div></div>
     <div class="gcard" onclick="nav('financeiro')"><div class="gico" style="background:#f0eeff">📊</div><div><div style="font-weight:600;font-size:13px">Financeiro</div><div style="font-size:11px;color:var(--txt3)">Histórico anual</div></div></div>
-    <div class="gcard" onclick="nav('documentos')"><div class="gico" style="background:#e8f5e9">📁</div><div><div style="font-weight:600;font-size:13px">Documentos</div><div style="font-size:11px;color:var(--txt3)">Plantas, regimento...</div></div></div>
-    <div class="gcard" onclick="nav('assembleias')"><div class="gico" style="background:#e3f0fb">🏛</div><div><div style="font-weight:600;font-size:13px">Assembleias</div><div style="font-size:11px;color:var(--txt3)">9 atas registradas</div></div></div>
     <div class="gcard" onclick="nav('defeitos')"><div class="gico" style="background:#fdecea">🔧</div><div><div style="font-weight:600;font-size:13px">Reportar defeito</div><div style="font-size:11px;color:var(--txt3)">Formulário rápido</div></div></div>
+    <div class="gcard admin-only" style="display:none" onclick="nav('documentos')"><div class="gico" style="background:#e8f5e9">📁</div><div><div style="font-weight:600;font-size:13px">Documentos</div><div style="font-size:11px;color:var(--txt3)">Plantas, regimento...</div></div></div>
+    <div class="gcard admin-only" style="display:none" onclick="nav('assembleias')"><div class="gico" style="background:#e3f0fb">🏛</div><div><div style="font-weight:600;font-size:13px">Assembleias</div><div style="font-size:11px;color:var(--txt3)">Atas registradas</div></div></div>
   </div>
   <div class="sec">Alertas e pendências</div>
   <div class="card" id="lista-alertas"></div>
@@ -198,25 +192,10 @@ textarea.fi{height:75px;resize:vertical}
     <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Manutenção Câmeras</div></div></div>
     <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores Serviço</div></div></div>
   </div>
-  <div class="sec">Anteriores</div>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Portaria Virtual — Proposta CRM V1 e V2 (2022)</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">AVCB — Orçamento 043/2020</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📄</div><div style="flex:1"><div style="font-weight:500">Reforma Playground (2020)</div></div></div>
-  </div>
 </div>
 
 <!-- CONTRATOS -->
 <div id="pg-contratos" class="pg">
-  <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Vigentes</div><div class="mc-val ok">3</div></div>
-    <div class="mc"><div class="mc-lbl">A revisar</div><div class="mc-val warn">1</div></div>
-    <div class="mc"><div class="mc-lbl">Docs vencidos</div><div class="mc-val bad">1</div></div>
-  </div>
-  <div class="sec">Contratos ativos</div>
-  <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Síndico Profissional</div><div style="font-size:12px;color:var(--txt3)">PDF + DOCX</div></div><span class="badge ok">Vigente</span></div></div>
-  <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Concierge / Portaria</div><div style="font-size:12px;color:var(--txt3)">PDF + Aditivo</div></div><span class="badge warn">Revisar</span></div></div>
-  <div class="card"><div class="row"><div class="gico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:600">Contrato Jardinagem</div><div style="font-size:12px;color:var(--txt3)">PDF assinado + DOCX</div></div><span class="badge ok">Vigente</span></div></div>
   <div class="sec">Prazos e vencimentos</div>
   <div class="card" style="padding:0"><div class="tw"><table>
     <thead><tr><th>Documento</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
@@ -291,23 +270,18 @@ textarea.fi{height:75px;resize:vertical}
 
 <!-- ASSEMBLEIAS -->
 <div id="pg-assembleias" class="pg">
-  <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Atas registradas</div><div class="mc-val ok">9</div></div>
-    <div class="mc"><div class="mc-lbl">Última</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
-    <div class="mc"><div class="mc-lbl">Síndico eleito</div><div class="mc-val" style="font-size:14px;margin-top:4px">Dez/2024</div></div>
-  </div>
   <div class="sec">Atas disponíveis</div>
   <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">AGE — Eleição de Síndico</div><div style="font-size:11px;color:var(--txt3)">Dez/2024 · Registrada</div></div><span class="badge ok">Registrada</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 16/01/2024</div><div style="font-size:11px;color:var(--txt3)">Jan/2024</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/04/2023</div><div style="font-size:11px;color:var(--txt3)">Abr/2023</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 29/11/2022</div><div style="font-size:11px;color:var(--txt3)">Nov/2022</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 23/06/2022</div><div style="font-size:11px;color:var(--txt3)">Jun/2022</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/11/2020</div><div style="font-size:11px;color:var(--txt3)">Nov/2020</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">AGO — Eleição (por e-mail)</div><div style="font-size:11px;color:var(--txt3)">Ago/2020</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#f0efe8">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia Abril 2019</div><div style="font-size:11px;color:var(--txt3)">Abr/2019</div></div><span class="badge gray">PPTX</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Retificação AGI 27/10/2018</div><div style="font-size:11px;color:var(--txt3)">Out/2018</div></div><span class="badge blue">PDF</span></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div></div><span class="badge ok">Registrada</span></div>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e8f5e9">📋</div><div style="flex:1"><div style="font-weight:500">AGE — Eleição de Síndico</div><div style="font-size:11px;color:var(--txt3)">Dez/2024 · Registrada</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 16/01/2024</div><div style="font-size:11px;color:var(--txt3)">Jan/2024</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/04/2023</div><div style="font-size:11px;color:var(--txt3)">Abr/2023</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 29/11/2022</div><div style="font-size:11px;color:var(--txt3)">Nov/2022</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 23/06/2022</div><div style="font-size:11px;color:var(--txt3)">Jun/2022</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia 10/11/2020</div><div style="font-size:11px;color:var(--txt3)">Nov/2020</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">AGO — Eleição (por e-mail)</div><div style="font-size:11px;color:var(--txt3)">Ago/2020</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#f0efe8">📋</div><div style="flex:1"><div style="font-weight:500">Assembleia Abril 2019</div><div style="font-size:11px;color:var(--txt3)">Abr/2019</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e3f0fb">📋</div><div style="flex:1"><div style="font-weight:500">Retificação AGI 27/10/2018</div><div style="font-size:11px;color:var(--txt3)">Out/2018</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
+    <a href="https://drive.google.com/drive/folders/1WTn7gO6c8o8nIgnCX2jBQaN6B7LFb3bG" target="_blank" class="file-row" style="text-decoration:none;color:inherit"><div class="file-ico" style="background:#e8f5e9">📄</div><div style="flex:1"><div style="font-weight:500">Convenção do Condomínio</div></div><span style="color:#1565c0;font-size:18px">›</span></a>
   </div>
 </div>
 
@@ -458,6 +432,8 @@ auth.onAuthStateChanged(function(user){
       if(btnAdmin) btnAdmin.style.display='flex';
       var navMapa=document.getElementById('nav-mapa');
       if(navMapa) navMapa.style.display='block';
+      // Mostrar itens exclusivos de admin (nav e acesso rápido)
+      document.querySelectorAll('.admin-only').forEach(function(el){el.style.display='';});
       adminLogado=true;
       // Adicionar link gerenciar usuários no admin
       var tabsEl=document.querySelector('.admin-tabs');
@@ -497,6 +473,8 @@ var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
 var adminLogado=false;
 
 function nav(id){
+  // Bloquear documentos e assembleias para não-admin
+  if((id==='documentos'||id==='assembleias')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
   document.querySelectorAll('.bni').forEach(function(b){b.classList.remove('on');});
@@ -815,9 +793,19 @@ var dadosAdmin={
     {doc:'AVCB',emissao:'Mar/2021',validade:'Mar/2026',status:'bad'},
     {doc:'Seguro',emissao:'—',validade:'—',status:'warn'},
     {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'warn'},
-    {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'}
+    {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'},
+    {doc:'Contrato Síndico Profissional',emissao:'—',validade:'—',status:'ok'}
   ]
 };
+var stContratoOpts=[
+  {v:'ok',l:'🟢 Vigente'},
+  {v:'bad',l:'🔴 Vencido'},
+  {v:'warn',l:'🟡 Em Renovação'},
+  {v:'blue',l:'🔵 Em Cotação'},
+  {v:'purple',l:'🟣 Finalizado'},
+  {v:'canceled',l:'🚫 Cancelado'}
+];
+var stContratoMap={ok:'Vigente',bad:'Vencido',warn:'Em Renovação',blue:'Em Cotação',purple:'Finalizado',canceled:'Cancelado'};
 var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:'blue',l:'🔵 Em Orçamento'},{v:'ok',l:'🟢 Em Andamento'},{v:'construction',l:'🟠 Em Construção'},{v:'approved',l:'✅ Aprovado'},{v:'purple',l:'🟣 Concluído'},{v:'canceled',l:'🚫 Cancelado'},{v:'gray',l:'⚪ Não Aprovado'}];
 var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',construction:'Em Construção',approved:'Aprovado',purple:'Concluído',canceled:'Cancelado',gray:'Não Aprovado'};
 function esc(s){return (s||'').replace(/"/g,'&quot;');}
@@ -911,7 +899,7 @@ function renderAdmin(){
       '<input class="ie-txt" style="min-width:110px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento">'+
       '<input style="width:75px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão">'+
       '<input style="width:85px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade">'+
-      '<select class="ie-sel" onchange="onStatusChange(dadosAdmin.contratos,'+i+',this.value,renderAdmin)">'+selOpts(c.status)+'</select>'+
+      '<select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value;renderAdmin()">'+stContratoOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===c.status?' selected':'')+'>'+o.l+'</option>';}).join('')+'</select>'+
       '<button class="del-btn" onclick="dadosAdmin.contratos.splice('+i+',1);renderAdmin()">✕</button></div>';
   }).join('');
 }
@@ -933,16 +921,42 @@ function renderAlertas(){
 }
 function renderRealizacoes(){
   var el=document.getElementById('lista-realizacoes');if(!el)return;
-  el.innerHTML=dadosAdmin.realizacoes.map(function(r){
-    var fotoUrl=r.foto?driveUrl(r.foto):null;
-    return '<div class="file-row" style="align-items:flex-start">'+
-      (fotoUrl
-        ?'<img src="'+fotoUrl+'" onclick="abrirFoto(\''+(r.foto||'')+'\')" style="width:56px;height:56px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" onerror="this.style.display=\'none\'">'
-        :'<div class="file-ico" style="background:#e8f5e9">✅</div>'
-      )+
-      '<div style="flex:1"><div style="font-size:12px;color:var(--txt3)">'+r.data+'</div><div style="font-weight:500">'+r.txt+'</div></div>'+
-      '<span class="badge ok">✓</span></div>';
+  var grupos={};
+  dadosAdmin.realizacoes.forEach(function(r){
+    var ano=(r.data||'').split('/')[1]||'Outros';
+    if(ano.length===2) ano='20'+ano;
+    if(!grupos[ano]) grupos[ano]=[];
+    grupos[ano].push(r);
+  });
+  var anos=Object.keys(grupos).sort(function(a,b){return b-a;});
+  el.innerHTML=anos.map(function(ano,idx){
+    var aberto=idx===0;
+    var itens=grupos[ano].map(function(r){
+      var fotoUrl=r.foto?driveUrl(r.foto):null;
+      return '<div class="file-row" style="align-items:flex-start">'+
+        (fotoUrl
+          ?'<img src="'+fotoUrl+'" onclick="abrirFoto(\''+(r.foto||'')+'\')" style="width:56px;height:56px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" onerror="this.style.display=\'none\'">'
+          :'<div class="file-ico" style="background:#e8f5e9">✅</div>'
+        )+
+        '<div style="flex:1"><div style="font-size:12px;color:var(--txt3)">'+r.data+'</div><div style="font-weight:500">'+r.txt+'</div></div>'+
+        '<span class="badge ok">✓</span></div>';
+    }).join('');
+    return '<div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">'+
+      '<div onclick="toggleAno(this)" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;background:'+(aberto?'#f0f5fb':'var(--card)')+'">'+
+      '<span style="font-weight:700;font-size:14px;color:var(--azul)">'+ano+'</span>'+
+      '<span style="font-size:13px;color:var(--txt3)">'+grupos[ano].length+' realizações <span class="chevron-ano" style="display:inline-block;transition:transform .2s;transform:'+(aberto?'rotate(90deg)':'rotate(0deg)')+'">›</span></span>'+
+      '</div>'+
+      '<div class="ano-content" style="display:'+(aberto?'block':'none')+';padding:0 15px">'+itens+'</div>'+
+      '</div>';
   }).join('');
+}
+function toggleAno(header){
+  var content=header.nextElementSibling;
+  var chevron=header.querySelector('.chevron-ano');
+  var aberto=content.style.display==='block';
+  content.style.display=aberto?'none':'block';
+  chevron.style.transform=aberto?'rotate(0deg)':'rotate(90deg)';
+  header.style.background=aberto?'var(--card)':'#f0f5fb';
 }
 
 function driveUrl(link){
@@ -965,7 +979,7 @@ function renderProjetosAdmin(){
 }
 function renderContratosAdmin(){
   var el=document.getElementById('tbody-contratos');if(!el)return;
-  el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+stMap[c.status]+'</span></td></tr>';}).join('');
+  el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+(stContratoMap[c.status]||c.status)+'</span></td></tr>';}).join('');
 }
 
 // ===== CHURRASQUEIRA SINCRONIZADA COM FIRESTORE =====

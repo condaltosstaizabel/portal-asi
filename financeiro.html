@@ -96,8 +96,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       </div>
       <div class="chart-wrap" style="height:280px"><canvas id="chartSaldo"></canvas></div>
     </div>
-    <div class="sec">Despesas por categoria</div>
-    <div id="catSections"></div>
     <div class="sec">Top 10 maiores despesas</div>
     <div class="card" id="top10" style="padding:0 16px"></div>
     <div class="sec"><span>Analise detalhada por item</span><span style="font-size:11px;color:var(--txt3);font-weight:400;text-transform:none;letter-spacing:0">clique para ver por mes</span></div>
@@ -383,12 +381,6 @@ function renderTudo(){
   } else cg.style.display='none';
   if(chartSaldo)chartSaldo.destroy();
   chartSaldo=new Chart(document.getElementById('chartSaldo'),{type:'bar',data:{labels:d.meses,datasets:[{label:'Receitas',data:d.receitas,backgroundColor:'rgba(45,122,58,0.6)',order:2},{label:'Despesas',data:d.despesas,backgroundColor:'rgba(192,57,43,0.6)',order:2},{label:'Saldo',data:d.saldos,backgroundColor:'rgba(26,58,92,0.85)',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmtK(c.raw);}}}},scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}}});
-  document.getElementById('catSections').innerHTML=['terceiros','tarifas','preventiva','conservacao','admin','bancarias'].map(function(cat){
-    var total=d.catTotais[cat]||0;if(total<=0)return '';
-    var cor=catCores[cat];
-    var its=d.itens.filter(function(i){return i.cat===cat;}).sort(function(a,b){return b.total-a.total;});
-    return '<div class="cat-section"><div class="cat-header" style="background:'+cor+'18;border-left:4px solid '+cor+'"><div class="cat-header-name"><span style="width:10px;height:10px;border-radius:50%;background:'+cor+';display:inline-block"></span>'+catNomes[cat]+'</div><div class="cat-header-total">'+fmt(total)+'</div></div><div class="card" style="padding:0 16px">'+its.map(function(it){var pct=Math.round(it.total/total*100);return '<div style="padding:8px 0;border-bottom:1px solid #f4f4ef;display:flex;align-items:center;gap:10px"><div style="flex:1;font-size:13px">'+it.nome+'</div><div style="width:100px"><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+cor+'"></div></div></div><div style="min-width:90px;text-align:right;font-size:13px;font-weight:600;color:var(--azul)">'+fmt(it.total)+'</div><div style="min-width:30px;text-align:right;font-size:11px;color:var(--txt3)">'+pct+'%</div></div>';}).join('')+'</div></div>';
-  }).join('');
   renderItens(d);
   var sorted=d.itens.slice().sort(function(a,b){return b.total-a.total;});
   var el=document.getElementById('top10'),mx=sorted[0]?sorted[0].total:1;

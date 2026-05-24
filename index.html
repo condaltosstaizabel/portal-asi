@@ -162,7 +162,7 @@ textarea.fi{height:75px;resize:vertical}
     <div style="flex:1"><div style="font-weight:600">Phoenix Global — Administradora/Boletos</div><div style="font-size:12px;color:var(--txt3)">(19) 99269-6889</div></div>
     <button class="btn success" onclick="window.open('https://wa.me/5519992696889?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'))">WhatsApp</button>
   </div>
-  <div style="text-align:center;padding:16px 0 4px;font-size:11px;color:var(--txt3)">Portal Altos Santa Izabel · v1.11.0 · Mai/2026</div>
+  <div style="text-align:center;padding:16px 0 4px;font-size:11px;color:var(--txt3)">Portal Altos Santa Izabel · v1.12.0 · Mai/2026</div>
 </div>
 
 <!-- PROJETOS -->
@@ -437,9 +437,11 @@ auth.onAuthStateChanged(function(user){
         tabsEl.appendChild(btn);
       }
     }
-    // Inicializar portal
-    renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
-    renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();
+    // Inicializar portal — carrega dados do Firestore
+    carregarTodosOsDados(function(){
+      renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
+      renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();
+    });
     // Preencher unidade do morador no campo de defeito
     var aptoField=document.getElementById('f-apto');
     if(aptoField&&usuarioAtual&&usuarioAtual.unidade) aptoField.value=usuarioAtual.unidade;
@@ -597,7 +599,7 @@ function renderChamados(){
 }
 
 // ===== ORÇAMENTOS =====
-var orcamentos=JSON.parse(localStorage.getItem('asi_orcamentos')||'null')||[
+var orcamentos=[
   {nome:'Projeto Quiosque / Área Gourmet',cat:'Quiosque',status:'warn',arquivos:['Proposta Comercial 151225-00','Relatório Orçamento Quiosque','Prestação Serviço Reforma (assinado)','Proposta Comercial 02240']},
   {nome:'Car Wash',cat:'Car Wash',status:'warn',arquivos:['Relatório Orçamento Car Wash','Prestação Serviço Car Wash (assinado)']},
   {nome:'Pintura Predial',cat:'Pintura',status:'gray',arquivos:['Proposta Pintura (assinado)','Proposta Comercial 02239','Proposta Técnica Abr/2026']},
@@ -610,12 +612,7 @@ var orcamentos=JSON.parse(localStorage.getItem('asi_orcamentos')||'null')||[
   {nome:'Portaria Virtual — Cotação',cat:'Portaria',status:'gray',arquivos:[]},
   {nome:'Manutenção Câmeras',cat:'Câmeras',status:'gray',arquivos:[]}
 ];
-function salvarOrcamentos(){localStorage.setItem('asi_orcamentos',JSON.stringify(orcamentos));}
-// Migrar dados antigos sem categoria válida
-(function migrarOrc(){
-  var s=JSON.parse(localStorage.getItem('asi_orcamentos')||'null');
-  if(s){var ch=false;s.forEach(function(o){if(!o.cat||!CATS_ORC.includes(o.cat)){o.cat='Outros';ch=true;}});if(ch){localStorage.setItem('asi_orcamentos',JSON.stringify(s));orcamentos=s;}}
-})();
+function salvarOrcamentos(){salvarNoFirestore('orcamentos',orcamentos,function(){});}
 var orcStatusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
 
 var CATS_ORC=['Quiosque','Car Wash','Pintura','Portaria','Documentação','Limpeza','Jardinagem','Pl. Solar','Câmeras','Outros'];
@@ -676,7 +673,7 @@ function addOrcamentoAdmin(){orcamentos.push({nome:'Novo orçamento',cat:'Outros
 
 // ===== PRESTADORES =====
 var CATS_PREST=['Eletricista','Jardinagem','Portaria / Cameras','Ar Condicionado','Placa Solar','FoodTruck','Smart Store','Advogado'];
-var prestadores=JSON.parse(localStorage.getItem('asi_prestadores')||'null')||[
+var prestadores=[
   {nome:'Jeová',cat:'Eletricista',tel:'(19) 99228-3082',ind:''},
   {nome:'Wendel',cat:'Eletricista',tel:'(19) 98166-3208',ind:'Apto 1121 — Wilson'},
   {nome:'Luis Fernando',cat:'Eletricista',tel:'(19) 99369-9529',ind:'Roberto Concierge'},
@@ -691,7 +688,7 @@ var prestadores=JSON.parse(localStorage.getItem('asi_prestadores')||'null')||[
   {nome:'Robson',cat:'Smart Store',tel:'(11) 95741-5192',ind:''},
   {nome:'Amanda Amaral',cat:'Advogado',tel:'(19) 3054-6196',ind:'Débitos / Garantidora'}
 ];
-function salvarPrestadores(){localStorage.setItem('asi_prestadores',JSON.stringify(prestadores));}
+function salvarPrestadores(){salvarNoFirestore('prestadores',prestadores,function(){});}
 var filtroAtualPrest='todos';
 var catIcos={Eletricista:'⚡',Jardinagem:'🌿','Portaria / Cameras':'📷','Ar Condicionado':'❄️','Placa Solar':'☀️',FoodTruck:'🚚','Smart Store':'🛒',Advogado:'⚖️'};
 var catBg={Eletricista:'#fff3e0',Jardinagem:'#e8f5e9','Portaria / Cameras':'#e3f0fb','Ar Condicionado':'#e3f0fb','Placa Solar':'#fff3e0',FoodTruck:'#fff3e0','Smart Store':'#e8f5e9',Advogado:'#fdecea'};
@@ -750,21 +747,12 @@ function renderPrestadoresAdmin(){
 }
 
 // ===== TAREFAS =====
-var tarefas=JSON.parse(localStorage.getItem('asi_tarefas')||'null')||[
-  {txt:'Regra de bloqueio facial / controle',sub:'Jan/2025',status:'gray'},
-  {txt:'Ajustar cargo Marcos',sub:'Jan/2025',status:'gray'},
-  {txt:'Revisar tarefas Zeladoria',sub:'Jan/2025',status:'warn'},
-  {txt:'Revisar câmeras',sub:'Jan/2025',status:'gray'},
-  {txt:'Liberar acesso câmeras — conselho',sub:'Jan/2025',status:'ok'},
+var tarefas=[
+  {txt:'Revisar câmeras',sub:'Jan/2025',status:'warn'},
   {txt:'Avaliar árvores da Quadra',sub:'Fev/2025',status:'gray'},
-  {txt:'Alterar abertura do portão',sub:'Fev/2025',status:'ok'},
   {txt:'Comprar bebedouro da Quadra',sub:'Fev/2025',status:'gray'},
-  {txt:'Avaliar infiltrações — Ap Robson e Edvaldo',sub:'Jan/2025',status:'gray'},
-  {txt:'Revisar contratos: Garbens, Concierge, Jardinagem, Elevador',sub:'Jan–Mar/2025',status:'warn'},
-  {txt:'Orçamentos: Pintura, Portaria, Quiosque, Espelho Elevador T2',sub:'Fev–Jul/2025',status:'warn'},
-  {txt:'Troca de LED nas coberturas',sub:'Resolvido',status:'ok'},
-  {txt:'Vistoria noturna no condomínio',sub:'Jan/2025',status:'gray'},
   {txt:'Disponibilizar regras do condômino aos moradores',sub:'Enviado parcialmente',status:'warn'},
+  {txt:'Alterar abertura do portão',sub:'Fev/2025',status:'ok'},
   {txt:'Acesso ao e-mail do condomínio',sub:'Priscila acompanhando',status:'ok'}
 ];
 var stLabel={ok:'Concluído',warn:'Parcial',gray:'Pendente',bad:'Urgente',blue:'Andamento'};
@@ -799,34 +787,72 @@ function renderTarefasAdmin(){
 }
 function addTarefa(){tarefas.push({txt:'Nova tarefa',sub:'',status:'gray'});renderTarefasAdmin();}
 
-// ===== ADMIN =====
-var SENHA='altos2026';
+// ===== DADOS ADMIN — carregados do Firestore =====
 var dadosAdmin={
-  alertas:JSON.parse(localStorage.getItem('asi_alertas')||'null')||[
-    {txt:'AVCB — renovação urgente',sub:'Venceu Mar/2026',status:'bad'},
-    {txt:'Reforma do Quiosque',sub:'R$ 121.604 · Aguarda aprovação',status:'warn'},
-    {txt:'Seguro do condomínio',sub:'Validade não verificada',status:'warn'},
-    {txt:'Pintura predial',sub:'Orçamento pendente',status:'blue'}
+  alertas:[
+    {txt:'AVCB — renovação urgente',sub:'Venceu Mar/2026 - Em Renovação',status:'bad'}
   ],
-  realizacoes:JSON.parse(localStorage.getItem('asi_realizacoes')||'null')||[
+  realizacoes:[
+    {data:'Abr/2026',txt:'Jardim - Área do Play - 01/04'},
+    {data:'Mar/2026',txt:"Limpeza Caixa D'agua 31/03 e 01/04"},
+    {data:'Mar/2026',txt:'Revisão da Central de Alarme 31/03'},
+    {data:'Mar/2026',txt:'Desinsetização - Agricamp 30/03'},
+    {data:'Mar/2026',txt:'Troca Motor(NOVO) do Portão de Veiculos'},
+    {data:'Mar/2026',txt:"Limpeza telhado das Caixas D'agua"},
+    {data:'Mar/2026',txt:'Food Truck 14/03'},
+    {data:'Fev/2026',txt:'Jardim - Frente Condomínio - 24/02'},
+    {data:'Fev/2026',txt:'Limpeza Caixa de Gordura e Desentupimento'},
     {data:'Fev/2026',txt:'Projeto do Quiosque finalizado'},
     {data:'Jan/2026',txt:'Compra das redes da Quadra'},
+    {data:'Dez/2025',txt:'Compra TV Quiosque'},
+    {data:'Nov/2025',txt:'Food Truck'},
     {data:'Out/2025',txt:'Festa das Crianças'},
     {data:'Jul/2025',txt:'Cinema na Quadra'}
   ],
-  projetos:JSON.parse(localStorage.getItem('asi_projetos')||'null')||[
-    {nome:'Reforma do Quiosque',sub:'R$ 121.604 · Quiosque',pct:25,status:'warn'},
-    {nome:'Criação Car Wash',sub:'R$ 17.080 · Garagem',pct:15,status:'warn'},
-    {nome:'Paisagismo — áreas comuns',sub:'R$ 15.575 · Play, Sacadas',pct:10,status:'blue'}
+  projetos:[
+    {nome:'Reforma do Quiosque',sub:'Quiosque',pct:5,status:'approved'},
+    {nome:'Pintura Predial',sub:'Condominio',pct:5,status:'approved'},
+    {nome:'Paisagismo — áreas comuns',sub:'Play, Sacadas',pct:40,status:'ok'},
+    {nome:'Reforma PISOS e ADM',sub:'9 Halls e Sala ADM',pct:50,status:'ok'},
+    {nome:'Criação Car Wash',sub:'Não Aprovado',pct:0,status:'canceled'}
   ],
-  contratos:JSON.parse(localStorage.getItem('asi_contratos')||'null')||[
+  contratos:[
     {doc:'AVCB',emissao:'Mar/2021',validade:'Mar/2026',status:'bad'},
-    {doc:'Seguro',emissao:'—',validade:'—',status:'warn'},
-    {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'warn'},
-    {doc:'Contrato Jardinagem',emissao:'—',validade:'A verificar',status:'ok'},
-    {doc:'Contrato Síndico Profissional',emissao:'—',validade:'—',status:'ok'}
+    {doc:'Seguro',emissao:'Fev/2026',validade:'Fev/2027',status:'ok'},
+    {doc:'Contrato Jardinagem',emissao:'Mai/2026',validade:'Abr/2027',status:'ok'},
+    {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'canceled'}
   ]
 };
+
+// Carrega TODOS os dados do Firestore na inicialização
+function carregarTodosOsDados(callback){
+  var secoes={
+    alertas:   function(d){dadosAdmin.alertas=d;},
+    realizacoes:function(d){dadosAdmin.realizacoes=d;},
+    projetos:  function(d){dadosAdmin.projetos=d;},
+    contratos: function(d){dadosAdmin.contratos=d;},
+    tarefas:   function(d){tarefas=d;},
+    orcamentos:function(d){orcamentos=d;},
+    documentos:function(d){documentos=d;},
+    prestadores:function(d){prestadores=d;}
+  };
+  var keys=Object.keys(secoes);
+  var pendentes=keys.length;
+  keys.forEach(function(sec){
+    db.collection('portal').doc(sec).get().then(function(doc){
+      if(doc.exists && doc.data().items && doc.data().items.length>0){
+        secoes[sec](doc.data().items);
+      }
+      pendentes--;
+      if(pendentes===0 && callback) callback();
+    }).catch(function(){
+      pendentes--;
+      if(pendentes===0 && callback) callback();
+    });
+  });
+}
+// ===== ADMIN =====
+var SENHA='altos2026';
 var stContratoOpts=[
   {v:'ok',l:'🟢 Vigente'},
   {v:'bad',l:'🔴 Vencido'},
@@ -937,11 +963,16 @@ function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'w
 function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}
 function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
 function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'gray'});renderAdmin();}
-function salvarAlertas(){localStorage.setItem('asi_alertas',JSON.stringify(dadosAdmin.alertas));renderAlertas();alert('✅ Salvos!');}
-function salvarRealizacoes(){localStorage.setItem('asi_realizacoes',JSON.stringify(dadosAdmin.realizacoes));renderRealizacoes();alert('✅ Salvos!');}
-function salvarProjetos(){localStorage.setItem('asi_projetos',JSON.stringify(dadosAdmin.projetos));renderProjetosAdmin();alert('✅ Salvos!');}
-function salvarContratos(){localStorage.setItem('asi_contratos',JSON.stringify(dadosAdmin.contratos));renderContratosAdmin();alert('✅ Salvos!');}
-function salvarTarefas(){localStorage.setItem('asi_tarefas',JSON.stringify(tarefas));renderTarefas();alert('✅ Tarefas salvas!');}
+function salvarNoFirestore(colecao,dados,callback){
+  db.collection('portal').doc(colecao).set({items:dados}).then(function(){
+    if(callback) callback();
+  }).catch(function(e){alert('Erro ao salvar: '+e.message);});
+}
+function salvarAlertas(){salvarNoFirestore('alertas',dadosAdmin.alertas,function(){renderAlertas();alert('✅ Alertas salvos!');});}
+function salvarRealizacoes(){salvarNoFirestore('realizacoes',dadosAdmin.realizacoes,function(){renderRealizacoes();alert('✅ Realizações salvas!');});}
+function salvarProjetos(){salvarNoFirestore('projetos',dadosAdmin.projetos,function(){renderProjetosAdmin();alert('✅ Projetos salvos!');});}
+function salvarContratos(){salvarNoFirestore('contratos',dadosAdmin.contratos,function(){renderContratosAdmin();alert('✅ Contratos salvos!');});}
+function salvarTarefas(){salvarNoFirestore('tarefas',tarefas,function(){renderTarefas();alert('✅ Tarefas salvas!');});}
 
 function renderAlertas(){
   var el=document.getElementById('lista-alertas');if(!el)return;
@@ -1072,7 +1103,7 @@ function sincronizarFinanceiro(){
 }
 
 // ===== DOCUMENTOS =====
-var documentos=JSON.parse(localStorage.getItem('asi_documentos')||'null')||[
+var documentos=[
   {nome:'AVCB — Auto de Vistoria Bombeiros',sub:'Emitido Mar/2021 · Vencido Mar/2026',status:'bad',link:'',secao:'docs'},
   {nome:'Seguro do Condomínio',sub:'Validade não verificada',status:'warn',link:'',secao:'docs'},
   {nome:'Convenção do Condomínio',sub:'PDF registrado',status:'ok',link:'',secao:'docs'},
@@ -1084,9 +1115,7 @@ var documentos=JSON.parse(localStorage.getItem('asi_documentos')||'null')||[
 ];
 
 function salvarDocumentos(){
-  localStorage.setItem('asi_documentos',JSON.stringify(documentos));
-  renderDocumentos();
-  alert('✅ Documentos salvos!');
+  salvarNoFirestore('documentos',documentos,function(){renderDocumentos();alert('✅ Documentos salvos!');});
 }
 
 var docIco={bad:'📄',warn:'📄',ok:'📄',blue:'📄'};

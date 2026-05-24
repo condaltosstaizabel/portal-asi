@@ -308,8 +308,8 @@ function parsePDF(pages,filename){
     });
   });
 
-  function toNum(s){if(!s)return 0;try{return parseFloat(s.replace(/\./g,'').replace(',','.'));}catch(e){return 0;}}
-  function nf(l){var m=l.match(/(-?\d{1,3}(?:\.\d{3})*,\d{2})$/);return m?m[1]:null;}
+  function toNum(s){if(!s)return 0;try{var neg=s.indexOf('(')>=0;var v=parseFloat(s.replace(/[().]/g,'').replace(',','.'));return neg?-v:v;}catch(e){return 0;}}
+  function nf(l){var m=l.match(/(\(\d{1,3}(?:\.\d{3})*,\d{2}\)|-?\d{1,3}(?:\.\d{3})*,\d{2})$/);return m?m[1]:null;}
 
   var t11=linhas.some(function(l){return l.indexOf('Comparativo de')>=0;});
   var t16=!t11&&linhas.some(function(l){return l.indexOf('Conta Ordin')>=0;});
@@ -505,11 +505,16 @@ function renderTudo(){
   document.getElementById('painelPrincipal').style.display=tem?'block':'none';
   if(!tem) return;
   var liq=d.totalReceitas-d.totalDespesas;
+  var ultIdx=d.meses.length-1;
+  var ultMes=d.meses[ultIdx]||'—';
+  var ultRec=d.receitas[ultIdx]||0;
+  var ultDesp=d.despesas[ultIdx]||0;
+  var ultLiq=ultRec-ultDesp;
   document.getElementById('metricas').innerHTML=
-    mc('Total receitas',fmtK(d.totalReceitas),'ok',d.meses.length+' meses')+
-    mc('Total despesas',fmtK(d.totalDespesas),'bad',d.meses.length+' meses')+
-    mc('Resultado liquido',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','')+
-    mc('Churrasqueira',fmtK(d.totalChurr),'',d.meses.length+' meses');
+    mc('Receitas — '+ultMes,fmtK(ultRec),'ok','ultimo periodo')+
+    mc('Despesas — '+ultMes,fmtK(ultDesp),'bad','ultimo periodo')+
+    mc('Resultado — '+ultMes,(ultLiq>=0?'+':'')+fmtK(ultLiq),ultLiq>=0?'ok':'bad','')+
+    mc('Acumulado '+d.meses.length+'m',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','total do historico');
   var cg=document.getElementById('contasGrid');
   if(d.contas&&d.contas.length){
     cg.style.display='grid';

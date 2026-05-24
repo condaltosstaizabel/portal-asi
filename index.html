@@ -182,16 +182,8 @@ textarea.fi{height:75px;resize:vertical}
 
 <!-- ORÇAMENTOS -->
 <div id="pg-orcamentos" class="pg">
-  <div class="sec">2026 — Projetos em andamento</div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="filtros-orc"></div>
   <div id="orc-lista"></div>
-  <div class="sec">2026 — Demais categorias</div>
-  <div class="grid2">
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Placa Solar</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Jardinagem</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Portaria Virtual</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Manutenção Câmeras</div></div></div>
-    <div class="gcard"><div class="gico" style="background:#f0eeff">📁</div><div><div style="font-weight:600;font-size:12px">Prestadores Serviço</div></div></div>
-  </div>
 </div>
 
 <!-- CONTRATOS -->
@@ -616,33 +608,62 @@ var orcamentos=JSON.parse(localStorage.getItem('asi_orcamentos')||'null')||[
 ];
 function salvarOrcamentos(){localStorage.setItem('asi_orcamentos',JSON.stringify(orcamentos));}
 var orcStatusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
+
+var CATS_ORC=['Quiosque','Car Wash','Pintura','Portaria','Documentação','Limpeza','Jardinagem','Pl. Solar','Câmeras','Outros'];
+var filtroAtualOrc='todos';
+function renderFiltrosOrc(){
+  var el=document.getElementById('filtros-orc');if(!el)return;
+  var usadas=CATS_ORC.filter(function(c){return orcamentos.some(function(o){return o.cat===c;});});
+  var cats=['todos'].concat(usadas);
+  el.innerHTML=cats.map(function(c){
+    var on=filtroAtualOrc===c;
+    return '<button onclick="filtrarOrc(\''+c+'\')" style="font-size:12px;padding:5px 12px;border-radius:99px;border:1px solid '+(on?'var(--azul)':'var(--border)')+';background:'+(on?'var(--azul)':'transparent')+';color:'+(on?'#fff':'var(--txt2)')+';cursor:pointer">'+(c==='todos'?'Todos':c)+'</button>';
+  }).join('');
+}
+function filtrarOrc(cat){
+  filtroAtualOrc=cat;
+  renderFiltrosOrc();
+  renderOrcamentos();
+}
 function renderOrcamentos(){
-  var el=document.getElementById('orc-lista'); if(!el)return;
-  el.innerHTML=orcamentos.map(function(o,i){
+  var el=document.getElementById('orc-lista');if(!el)return;
+  renderFiltrosOrc();
+  var filtrados=filtroAtualOrc==='todos'?orcamentos:orcamentos.filter(function(o){return o.cat===filtroAtualOrc;});
+  el.innerHTML=filtrados.map(function(o){
+    var i=orcamentos.indexOf(o);
     return '<div class="card" style="margin-bottom:8px">'+
       '<div class="row">'+
         '<div style="flex:1"><div style="font-weight:600">'+o.nome+'</div><div style="font-size:11px;color:var(--txt3)">'+o.cat+'</div></div>'+
         '<select class="orc-status-sel badge '+o.status+'" onchange="orcamentos['+i+'].status=this.value;this.className=\'orc-status-sel badge \'+this.value;salvarOrcamentos()">'+
           ['warn','bad','blue','ok','gray'].map(function(s){return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+orcStatusTxt[s]+'</option>';}).join('')+
         '</select>'+
-        (adminLogado?'<button class="del-btn" style="margin-left:4px" onclick="orcamentos.splice('+i+',1);salvarOrcamentos();renderOrcamentos()">✕</button>':'')+
+        (adminLogado?'<button class="del-btn" style="margin-left:4px" onclick="orcamentos.splice('+i+',1);salvarOrcamentos();renderFiltrosOrc();renderOrcamentos()">&#x2715;</button>':'')+
       '</div>'+
       (o.arquivos&&o.arquivos.length?'<div style="margin-top:8px">'+o.arquivos.map(function(a){return '<span class="tag">📄 '+a+'</span>';}).join('')+'</div>':'')+
     '</div>';
   }).join('')+(adminLogado?'<button class="add-btn" onclick="addOrcamento()">+ Adicionar orçamento</button>':'');
 }
-function addOrcamento(){var n=prompt('Nome:');if(!n)return;var c=prompt('Categoria:')||'';orcamentos.push({nome:n,cat:c,status:'gray',arquivos:[]});salvarOrcamentos();renderOrcamentos();}
+function addOrcamento(){
+  var n=prompt('Nome do orçamento:');if(!n)return;
+  var c=prompt('Categoria (Quiosque, Car Wash, Pintura, Portaria, Documentação, Limpeza, Jardinagem, Pl. Solar, Câmeras, Outros):')||'Outros';
+  if(!CATS_ORC.includes(c)) c='Outros';
+  orcamentos.push({nome:n,cat:c,status:'gray',arquivos:[]});
+  salvarOrcamentos();renderFiltrosOrc();renderOrcamentos();
+}
 function renderOrcamentosAdmin(){
   var el=document.getElementById('edit-orcamentos');if(!el)return;
   el.innerHTML=orcamentos.map(function(o,i){
     return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
+      ordemBtns.replace('{UP}','moverItem(orcamentos,'+i+',-1,renderOrcamentosAdmin)').replace('{DOWN}','moverItem(orcamentos,'+i+',1,renderOrcamentosAdmin)')+
       '<input class="ie-txt" value="'+esc(o.nome)+'" onchange="orcamentos['+i+'].nome=this.value" placeholder="Nome">'+
-      '<input style="width:90px" value="'+esc(o.cat)+'" onchange="orcamentos['+i+'].cat=this.value" placeholder="Categoria">'+
-      '<button class="del-btn" onclick="orcamentos.splice('+i+',1);renderOrcamentosAdmin()">✕</button>'+
+      '<select style="width:110px;font-size:11px;padding:4px 6px;border:1px solid #ddd;border-radius:6px" onchange="orcamentos['+i+'].cat=this.value">'+
+        CATS_ORC.map(function(c){return '<option value="'+c+'"'+(o.cat===c?' selected':'')+'>'+c+'</option>';}).join('')+
+      '</select>'+
+      '<button class="del-btn" onclick="orcamentos.splice('+i+',1);renderOrcamentosAdmin();renderFiltrosOrc();renderOrcamentos()">&#x2715;</button>'+
     '</div>';
   }).join('');
 }
-function addOrcamentoAdmin(){orcamentos.push({nome:'Novo orçamento',cat:'',status:'gray',arquivos:[]});renderOrcamentosAdmin();}
+function addOrcamentoAdmin(){orcamentos.push({nome:'Novo orçamento',cat:'Outros',status:'gray',arquivos:[]});renderOrcamentosAdmin();}
 
 // ===== PRESTADORES =====
 var CATS_PREST=['Eletricista','Jardinagem','Portaria / Cameras','Ar Condicionado','Placa Solar','FoodTruck','Smart Store','Advogado'];

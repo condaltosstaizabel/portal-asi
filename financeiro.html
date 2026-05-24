@@ -413,9 +413,10 @@ function parsePDF(pages,filename){
             // Linha do saldo final consolidado
             if(nc==='Saldo final'||nc.startsWith('Saldo final')){
               rec=toNum(ns[1]);  // Creditos consolidados
-              desp=toNum(ns[2]); // Debitos consolidados (positivo)
+              desp=toNum(ns[2]); // Debitos consolidados
               saldo=toNum(ns[ns.length-1]); // Saldo final consolidado
-            } else if(nc&&nc.length>2&&!nc.startsWith('Conta ')){
+            } else if(nc&&nc.length>2){
+              // Incluir todas as contas inclusive Conta Ordinaria
               contas.push({nome:nc,saldo:toNum(ns[ns.length-1])});
             }
           }
@@ -504,11 +505,18 @@ function renderTudo(){
   document.getElementById('estadoVazio').style.display=tem?'none':'block';
   document.getElementById('painelPrincipal').style.display=tem?'block':'none';
   if(!tem) return;
+  // Ultimo mes disponivel
+  var ultIdx=d.meses.length-1;
+  var ultMes=d.meses[ultIdx]||'—';
+  var ultRec=d.receitas[ultIdx]||0;
+  var ultDesp=d.despesas[ultIdx]||0;
+  var ultLiq=ultRec-ultDesp;
   var liq=d.totalReceitas-d.totalDespesas;
   document.getElementById('metricas').innerHTML=
-    mc('Total receitas',fmtK(d.totalReceitas),'ok',d.meses.length+' meses')+
-    mc('Total despesas',fmtK(d.totalDespesas),'bad',d.meses.length+' meses')+
-    mc('Resultado liquido',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','');
+    mc('Receitas — '+ultMes,fmtK(ultRec),'ok','ultimo periodo')+
+    mc('Despesas — '+ultMes,fmtK(ultDesp),'bad','ultimo periodo')+
+    mc('Resultado — '+ultMes,(ultLiq>=0?'+':'')+fmtK(ultLiq),ultLiq>=0?'ok':'bad','')+
+    mc('Acumulado '+d.meses.length+'m',(liq>=0?'+':'')+fmtK(liq),liq>=0?'ok':'bad','total do historico');
   var cg=document.getElementById('contasGrid');
   if(d.contas&&d.contas.length){
     cg.style.display='grid';
@@ -574,11 +582,7 @@ function filtrarCat(cat,btn){
 function renderItens(d){
   var el=document.getElementById('listaItens');
   var filtrados=filtroAtual==='todos'?d.itens:d.itens.filter(function(i){return i.cat===filtroAtual;});
-  filtrados=filtrados.slice().sort(function(a,b){
-    var pa=a.nome.split(' ')[0],pb=b.nome.split(' ')[0];
-    if(pa===pb) return b.total-a.total;
-    return a.nome.localeCompare(b.nome,'pt');
-  });
+  filtrados=filtrados.slice().sort(function(a,b){return b.total-a.total;});
   var max=filtrados.reduce(function(m,i){return Math.max(m,i.total);},1);
   el.innerHTML=filtrados.map(function(item,idx){
     var cor=catCores[item.cat],id='det_'+idx+'_'+filtroAtual;

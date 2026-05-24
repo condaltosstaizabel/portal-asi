@@ -514,8 +514,18 @@ function renderTudo(){
   if(d.contas&&d.contas.length){
     cg.style.display='grid';
     cg.innerHTML=d.contas.map(function(c){
-      return '<div class="conta-card"><div class="conta-nome">'+c.nome+'</div><div class="conta-saldo '+(c.saldo>=0?'pos':'neg')+'">'+fmt(c.saldo)+'</div></div>';
-    }).join('');
+      var neg=c.saldo<0;
+      return '<div class="conta-card"><div class="conta-nome">'+c.nome+'</div><div class="conta-saldo '+(neg?'neg':'pos')+'">'+(neg?'('+fmt(Math.abs(c.saldo))+')':fmt(c.saldo))+'</div></div>';
+    }).join('')+
+    (function(){
+      var tot=d.contas.reduce(function(s,c){return s+c.saldo;},0);
+      var neg=tot<0;
+      return '<div class="conta-card" style="border:2px solid var(--azul);grid-column:1/-1">'+
+        '<div class="conta-nome" style="color:var(--azul)">Saldo Final Consolidado</div>'+
+        '<div class="conta-saldo '+(neg?'neg':'pos')+'" style="font-size:22px">'+
+          (neg?'('+fmt(Math.abs(tot))+')':fmt(tot))+
+        '</div></div>';
+    })();
   } else cg.style.display='none';
   // Grafico receitas/despesas
   if(chartSaldo) chartSaldo.destroy();

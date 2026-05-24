@@ -208,11 +208,17 @@ function parsePDF(pages,filename){
       if(ns.length<2)continue;
       var off=ns[0]==='0,00'?1:0,vals=ns.slice(off,nM+off).map(toNum);
       if(vals.length<nM-1)continue;
+      // Para churrasqueira, ignorar o ultimo valor que e o total acumulado
       var nm=l.replace(/-?\d{1,3}(?:\.\d{3})*,\d{2}/g,'').replace(/\s+/g,' ').trim();
+      if(l.indexOf('Cota Churrasqueira')>=0){
+        // Pegar apenas os nM primeiros valores sem o total
+        var allVals=ns.slice(off).map(toNum);
+        cA=allVals.slice(0,nM);
+        continue;
+      }
       if(l.indexOf('Total de Receitas')>=0)rA=vals;
       else if(l.indexOf('Total de Despesas')>=0&&!/TERCEIROS|PUBLICAS|PREVENTIVA|CONSERVA|ADMINISTRATIVAS|BANCARIAS|RETIDOS/.test(normStr(l).toUpperCase()))dA=vals;
       else if(l.indexOf('Saldo Final')>=0)sA=vals;
-      else if(l.indexOf('Cota Churrasqueira')>=0)cA=vals;
       else if(l.indexOf('Total de DESPESAS COM TERCEIROS')>=0)vals.forEach(function(v,k){ctA[k].terceiros+=v;});
       else if(l.indexOf('Total de TARIFAS')>=0)vals.forEach(function(v,k){ctA[k].tarifas+=v;});
       else if(/Total de MANUTENCAO PREVENTIVA|Total de MANUTENÇÃO PREVENTIVA/.test(l))vals.forEach(function(v,k){ctA[k].preventiva+=v;});

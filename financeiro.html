@@ -277,7 +277,9 @@ function parsePDF(pages,filename){
             var nc=lc.replace(/\(?-?\d{1,3}(?:\.\d{3})*,\d{2}\)?.*/,'').trim();
             var saldoFinal=toNum(ns[ns.length-1]);
             if(nc.startsWith('Saldo final')||nc==='Saldo final'){
-              rec=toNum(ns[1]);desp=toNum(ns[2]);saldo=saldoFinal;
+              rec=Math.abs(toNum(ns[1]));   // Creditos — sempre positivo
+              desp=Math.abs(toNum(ns[2]));  // Debitos — sempre positivo
+              saldo=toNum(ns[ns.length-1]); // Saldo final — pode ser negativo
             } else if(nc&&nc.length>2&&nc!=='Conta'&&!nc.startsWith('Saldo final')){
               contas.push({nome:nc,saldo:saldoFinal});
             }

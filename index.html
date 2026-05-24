@@ -162,7 +162,7 @@ textarea.fi{height:75px;resize:vertical}
     <div style="flex:1"><div style="font-weight:600">Phoenix Global — Administradora/Boletos</div><div style="font-size:12px;color:var(--txt3)">(19) 99269-6889</div></div>
     <button class="btn success" onclick="window.open('https://wa.me/5519992696889?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'))">WhatsApp</button>
   </div>
-  <div style="text-align:center;padding:16px 0 4px;font-size:11px;color:var(--txt3)">Portal Altos Santa Izabel · v1.10.0 · Mai/2026</div>
+  <div style="text-align:center;padding:16px 0 4px;font-size:11px;color:var(--txt3)">Portal Altos Santa Izabel · v1.11.0 · Mai/2026</div>
 </div>
 
 <!-- PROJETOS -->
@@ -604,9 +604,18 @@ var orcamentos=JSON.parse(localStorage.getItem('asi_orcamentos')||'null')||[
   {nome:'Facial ADM — Portaria',cat:'Portaria',status:'gray',arquivos:['Orçamento Facial Concierge','Orçamento Facial MTC']},
   {nome:'TAG Veicular',cat:'Portaria',status:'gray',arquivos:['Orçamento TAG Veicular Concierge','Orçamento TAG Veicular MTC']},
   {nome:'AVCB — Renovação',cat:'Documentação',status:'bad',arquivos:[]},
-  {nome:'Limpeza Caixa d\'Água',cat:'Limpeza',status:'gray',arquivos:[]}
+  {nome:'Limpeza Caixa d\'gua',cat:'Limpeza',status:'gray',arquivos:[]},
+  {nome:'Placa Solar — Cotação',cat:'Pl. Solar',status:'gray',arquivos:[]},
+  {nome:'Jardinagem — Paisagismo áreas comuns',cat:'Jardinagem',status:'gray',arquivos:[]},
+  {nome:'Portaria Virtual — Cotação',cat:'Portaria',status:'gray',arquivos:[]},
+  {nome:'Manutenção Câmeras',cat:'Câmeras',status:'gray',arquivos:[]}
 ];
 function salvarOrcamentos(){localStorage.setItem('asi_orcamentos',JSON.stringify(orcamentos));}
+// Migrar dados antigos sem categoria válida
+(function migrarOrc(){
+  var s=JSON.parse(localStorage.getItem('asi_orcamentos')||'null');
+  if(s){var ch=false;s.forEach(function(o){if(!o.cat||!CATS_ORC.includes(o.cat)){o.cat='Outros';ch=true;}});if(ch){localStorage.setItem('asi_orcamentos',JSON.stringify(s));orcamentos=s;}}
+})();
 var orcStatusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
 
 var CATS_ORC=['Quiosque','Car Wash','Pintura','Portaria','Documentação','Limpeza','Jardinagem','Pl. Solar','Câmeras','Outros'];

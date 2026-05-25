@@ -246,19 +246,27 @@ function parsePDF(pages,filename){
   var its={},contas=[];
 
   if(t16){
+    // W016A: formato Phoenix Global — seção única sem separação por conta
+    // W020G: formato Garbens — seções separadas por conta (Demonstrativo Analítico)
+    var isW020G=linhas.some(function(l){return l.indexOf('Demonstrativo Anal')>=0;});
     var inO=false,inD=false;
     for(var i=0;i<linhas.length;i++){
       var l=linhas[i].trim(),v=nf(l);
-      // inO: ativa no cabeçalho real da seção (linha do Demonstrativo ou Saldo em data)
-      if(/Demonstrativo Anal.+Conta (Ordin|Principal)/i.test(l))inO=true;
-      if(inO&&/Demonstrativo Anal.+Fundo/i.test(l))inO=false;
-      if(l.indexOf('Resumo Financeiro')>=0)inO=false;
+      if(isW020G){
+        // W020G: inO ativa no cabeçalho da seção Conta Principal
+        if(/Demonstrativo Anal.+Conta (Ordin|Principal)/i.test(l))inO=true;
+        if(inO&&/Demonstrativo Anal.+Fundo/i.test(l))inO=false;
+        if(l.indexOf('Resumo Financeiro')>=0)inO=false;
+      } else {
+        // W016A: inO sempre true (documento todo é a conta principal)
+        if(!inO&&(l.indexOf('Demonstrativo de Receitas')>=0||l.indexOf('Saldo em')===0))inO=true;
+        if(l.indexOf('Resumo Financeiro')>=0)inO=false;
+      }
       if(inO){
-        // inD: ativa quando encontra linha de Despesas (com ou sem colunas após)
-        if(/^Despesas(\s|$)/.test(l)&&l.length<60)inD=true;
+        if(l==='Despesas'||l==='Despesas ')inD=true;
         if(/^Total de (Receitas|RECEITAS)/i.test(l)&&v)rec=toNum(v);
         if(/^Total de (Despesas|DESPESAS)/i.test(l)&&v&&!/(COM |PUBLICA|PREVENTIVA|CONSERVA|ADMINISTRATIVA|BANCARIA|RETIDOS)/i.test(normStr(l)))desp=toNum(v);
-        if((l.startsWith('Cota Churrasqueira')||l.startsWith('ALUGUEL CHURRASQUEIRA')||/Churrasqueira/i.test(l))&&v&&!inD)ch+=toNum(v);
+        if(/Churrasqueira/i.test(l)&&v&&!inD)ch+=toNum(v);
         if(/^Saldo em \d{2}\/\d{2}\/\d{4}/.test(l)&&v&&inD)saldo=toNum(v);
         if(/Total de DESPESAS COM TERCEIROS/i.test(normStr(l))&&v)ct.terceiros=toNum(v);
         if(/Total de TARIFAS/i.test(normStr(l))&&v)ct.tarifas=toNum(v);

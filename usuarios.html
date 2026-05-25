@@ -12,33 +12,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .hdr h1{font-size:16px;font-weight:700}.hdr p{font-size:11px;opacity:.65;margin-top:2px}
 .back-btn{font-size:12px;padding:7px 14px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;cursor:pointer;text-decoration:none}
 .wrap{max-width:900px;margin:0 auto;padding:16px}
-.tabs{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--border);padding:0 16px}
-.tab{font-size:13px;padding:11px 16px;border:none;background:transparent;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
+.tabs{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--border);padding:0 16px;overflow-x:auto}
+.tab{font-size:13px;padding:11px 14px;border:none;background:transparent;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;white-space:nowrap;flex-shrink:0}
 .tab.on{color:var(--azul);border-bottom-color:var(--azul)}
 .sec{display:none}.sec.on{display:block;padding:16px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 16px;margin-bottom:12px}
-.user-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
+.user-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f4f4ef;flex-wrap:wrap}
 .user-row:last-child{border-bottom:none}
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
-.user-info{flex:1;min-width:0}
+.user-info{flex:1;min-width:120px}
 .user-nome{font-weight:600;font-size:14px}
 .user-meta{font-size:12px;color:var(--txt3);margin-top:2px}
 .badge{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:600}
 .badge.ok{background:#e8f5e9;color:#2d7a3a}.badge.warn{background:#fff3e0;color:#b8630a}
 .badge.bad{background:#fdecea;color:#c0392b}.badge.blue{background:#e3f0fb;color:#1565c0}
-.badge.gray{background:#f0efe8;color:#555}
-.btn-sm{padding:6px 12px;border-radius:7px;border:none;font-size:12px;cursor:pointer;font-weight:600}
+.badge.gray{background:#f0efe8;color:#555}.badge.purple{background:#f3f0ff;color:#6d28d9}
+.btn-sm{padding:6px 11px;border-radius:7px;border:none;font-size:12px;cursor:pointer;font-weight:600}
 .btn-sm.ok{background:#e8f5e9;color:#2d7a3a}.btn-sm.bad{background:#fdecea;color:#c0392b}
-.btn-sm.warn{background:#fff3e0;color:#b8630a}
+.btn-sm.warn{background:#fff3e0;color:#b8630a}.btn-sm.blue{background:#e3f0fb;color:#1565c0}
+.btn-sm.gray{background:#f0efe8;color:#555}.btn-sm.edit{background:#f0efe8;color:#333}
 .empty{text-align:center;padding:32px;color:var(--txt3);font-size:13px}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
-.mc{background:var(--card);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
-.mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.mc-val{font-size:20px;font-weight:700;color:var(--azul)}
-.mc-val.ok{color:var(--ok)}.mc-val.warn{color:var(--warn)}.mc-val.bad{color:var(--bad)}
 .alert{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;border:1px solid;display:flex;gap:10px}
 .alert.warn{background:#fff3e0;border-color:#ffe0b2;color:#b8630a}
-@media(max-width:600px){.user-row{gap:8px}}
+.alert.ok{background:#e8f5e9;border-color:#c8e6c9;color:#2d7a3a}
+.alert.bad{background:#fdecea;border-color:#ffcdd2;color:#c0392b}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay.on{display:flex}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:16px;font-weight:700;color:var(--azul);margin-bottom:16px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:700;color:var(--txt2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:#fafafa}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--azul)}
+.modal-btns{display:flex;gap:8px;margin-top:18px}
+.btn-prim{flex:1;padding:11px;background:var(--azul);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-sec{padding:11px 16px;background:#f0efe8;color:#333;border:none;border-radius:9px;font-size:14px;cursor:pointer}
+.create-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px}
+.create-form h3{font-size:14px;font-weight:700;color:var(--azul);margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:540px){.form-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -51,15 +63,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   <button class="tab on" onclick="trocarTab('pendentes',this)">🔔 Pendentes <span id="badge-pend"></span></button>
   <button class="tab" onclick="trocarTab('aprovados',this)">✅ Aprovados</button>
   <button class="tab" onclick="trocarTab('rejeitados',this)">❌ Rejeitados</button>
+  <button class="tab" onclick="trocarTab('criar',this)">➕ Criar usuário</button>
+  <button class="tab" onclick="trocarTab('ajuda',this)">❓ Status</button>
 </div>
 
 <div class="wrap">
-  <div class="metrics">
-    <div class="mc"><div class="mc-lbl">Pendentes</div><div class="mc-val warn" id="cnt-pend">—</div></div>
-    <div class="mc"><div class="mc-lbl">Aprovados</div><div class="mc-val ok" id="cnt-aprov">—</div></div>
-    <div class="mc"><div class="mc-lbl">Rejeitados</div><div class="mc-val bad" id="cnt-rej">—</div></div>
-    <div class="mc"><div class="mc-lbl">Total</div><div class="mc-val" id="cnt-total">—</div></div>
-  </div>
 
   <div class="sec on" id="sec-pendentes">
     <div class="alert warn" id="alerta-pend" style="display:none"><span>🔔</span><div>Há solicitações pendentes de aprovação.</div></div>
@@ -72,6 +80,70 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 
   <div class="sec" id="sec-rejeitados">
     <div class="card" id="lista-rejeitados"><div class="empty">Carregando...</div></div>
+  </div>
+
+  <div class="sec" id="sec-criar">
+    <div class="alert ok"><span>ℹ️</span><div>Cria o cadastro do usuário diretamente. O morador ainda precisará definir a senha pelo <strong>Esqueci minha senha</strong> em auth.html.</div></div>
+    <div class="create-form">
+      <h3>➕ Novo usuário</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Nome completo</label><input id="c-nome" placeholder="Ex: João Silva"></div>
+        <div class="form-group"><label>E-mail</label><input id="c-email" type="email" placeholder="morador@email.com"></div>
+        <div class="form-group"><label>Unidade (Apto)</label><input id="c-unidade" placeholder="Ex: 1042"></div>
+        <div class="form-group"><label>Celular</label><input id="c-cel" placeholder="(19) 99999-9999"></div>
+        <div class="form-group"><label>Tipo</label>
+          <select id="c-tipo"><option>Proprietário</option><option>Inquilino</option><option>Familiar</option></select>
+        </div>
+        <div class="form-group"><label>Perfil</label>
+          <select id="c-perfil"><option value="morador">Morador</option><option value="admin">Administrador</option></select>
+        </div>
+      </div>
+      <div id="status-criar"></div>
+      <button class="btn-prim" style="width:100%;margin-top:8px" onclick="criarUsuario()">✅ Criar usuário aprovado</button>
+    </div>
+    <div class="alert warn"><span>⚠️</span><div>Após criar, o morador acessa <strong>auth.html → Esqueci minha senha</strong> para definir a senha.</div></div>
+  </div>
+
+  <div class="sec" id="sec-ajuda">
+    <div class="card" style="padding:16px">
+      <h3 style="font-size:14px;font-weight:700;color:var(--azul);margin-bottom:14px">Significado dos status</h3>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px"><span class="badge warn" style="flex-shrink:0;margin-top:2px">Pendente</span><div style="font-size:13px;color:var(--txt2)">Morador preencheu o cadastro mas ainda não foi avaliado. Não consegue acessar o portal.</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span class="badge ok" style="flex-shrink:0;margin-top:2px">Aprovado</span><div style="font-size:13px;color:var(--txt2)">Acesso liberado. O morador consegue fazer login normalmente.</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span class="badge bad" style="flex-shrink:0;margin-top:2px">Rejeitado</span><div style="font-size:13px;color:var(--txt2)">Acesso negado ou revogado. Morador recebe mensagem de acesso não autorizado ao tentar logar.</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span class="badge blue" style="flex-shrink:0;margin-top:2px">Proprietário</span><div style="font-size:13px;color:var(--txt2)">Tipo do usuário — dono do apartamento.</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span class="badge gray" style="flex-shrink:0;margin-top:2px">Inquilino</span><div style="font-size:13px;color:var(--txt2)">Tipo do usuário — locatário.</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px"><span class="badge purple" style="flex-shrink:0;margin-top:2px">Admin</span><div style="font-size:13px;color:var(--txt2)">Perfil especial — acesso à área administrativa, pode editar conteúdo e aprovar usuários.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="modal-edicao">
+  <div class="modal">
+    <h2>✏️ Editar usuário</h2>
+    <input type="hidden" id="edit-uid">
+    <div class="form-group"><label>Nome</label><input id="edit-nome"></div>
+    <div class="form-group"><label>Unidade (Apto)</label><input id="edit-unidade"></div>
+    <div class="form-group"><label>Celular</label><input id="edit-cel"></div>
+    <div class="form-group"><label>Tipo</label>
+      <select id="edit-tipo"><option>Proprietário</option><option>Inquilino</option><option>Familiar</option></select>
+    </div>
+    <div class="form-group"><label>Perfil</label>
+      <select id="edit-perfil"><option value="morador">Morador</option><option value="admin">Administrador</option></select>
+    </div>
+    <div class="form-group"><label>Status</label>
+      <select id="edit-status">
+        <option value="aprovado">✅ Aprovado</option>
+        <option value="pendente">🔔 Pendente</option>
+        <option value="rejeitado">❌ Rejeitado</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-sec" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-prim" onclick="salvarEdicao()">💾 Salvar</button>
+    </div>
   </div>
 </div>
 
@@ -90,7 +162,6 @@ firebase.initializeApp({
 var auth=firebase.auth();
 var db=firebase.firestore();
 
-// Verificar se é admin
 auth.onAuthStateChanged(function(user){
   if(!user){window.location.href='auth.html';return;}
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
@@ -107,61 +178,57 @@ function trocarTab(id,btn){
 
 function carregarUsuarios(){
   db.collection('usuarios').get().then(function(snap){
-    var todos=[], pend=[], aprov=[], rej=[];
+    var pend=[],aprov=[],rej=[];
     snap.forEach(function(doc){
       var d=Object.assign({uid:doc.id},doc.data());
-      todos.push(d);
       if(d.status==='pendente') pend.push(d);
       else if(d.status==='aprovado') aprov.push(d);
-      else if(d.status==='rejeitado') rej.push(d);
+      else rej.push(d);
     });
-
-    document.getElementById('cnt-pend').textContent=pend.length;
-    document.getElementById('cnt-aprov').textContent=aprov.length;
-    document.getElementById('cnt-rej').textContent=rej.length;
-    document.getElementById('cnt-total').textContent=todos.length;
-
     if(pend.length>0){
       document.getElementById('alerta-pend').style.display='flex';
       document.getElementById('badge-pend').innerHTML='<span style="background:#e74c3c;color:#fff;border-radius:99px;padding:1px 7px;font-size:11px;margin-left:4px">'+pend.length+'</span>';
+    } else {
+      document.getElementById('alerta-pend').style.display='none';
+      document.getElementById('badge-pend').innerHTML='';
     }
-
-    renderLista('lista-pendentes', pend, true);
-    renderLista('lista-aprovados', aprov, false);
-    renderLista('lista-rejeitados', rej, false);
+    renderLista('lista-pendentes',pend,'pendente');
+    renderLista('lista-aprovados',aprov,'aprovado');
+    renderLista('lista-rejeitados',rej,'rejeitado');
   });
 }
 
-function renderLista(elId, usuarios, isPendente){
+function renderLista(elId,usuarios,tipo){
   var el=document.getElementById(elId);
   if(!usuarios.length){el.innerHTML='<div class="empty">Nenhum usuário nesta categoria.</div>';return;}
   el.innerHTML=usuarios.map(function(u){
     var ini=(u.nome||'?').charAt(0).toUpperCase();
-    var badgeTipo=u.tipo==='Proprietário'?'blue':'gray';
+    var badgeTipo=u.tipo==='Proprietário'?'blue':(u.tipo==='Inquilino'?'gray':'purple');
     var data=u.criadoEm&&u.criadoEm.toDate?u.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
+    var perfilBadge=u.perfil==='admin'?'<span class="badge purple" style="margin-left:4px">Admin</span>':'';
+    var acoes='';
+    if(tipo==='pendente'){
+      acoes='<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+escQ(u.nome)+'\',\''+escQ(u.email)+'\')">✅ Aprovar</button>'+
+            '<button class="btn-sm bad" onclick="rejeitar(\''+u.uid+'\',\''+escQ(u.nome)+'\')">❌ Rejeitar</button>';
+    } else if(tipo==='aprovado'){
+      acoes='<button class="btn-sm warn" onclick="rejeitar(\''+u.uid+'\',\''+escQ(u.nome)+'\')">Revogar</button>';
+    } else {
+      acoes='<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+escQ(u.nome)+'\',\''+escQ(u.email)+'\')">Reativar</button>';
+    }
+    acoes+='<button class="btn-sm edit" onclick="abrirEdicao(\''+u.uid+'\',\''+escQ(u.nome)+'\',\''+escQ(u.unidade)+'\',\''+escQ(u.celular||'')+'\',\''+escQ(u.tipo||'Proprietário')+'\',\''+escQ(u.perfil||'morador')+'\',\''+escQ(u.status||'pendente')+'\')">✏️</button>';
     return '<div class="user-row" id="row_'+u.uid+'">'+
       '<div class="avatar" style="background:'+getColor(ini)+'">'+ini+'</div>'+
       '<div class="user-info">'+
-        '<div class="user-nome">'+u.nome+'</div>'+
-        '<div class="user-meta">'+u.email+' · '+u.unidade+' · '+data+'</div>'+
+        '<div class="user-nome">'+(u.nome||'—')+perfilBadge+'</div>'+
+        '<div class="user-meta">'+u.email+' · Apto '+(u.unidade||'—')+' · '+data+'</div>'+
       '</div>'+
-      '<span class="badge '+badgeTipo+'">'+u.tipo+'</span>'+
-      (isPendente
-        ?'<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+u.nome+'\',\''+u.email+'\')">✅ Aprovar</button>'+
-          '<button class="btn-sm bad" onclick="rejeitar(\''+u.uid+'\',\''+u.nome+'\')">❌ Rejeitar</button>'
-        :(u.status==='aprovado'
-          ?'<span class="badge ok">Aprovado</span>'+
-            '<button class="btn-sm warn" onclick="rejeitar(\''+u.uid+'\',\''+u.nome+'\')">Revogar</button>'+
-            (u.perfil==='admin'
-              ?'<button class="btn-sm gray" onclick="tornarMorador(\''+u.uid+'\')">→ Morador</button>'
-              :'<button class="btn-sm blue" onclick="tornarAdmin(\''+u.uid+'\')">→ Admin</button>')
-          :'<span class="badge bad">Rejeitado</span>'+
-            '<button class="btn-sm ok" onclick="aprovar(\''+u.uid+'\',\''+u.nome+'\',\''+u.email+'\')">Aprovar</button>'
-        )
-      )+'</div>';
+      '<span class="badge '+badgeTipo+'">'+(u.tipo||'—')+'</span>'+
+      acoes+
+    '</div>';
   }).join('');
 }
 
+function escQ(s){return (s||'').replace(/'/g,"\\'");}
 function getColor(c){
   var cores=['#1a3a5c','#2d7a3a','#7c3aed','#b8630a','#c0392b','#0891b2'];
   return cores[c.charCodeAt(0)%cores.length];
@@ -170,16 +237,10 @@ function getColor(c){
 function aprovar(uid,nome,email){
   if(!confirm('Aprovar acesso de '+nome+'?')) return;
   db.collection('usuarios').doc(uid).update({status:'aprovado'}).then(function(){
-    // Enviar e-mail de aprovação
-    var assunto=encodeURIComponent('[Portal ASI] Seu acesso foi aprovado!');
-    var corpo=encodeURIComponent(
-      'Olá, '+nome+'!\n\n'+
-      'Seu acesso ao Portal Altos Santa Izabel foi aprovado.\n\n'+
-      'Acesse agora em: https://condaltosstaizabel.github.io/portal-asi/auth.html\n\n'+
-      'Condomínio Altos Santa Izabel'
-    );
-    window.open('mailto:'+email+'?subject='+assunto+'&body='+corpo);
     carregarUsuarios();
+    var assunto=encodeURIComponent('[Portal ASI] Seu acesso foi aprovado!');
+    var corpo=encodeURIComponent('Olá, '+nome+'!\n\nSeu acesso ao Portal Altos Santa Izabel foi aprovado.\n\nAcesse: https://condaltosstaizabel.github.io/portal-asi/auth.html\n\nCondomínio Altos Santa Izabel');
+    window.open('mailto:'+email+'?subject='+assunto+'&body='+corpo);
   });
 }
 
@@ -188,14 +249,62 @@ function rejeitar(uid,nome){
   db.collection('usuarios').doc(uid).update({status:'rejeitado'}).then(carregarUsuarios);
 }
 
-function tornarAdmin(uid){
-  if(!confirm('Tornar este usuário administrador?')) return;
-  db.collection('usuarios').doc(uid).update({perfil:'admin'}).then(carregarUsuarios);
+function abrirEdicao(uid,nome,unidade,cel,tipo,perfil,status){
+  document.getElementById('edit-uid').value=uid;
+  document.getElementById('edit-nome').value=nome||'';
+  document.getElementById('edit-unidade').value=unidade||'';
+  document.getElementById('edit-cel').value=cel||'';
+  document.getElementById('edit-tipo').value=tipo||'Proprietário';
+  document.getElementById('edit-perfil').value=perfil||'morador';
+  document.getElementById('edit-status').value=status||'pendente';
+  document.getElementById('modal-edicao').classList.add('on');
+}
+function fecharModal(){document.getElementById('modal-edicao').classList.remove('on');}
+function salvarEdicao(){
+  var uid=document.getElementById('edit-uid').value;
+  var dados={
+    nome:document.getElementById('edit-nome').value,
+    unidade:document.getElementById('edit-unidade').value,
+    celular:document.getElementById('edit-cel').value,
+    tipo:document.getElementById('edit-tipo').value,
+    perfil:document.getElementById('edit-perfil').value,
+    status:document.getElementById('edit-status').value
+  };
+  db.collection('usuarios').doc(uid).update(dados).then(function(){
+    fecharModal();carregarUsuarios();
+  }).catch(function(e){alert('Erro: '+e.message);});
 }
 
-function tornarMorador(uid){
-  if(!confirm('Remover permissão de admin deste usuário?')) return;
-  db.collection('usuarios').doc(uid).update({perfil:'morador'}).then(carregarUsuarios);
+function criarUsuario(){
+  var nome=document.getElementById('c-nome').value.trim();
+  var email=document.getElementById('c-email').value.trim();
+  var unidade=document.getElementById('c-unidade').value.trim();
+  var cel=document.getElementById('c-cel').value.trim();
+  var tipo=document.getElementById('c-tipo').value;
+  var perfil=document.getElementById('c-perfil').value;
+  var statusEl=document.getElementById('status-criar');
+  if(!nome||!email||!unidade){
+    statusEl.innerHTML='<div class="alert bad" style="margin-top:8px"><span>⚠️</span><div>Nome, e-mail e unidade são obrigatórios.</div></div>';
+    return;
+  }
+  statusEl.innerHTML='<div class="alert warn" style="margin-top:8px"><span>⏳</span><div>Criando usuário...</div></div>';
+  var senhaTemp='ASI@'+unidade+'2026';
+  auth.createUserWithEmailAndPassword(email,senhaTemp).then(function(cred){
+    return db.collection('usuarios').doc(cred.user.uid).set({
+      nome:nome,email:email,unidade:unidade,celular:cel,tipo:tipo,perfil:perfil,
+      status:'aprovado',criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }).then(function(){
+    statusEl.innerHTML='<div class="alert ok" style="margin-top:8px"><span>✅</span><div>Usuário criado! Senha temporária: <strong>ASI@'+unidade+'2026</strong> — peça ao morador para trocar pelo "Esqueci minha senha".</div></div>';
+    document.getElementById('c-nome').value='';
+    document.getElementById('c-email').value='';
+    document.getElementById('c-unidade').value='';
+    document.getElementById('c-cel').value='';
+    carregarUsuarios();
+  }).catch(function(e){
+    var msg=e.code==='auth/email-already-in-use'?'Este e-mail já está cadastrado.':e.message;
+    statusEl.innerHTML='<div class="alert bad" style="margin-top:8px"><span>❌</span><div>'+msg+'</div></div>';
+  });
 }
 </script>
 </body>

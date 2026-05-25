@@ -124,6 +124,9 @@ var PALAVRAS_RECEITA=['Cota Ordinaria','Cota Fundo','Conta Ordin','Conta Princip
 var GRUPOS={
   // Terceiros
   'Servicos Gerais':'Servicos Gerais',
+  'SERV. GERAIS':'Servicos Gerais',
+  'Servicos de Portaria':'Monitoramento / Portaria',
+  'MONITORAMENTO REMOTO':'Monitoramento / Portaria',
   'Monitoramento':'Monitoramento / Portaria',
   'PIS-COFINS':'PIS-COFINS-CSLL',
   'INSS':'INSS',
@@ -356,7 +359,7 @@ function parsePDF(pages,filename){
               .replace(/\s+(NF[-\s]?\S+|REF\s+\S+)\s*.*$/i,'')
               .replace(/\s+(\d+ de \d+)\s*.*$/,'')
               .replace(/\s*[-–]\s*$/,'')
-              .replace(/\s{2,}.*$/,'').trim();if(nm&&nm.length>2){var gr=getGrupo(nm);if(!its[gr.nome])its[gr.nome]={cat:gr.cat,v:0};its[gr.nome].v+=vv;if(gr.nome==='Servicos Gerais'||gr.nome===nm)console.log('ITEM:',JSON.stringify({raw:l.slice(0,40),nm:nm,gr:gr.nome,v:vv}));}}
+              .replace(/\s{2,}.*$/,'').trim();if(nm&&nm.length>2){var gr=getGrupo(nm);if(!its[gr.nome])its[gr.nome]={cat:gr.cat,v:0};its[gr.nome].v+=vv;}}
         }
       }
       if(l.indexOf('Resumo Financeiro')>=0){

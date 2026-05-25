@@ -142,6 +142,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     </div>
     <div class="modal-btns">
       <button class="btn-sec" onclick="fecharModal()">Cancelar</button>
+      <button style="padding:11px 16px;background:#fdecea;color:#c0392b;border:none;border-radius:9px;font-size:14px;cursor:pointer" onclick="excluirUsuario()">🗑️</button>
       <button class="btn-prim" onclick="salvarEdicao()">💾 Salvar</button>
     </div>
   </div>
@@ -260,6 +261,14 @@ function abrirEdicao(uid,nome,unidade,cel,tipo,perfil,status){
   document.getElementById('modal-edicao').classList.add('on');
 }
 function fecharModal(){document.getElementById('modal-edicao').classList.remove('on');}
+function excluirUsuario(){
+  var uid=document.getElementById('edit-uid').value;
+  var nome=document.getElementById('edit-nome').value;
+  if(!confirm('Excluir permanentemente o usuário '+nome+'? Esta ação não pode ser desfeita.')) return;
+  db.collection('usuarios').doc(uid).delete().then(function(){
+    fecharModal();carregarUsuarios();
+  }).catch(function(e){alert('Erro: '+e.message);});
+}
 function salvarEdicao(){
   var uid=document.getElementById('edit-uid').value;
   var dados={

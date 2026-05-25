@@ -141,6 +141,8 @@ function carregarFirestore(){
     periodos=[];
     snap.forEach(function(doc){periodos.push(Object.assign({id:doc.id},doc.data()));});
     document.getElementById('loading').style.display='none';
+    console.log('Firestore loaded:',periodos.length,'periodos');
+    periodos.forEach(function(p){console.log(p.mes,p.tipo,'itens:',(p.itens||[]).length,'receitas:',p.receitas);});
     renderPeriodosTags();renderTudo();
   }).catch(function(e){document.getElementById('loading').textContent='Erro: '+e.message;});
 }
@@ -313,7 +315,6 @@ function parsePDF(pages,filename){
 }
 
 function merge(){
-  console.log('merge: periodos=',periodos.length, periodos.map(function(p){return p.mes+' itens:'+(p.itens||[]).length;}));
   if(!periodos.length)return null;
   var meses=[],rec=[],desp=[],sald=[],ch=[];
   var iM={},catT={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0};

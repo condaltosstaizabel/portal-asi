@@ -120,7 +120,7 @@ var auth=firebase.auth(),db=firebase.firestore(),chartSaldo,filtroAtual='todos',
 var PRIO={'16A':3,'11A':2,'20C':1};
 var catCores={terceiros:'#1a3a5c',tarifas:'#b8630a',preventiva:'#2d7a3a',conservacao:'#7c3aed',admin:'#c0392b',bancarias:'#888'};
 var catNomes={terceiros:'Despesas com Terceiros',tarifas:'Tarifas Publicas',preventiva:'Manutencao Preventiva',conservacao:'Manutencao e Conservacao',admin:'Despesas Administrativas',bancarias:'Despesas Bancarias'};
-var PALAVRAS_RECEITA=['Cota Ordinaria','Cota Fundo','Cota Extra','Cota Churrasqueira','Consumo de agua','Receitas Eventuais','Rendimentos','Taxa de Leitura','Tarifa Garantidora','Fundo de Reserva','Fundo de Melhoria','Saldo em','Saldo anterior','Saldo Final','Saldo Inicial','Mov. Liquido','Transf. da conta','(+) Transf','(-) Transf','Total de Receitas','Total de RECEITAS','Total de Despesas','Total de DESPESAS','Multa Regulamentar','Receita Mercado','CONTA SALAO'];
+var PALAVRAS_RECEITA=['Cota Ordinaria','Cota Fundo','Conta Ordin','Conta Principal','Cota Extra','Cota Churrasqueira','Consumo de agua','Receitas Eventuais','Rendimentos','Taxa de Leitura','Tarifa Garantidora','Fundo de Reserva','Fundo de Melhoria','Saldo em','Saldo anterior','Saldo Final','Saldo Inicial','Mov. Liquido','Transf. da conta','(+) Transf','(-) Transf','Total de Receitas','Total de RECEITAS','Total de Despesas','Total de DESPESAS','Multa Regulamentar','Receita Mercado','CONTA SALAO'];
 var GRUPOS={'Manutencao Eletrica':'Manutencao Eletrica','Material Eletrico':'Material Eletrico','Manutencao Hidraulica':'Manutencao Hidraulica','Manutencao de Portao':'Manutencao de Portao Eletronico','Manutencao de Telhado':'Manutencao de Telhados','Manutencoes Diversas':'Manutencoes Diversas','Aquisicao de equipamentos':'Aquisicao de Equipamentos','Material de limpeza':'Material de Limpeza','Material de jardim':'Material de Jardim','Material de Construcao':'Material de Construcao','Substituicao de Pecas':'Substituicao de Pecas Elevador','Manutencao Elevador':'Manutencao de Elevador','Sistema de Seguranca':'Sistema de Seguranca','Conservacao de Jardins':'Conservacao de Jardins','Dedetizacao':'Dedetizacao','Mao de Obra':'Mao de Obra','Medicao de Agua':'Medicao de Agua','Limpeza de Caixa':'Limpeza de Caixa','Servicos Gerais':'Servicos Gerais','PIS-COFINS':'PIS-COFINS-CSLL','INSS':'INSS','IR ':'IR Retido','IR S':'IR Retido','Energia Eletrica':'Energia Eletrica','Agua e Esgoto':'Agua e Esgoto','Telefone':'Telefone e Internet','Gas':'Gas','Seguro':'Seguro Predial','Recarga':'Recarga de Extintores','Taxa de Administracao':'Taxa de Administracao','Honorarios':'Honorarios Sindico','Pasta mensal':'Pasta Mensal','Copias':'Copias e Impressos','Manutencao de Conta':'Manutencao de Conta Bancaria','Tarifa Bancaria':'Tarifa Bancaria','Monitoramento':'Monitoramento / Portaria'};
 var GRUPO_CAT={'Manutencao Eletrica':'conservacao','Material Eletrico':'conservacao','Manutencao Hidraulica':'conservacao','Manutencao de Portao':'conservacao','Manutencao de Telhado':'conservacao','Manutencoes Diversas':'conservacao','Aquisicao de equipamentos':'conservacao','Material de limpeza':'conservacao','Material de jardim':'conservacao','Material de Construcao':'conservacao','Conservacao de Jardins':'conservacao','Dedetizacao':'conservacao','Mao de Obra':'conservacao','Medicao de Agua':'conservacao','Substituicao de Pecas':'preventiva','Manutencao Elevador':'preventiva','Sistema de Seguranca':'preventiva','Limpeza de Caixa':'preventiva','Seguro':'preventiva','Recarga':'preventiva','Servicos Gerais':'terceiros','PIS-COFINS':'terceiros','INSS':'terceiros','IR ':'terceiros','IR S':'terceiros','Monitoramento':'terceiros','Energia Eletrica':'tarifas','Agua e Esgoto':'tarifas','Telefone':'tarifas','Gas':'tarifas','Taxa de Administracao':'admin','Honorarios':'admin','Pasta mensal':'admin','Copias':'admin','Manutencao de Conta':'bancarias','Tarifa Bancaria':'bancarias'};
 
@@ -255,7 +255,7 @@ function parsePDF(pages,filename){
         if(l==='Despesas')inD=true;
         if(/^Total de (Receitas|RECEITAS)/i.test(l)&&v)rec=toNum(v);
         if(/^Total de (Despesas|DESPESAS)/i.test(l)&&v&&!/(COM |PUBLICA|PREVENTIVA|CONSERVA|ADMINISTRATIVA|BANCARIA|RETIDOS)/i.test(normStr(l)))desp=toNum(v);
-        if(l.startsWith('Cota Churrasqueira')&&v)ch=toNum(v);
+        if((l.startsWith('Cota Churrasqueira')||l.startsWith('ALUGUEL CHURRASQUEIRA')||/Churrasqueira/i.test(l))&&v&&!inD)ch+=toNum(v);
         if(/^Saldo em \d{2}\/\d{2}\/\d{4}/.test(l)&&v&&inD)saldo=toNum(v);
         if(/Total de DESPESAS COM TERCEIROS/i.test(normStr(l))&&v)ct.terceiros=toNum(v);
         if(/Total de TARIFAS/i.test(normStr(l))&&v)ct.tarifas=toNum(v);
@@ -313,6 +313,7 @@ function parsePDF(pages,filename){
 }
 
 function merge(){
+  console.log('merge: periodos=',periodos.length, periodos.map(function(p){return p.mes+' itens:'+(p.itens||[]).length;}));
   if(!periodos.length)return null;
   var meses=[],rec=[],desp=[],sald=[],ch=[];
   var iM={},catT={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0};

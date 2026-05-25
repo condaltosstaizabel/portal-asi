@@ -322,7 +322,6 @@ function merge(){
     (p.itens||[]).forEach(function(it){if(!iM[it.nome])iM[it.nome]={nome:it.nome,cat:it.cat,meses:[],vals:[]};if(!iM[it.nome].meses.includes(p.mes)){iM[it.nome].meses.push(p.mes);iM[it.nome].vals.push(it.v);}});
     Object.keys(catT).forEach(function(k){catT[k]+=((p.catTotais||{})[k]||0);});
     tR+=p.receitas||0;tD+=p.despesas||0;tC+=p.churr||0;
-    if(p.contas&&p.contas.length)p.contas.forEach(function(c){contasU[c.nome]=c.saldo;});
   });
   // Ordenar meses cronologicamente
   var mMap={Jan:1,Fev:2,Mar:3,Abr:4,Mai:5,Jun:6,Jul:7,Ago:8,Set:9,Out:10,Nov:11,Dez:12};
@@ -333,7 +332,7 @@ function merge(){
   }
   var idx=meses.map(function(_,i){return i;}).sort(function(a,b){return mesOrd(meses[a])-mesOrd(meses[b]);});
   meses=idx.map(function(i){return meses[i];});rec=idx.map(function(i){return rec[i];});desp=idx.map(function(i){return desp[i];});sald=idx.map(function(i){return sald[i];});ch=idx.map(function(i){return ch[i];});
-  // Saldos: usar SOMENTE o período mais recente
+  // Saldos de contas: usar SOMENTE o período mais recente (não acumular entre meses)
   var mesMaisRecente=meses[meses.length-1];
   var periodoMaisRecente=periodos.filter(function(p){return p.mes===mesMaisRecente;}).sort(function(a,b){return b.tipo.localeCompare(a.tipo);})[0];
   var contasFinais=periodoMaisRecente&&periodoMaisRecente.contas&&periodoMaisRecente.contas.length?periodoMaisRecente.contas:[];
@@ -405,5 +404,6 @@ function renderItens(d){
   }).join('');
 }
 </script>
+<!-- v1.12.1 -->
 </body>
 </html>

@@ -349,7 +349,7 @@ function parsePDF(pages,filename){
         if(/Total de MANUTENCAO E CONSERVACAO/i.test(normStr(l))&&v)ct.conservacao=toNum(v);
         if(/Total de DESPESAS ADMINISTRATIVAS/i.test(normStr(l))&&v)ct.admin=toNum(v);
         if(/Total de DESPESAS BANCARIAS/i.test(normStr(l))&&v)ct.bancarias=toNum(v);
-        if(inD&&v&&!l.startsWith('Total')&&!l.startsWith('Saldo')&&!l.startsWith('Mov.')&&!l.startsWith('Transf')&&!isReceita(l)){
+        if(inD&&v&&!l.startsWith('Total')&&!l.startsWith('Saldo')&&!l.startsWith('Mov.')&&!l.startsWith('Transf')&&!isReceita(l)&&!/descontado|estorno/i.test(l)){
           var vv=toNum(v);
           if(vv>0){var nm=l.slice(0,l.lastIndexOf(v)).trim().replace(/\s+(\d{2}\/\d{4}|\d{2}\/\d{2})\b.*/,'').replace(/\s+(NF[-\s]?\S+|REF\s+\S+)\s*.*$/i,'').replace(/\s+(\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();if(nm&&nm.length>2){var gr=getGrupo(nm);if(!its[gr.nome])its[gr.nome]={cat:gr.cat,v:0};its[gr.nome].v+=vv;}}
         }

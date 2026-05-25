@@ -121,7 +121,82 @@ var PRIO={'16A':3,'11A':2,'20C':1};
 var catCores={terceiros:'#1a3a5c',tarifas:'#b8630a',preventiva:'#2d7a3a',conservacao:'#7c3aed',admin:'#c0392b',bancarias:'#888'};
 var catNomes={terceiros:'Despesas com Terceiros',tarifas:'Tarifas Publicas',preventiva:'Manutencao Preventiva',conservacao:'Manutencao e Conservacao',admin:'Despesas Administrativas',bancarias:'Despesas Bancarias'};
 var PALAVRAS_RECEITA=['Cota Ordinaria','Cota Fundo','Conta Ordin','Conta Principal','Cota Extra','Cota Churrasqueira','Consumo de agua','Receitas Eventuais','Rendimentos','Taxa de Leitura','Tarifa Garantidora','Fundo de Reserva','Fundo de Melhoria','Saldo em','Saldo anterior','Saldo Final','Saldo Inicial','Mov. Liquido','Transf. da conta','(+) Transf','(-) Transf','Total de Receitas','Total de RECEITAS','Total de Despesas','Total de DESPESAS','Multa Regulamentar','Receita Mercado','CONTA SALAO'];
-var GRUPOS={'Manutencao Eletrica':'Manutencao Eletrica','Material Eletrico':'Material Eletrico','Manutencao Hidraulica':'Manutencao Hidraulica','Manutencao de Portao':'Manutencao de Portao Eletronico','Manutencao de Telhado':'Manutencao de Telhados','Manutencoes Diversas':'Manutencoes Diversas','Aquisicao de equipamentos':'Aquisicao de Equipamentos','Material de limpeza':'Material de Limpeza','Material de jardim':'Material de Jardim','Material de Construcao':'Material de Construcao','Substituicao de Pecas':'Substituicao de Pecas Elevador','Manutencao Elevador':'Manutencao de Elevador','Sistema de Seguranca':'Sistema de Seguranca','Conservacao de Jardins':'Conservacao de Jardins','Dedetizacao':'Dedetizacao','Mao de Obra':'Mao de Obra','Medicao de Agua':'Medicao de Agua','Limpeza de Caixa':'Limpeza de Caixa','Servicos Gerais':'Servicos Gerais','PIS-COFINS':'PIS-COFINS-CSLL','INSS':'INSS','IR ':'IR Retido','IR S':'IR Retido','Energia Eletrica':'Energia Eletrica','Agua e Esgoto':'Agua e Esgoto','Telefone':'Telefone e Internet','Gas':'Gas','Seguro':'Seguro Predial','Recarga':'Recarga de Extintores','Taxa de Administracao':'Taxa de Administracao','Honorarios':'Honorarios Sindico','Pasta mensal':'Pasta Mensal','Copias':'Copias e Impressos','Manutencao de Conta':'Manutencao de Conta Bancaria','Tarifa Bancaria':'Tarifa Bancaria','Monitoramento':'Monitoramento / Portaria'};
+var GRUPOS={
+  // Terceiros
+  'Servicos Gerais':'Servicos Gerais',
+  'Monitoramento':'Monitoramento / Portaria',
+  'PIS-COFINS':'PIS-COFINS-CSLL',
+  'INSS':'INSS',
+  'IR ':'IR Retido','IR S':'IR Retido','IRRF':'IR Retido',
+  'ISSQN':'ISSQN',
+  'Impostos':'Impostos Diversos',
+  // Tarifas
+  'Agua e Esgoto':'Agua e Esgoto',
+  'AGUA E ESGOTO':'Agua e Esgoto',
+  'Agua':'Agua e Esgoto',
+  'Energia Eletrica':'Energia Eletrica',
+  'ENERGIA ELETRICA':'Energia Eletrica',
+  'PLACA FOTOVOLTAICA':'Energia Eletrica',
+  'Telefone':'Telefone e Internet',
+  'TELEFONIA':'Telefone e Internet',
+  'Gas':'Gas',
+  'TX. ADM-LEITURA':'Medicao de Agua',
+  // Preventiva
+  'Manutencao Elevador':'Manutencao de Elevador',
+  'MANUTENCAO ELEVADOR':'Manutencao de Elevador',
+  'Limpeza de Caixa':'Limpeza de Caixa',
+  'Recarga':'Recarga de Extintores',
+  'Seguro':'Seguro Predial',
+  'Sistema de Seguranca':'Sistema de Seguranca',
+  // Conservação
+  'Manutencao Eletrica':'Manutencao Eletrica',
+  'Manutencao Hidraulica':'Manutencao Hidraulica',
+  'Manutencao de Portao':'Manutencao de Portao Eletronico',
+  'Manutencao de Telhado':'Manutencao de Telhados',
+  'Manutencoes Diversas':'Manutencoes Diversas',
+  'Conservacao de Jardins':'Conservacao de Jardins',
+  'Jardim':'Conservacao de Jardins',
+  'MANUTENCAO JARDIM':'Conservacao de Jardins',
+  'Substituicao de Pecas':'Substituicao de Pecas Elevador',
+  'OUTROS - ELEVADOR':'Substituicao de Pecas Elevador',
+  'Material Eletrico':'Material Eletrico',
+  'Material Hidraulico':'Material Hidraulico',
+  'Material de limpeza':'Material de Limpeza',
+  'Material de jardim':'Material de Jardim',
+  'Material de Construcao':'Material de Construcao',
+  'Material de Pintura':'Material de Pintura',
+  'Material de Decoracao':'Material de Decoracao',
+  'Material para area de lazer':'Material para Area de Lazer',
+  'Materiais de Consumo':'Materiais de Consumo',
+  'Aquisicao de equipamentos':'Aquisicao de Equipamentos',
+  'Mao de Obra':'Mao de Obra',
+  'Dedetizacao':'Dedetizacao',
+  'Medicao de Agua':'Medicao de Agua',
+  'Servicos de engenharia':'Servicos de Engenharia',
+  'Laudo SPDA':'Laudo SPDA',
+  'Equipamentos de Seguranca':'Equipamentos de Seguranca',
+  'Locacao de equipamentos':'Locacao de Equipamentos',
+  'Eventos':'Eventos',
+  'Frete':'Frete',
+  // Admin
+  'Taxa de Administracao':'Taxa de Administracao',
+  'Assessoria Administrativa':'Taxa de Administracao',
+  'ASSESSORIA ADMINISTRATIVA':'Taxa de Administracao',
+  'Reemb. Despesas Adm':'Taxa de Administracao',
+  'Honorarios':'Honorarios Sindico',
+  'HONORARIO SINDICO':'Honorarios Sindico',
+  'Pasta mensal':'Pasta Mensal',
+  'Copias':'Copias e Impressos',
+  'Correios':'Correios',
+  'Cartorio':'Cartorio',
+  'Renovacao de Certificado':'Renovacao de Certificado',
+  'Reembolso':'Reembolso',
+  // Bancárias
+  'Manutencao de Conta':'Manutencao de Conta Bancaria',
+  'Tarifa Bancaria':'Tarifa Bancaria',
+  'TARIFA BANCARIA':'Tarifa Bancaria',
+  'TARIFA COBRANCA':'Tarifa de Cobranca',
+};
 var GRUPO_CAT={'Manutencao Eletrica':'conservacao','Material Eletrico':'conservacao','Manutencao Hidraulica':'conservacao','Manutencao de Portao':'conservacao','Manutencao de Telhado':'conservacao','Manutencoes Diversas':'conservacao','Aquisicao de equipamentos':'conservacao','Material de limpeza':'conservacao','Material de jardim':'conservacao','Material de Construcao':'conservacao','Conservacao de Jardins':'conservacao','Dedetizacao':'conservacao','Mao de Obra':'conservacao','Medicao de Agua':'conservacao','Substituicao de Pecas':'preventiva','Manutencao Elevador':'preventiva','Sistema de Seguranca':'preventiva','Limpeza de Caixa':'preventiva','Seguro':'preventiva','Recarga':'preventiva','Servicos Gerais':'terceiros','PIS-COFINS':'terceiros','INSS':'terceiros','IR ':'terceiros','IR S':'terceiros','Monitoramento':'terceiros','Energia Eletrica':'tarifas','Agua e Esgoto':'tarifas','Telefone':'tarifas','Gas':'tarifas','Taxa de Administracao':'admin','Honorarios':'admin','Pasta mensal':'admin','Copias':'admin','Manutencao de Conta':'bancarias','Tarifa Bancaria':'bancarias'};
 
 function normStr(s){return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
@@ -266,7 +341,7 @@ function parsePDF(pages,filename){
         if(l==='Despesas'||l==='Despesas ')inD=true;
         if(/^Total de (Receitas|RECEITAS)/i.test(l)&&v)rec=toNum(v);
         if(/^Total de (Despesas|DESPESAS)/i.test(l)&&v&&!/(COM |PUBLICA|PREVENTIVA|CONSERVA|ADMINISTRATIVA|BANCARIA|RETIDOS)/i.test(normStr(l)))desp=toNum(v);
-        if(/Churrasqueira/i.test(l)&&v&&!inD)ch+=toNum(v);
+        if((l.startsWith('Cota Churrasqueira')||l.startsWith('ALUGUEL CHURRASQUEIRA'))&&v&&!inD)ch+=toNum(v);
         if(/^Saldo em \d{2}\/\d{2}\/\d{4}/.test(l)&&v&&inD)saldo=toNum(v);
         if(/Total de DESPESAS COM TERCEIROS/i.test(normStr(l))&&v)ct.terceiros=toNum(v);
         if(/Total de TARIFAS/i.test(normStr(l))&&v)ct.tarifas=toNum(v);
@@ -276,7 +351,7 @@ function parsePDF(pages,filename){
         if(/Total de DESPESAS BANCARIAS/i.test(normStr(l))&&v)ct.bancarias=toNum(v);
         if(inD&&v&&!l.startsWith('Total')&&!l.startsWith('Saldo')&&!l.startsWith('Mov.')&&!l.startsWith('Transf')&&!isReceita(l)){
           var vv=toNum(v);
-          if(vv>0){var nm=l.slice(0,l.lastIndexOf(v)).trim().replace(/\s+(NF-\S+|\d{2}\/\d{4}|\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();if(nm&&nm.length>2){var gr=getGrupo(nm);if(!its[gr.nome])its[gr.nome]={cat:gr.cat,v:0};its[gr.nome].v+=vv;}}
+          if(vv>0){var nm=l.slice(0,l.lastIndexOf(v)).trim().replace(/\s+(\d{2}\/\d{4}|\d{2}\/\d{2})\b.*/,'').replace(/\s+(NF[-\s]?\S+|REF\s+\S+)\s*.*$/i,'').replace(/\s+(\d+ de \d+)\s*.*$/,'').replace(/\s{2,}.*$/,'').trim();if(nm&&nm.length>2){var gr=getGrupo(nm);if(!its[gr.nome])its[gr.nome]={cat:gr.cat,v:0};its[gr.nome].v+=vv;}}
         }
       }
       if(l.indexOf('Resumo Financeiro')>=0){

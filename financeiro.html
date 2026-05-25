@@ -249,12 +249,14 @@ function parsePDF(pages,filename){
 
   if(t16){
     var inO=false,inD=false;
+    var dbgLinhas=[];
     for(var i=0;i<linhas.length;i++){
       var l=linhas[i].trim(),v=nf(l);
-      if(l.indexOf('Conta Ordin')>=0||l.indexOf('Conta Principal')>=0)inO=true;
+      if(l.indexOf('Conta Ordin')>=0||l.indexOf('Conta Principal')>=0){inO=true;dbgLinhas.push('>>> inO=true: '+l);}
       if(l.indexOf('Fundo de Reserva')>=0||l.indexOf('Fundo de Melhoria')>=0||l.indexOf('Fundo Troca')>=0)inO=false;
       if(inO){
-        if(l==='Despesas')inD=true;
+        if(l==='Despesas'||l==='Despesas '||l.startsWith('Despesas	')){inD=true;dbgLinhas.push('>>> inD=true: '+l);}
+        else if(l.indexOf('Despesas')===0&&l.length<30){inD=true;dbgLinhas.push('>>> inD=true(alt): '+l);}
         if(/^Total de (Receitas|RECEITAS)/i.test(l)&&v)rec=toNum(v);
         if(/^Total de (Despesas|DESPESAS)/i.test(l)&&v&&!/(COM |PUBLICA|PREVENTIVA|CONSERVA|ADMINISTRATIVA|BANCARIA|RETIDOS)/i.test(normStr(l)))desp=toNum(v);
         if((l.startsWith('Cota Churrasqueira')||l.startsWith('ALUGUEL CHURRASQUEIRA')||/Churrasqueira/i.test(l))&&v&&!inD)ch+=toNum(v);
@@ -291,6 +293,7 @@ function parsePDF(pages,filename){
     }
   }
 
+  if(t16){console.log('16A debug inO/inD lines:',dbgLinhas.slice(0,20));console.log('its keys:',Object.keys(its).length,'items found');console.log('first lines with Conta:',linhas.filter(function(l){return l.indexOf('Conta')>=0;}).slice(0,5));}
   if(t20){
     var inD2=false;
     for(var i=0;i<linhas.length;i++){

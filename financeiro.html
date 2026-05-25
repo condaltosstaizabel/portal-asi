@@ -333,8 +333,12 @@ function merge(){
   }
   var idx=meses.map(function(_,i){return i;}).sort(function(a,b){return mesOrd(meses[a])-mesOrd(meses[b]);});
   meses=idx.map(function(i){return meses[i];});rec=idx.map(function(i){return rec[i];});desp=idx.map(function(i){return desp[i];});sald=idx.map(function(i){return sald[i];});ch=idx.map(function(i){return ch[i];});
+  // Saldos: usar SOMENTE o período mais recente
+  var mesMaisRecente=meses[meses.length-1];
+  var periodoMaisRecente=periodos.filter(function(p){return p.mes===mesMaisRecente;}).sort(function(a,b){return b.tipo.localeCompare(a.tipo);})[0];
+  var contasFinais=periodoMaisRecente&&periodoMaisRecente.contas&&periodoMaisRecente.contas.length?periodoMaisRecente.contas:[];
   var itArr=Object.values(iM).map(function(it){return{nome:it.nome,cat:it.cat,meses:it.meses,vals:it.vals,total:it.vals.reduce(function(a,b){return a+b;},0)};});
-  return{meses:meses,receitas:rec,despesas:desp,saldos:sald,churr:ch,itens:itArr,catTotais:catT,totalReceitas:tR,totalDespesas:tD,totalChurr:tC,saldoFinal:sald[sald.length-1]||0,contas:Object.keys(contasU).map(function(k){return{nome:k,saldo:contasU[k]};})};
+  return{meses:meses,receitas:rec,despesas:desp,saldos:sald,churr:ch,itens:itArr,catTotais:catT,totalReceitas:tR,totalDespesas:tD,totalChurr:tC,saldoFinal:sald[sald.length-1]||0,contas:contasFinais};
 }
 
 function renderPeriodosTags(){

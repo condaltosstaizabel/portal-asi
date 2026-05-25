@@ -89,7 +89,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <div class="form-grid">
         <div class="form-group"><label>Nome completo</label><input id="c-nome" placeholder="Ex: João Silva"></div>
         <div class="form-group"><label>E-mail</label><input id="c-email" type="email" placeholder="morador@email.com"></div>
-        <div class="form-group"><label>Unidade (Apto)</label><input id="c-unidade" placeholder="Ex: 1042"></div>
+        <div class="form-group"><label>Unidade (Apto)</label><input id="c-unidade" placeholder="Ex: 1042" type="number" min="1001" max="2164" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
         <div class="form-group"><label>Celular</label><input id="c-cel" placeholder="(19) 99999-9999"></div>
         <div class="form-group"><label>Tipo</label>
           <select id="c-tipo"><option>Proprietário</option><option>Inquilino</option><option>Familiar</option></select>
@@ -125,7 +125,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <h2>✏️ Editar usuário</h2>
     <input type="hidden" id="edit-uid">
     <div class="form-group"><label>Nome</label><input id="edit-nome"></div>
-    <div class="form-group"><label>Unidade (Apto)</label><input id="edit-unidade"></div>
+    <div class="form-group"><label>Unidade (Apto)</label><input id="edit-unidade" type="number" min="1001" max="2164" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
     <div class="form-group"><label>Celular</label><input id="edit-cel"></div>
     <div class="form-group"><label>Tipo</label>
       <select id="edit-tipo"><option>Proprietário</option><option>Inquilino</option><option>Familiar</option></select>

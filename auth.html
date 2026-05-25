@@ -73,7 +73,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <label class="fl">Senha (mínimo 6 caracteres)</label>
     <input class="fi" type="password" id="cad-senha" placeholder="Crie uma senha">
     <label class="fl">Unidade</label>
-    <input class="fi" type="text" id="cad-unidade" placeholder="Ex: Ap. 1121 — Torre 2">
+    <input class="fi" type="number" id="cad-unidade" placeholder="Ex: 1121" min="1001" max="2164" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     <label class="fl">Celular <span style="font-weight:400;color:var(--txt3)">(opcional)</span></label>
     <input class="fi" type="tel" id="cad-cel" placeholder="Ex: (19) 99999-9999">
     <label class="fl">Tipo</label>

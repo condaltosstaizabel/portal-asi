@@ -191,7 +191,7 @@ function parsePDF(pages,filename){
   function nf(l){var m=l.match(/(\(\d{1,3}(?:\.\d{3})*,\d{2}\)|-?\d{1,3}(?:\.\d{3})*,\d{2})$/);return m?m[1]:null;}
 
   var t11=linhas.some(function(l){return l.indexOf('Comparativo de')>=0;});
-  var t16=!t11&&linhas.some(function(l){return l.indexOf('Conta Ordin')>=0;});
+  var t16=!t11&&linhas.some(function(l){return l.indexOf('Conta Ordin')>=0||l.indexOf('Conta Principal')>=0||l.indexOf('Demonstrativo Anal')>=0;});
   var t20=!t11&&!t16;
 
   if(t11){
@@ -249,12 +249,12 @@ function parsePDF(pages,filename){
     var inO=false,inD=false;
     for(var i=0;i<linhas.length;i++){
       var l=linhas[i].trim(),v=nf(l);
-      if(l.indexOf('Conta Ordin')>=0)inO=true;
+      if(l.indexOf('Conta Ordin')>=0||l.indexOf('Conta Principal')>=0)inO=true;
       if(l.indexOf('Fundo de Reserva')>=0||l.indexOf('Fundo de Melhoria')>=0||l.indexOf('Fundo Troca')>=0)inO=false;
       if(inO){
         if(l==='Despesas')inD=true;
-        if(l.startsWith('Total de Receitas')&&v)rec=toNum(v);
-        if(l.startsWith('Total de Despesas')&&v&&!/(COM |PUBLICA|PREVENTIVA|CONSERVA|ADMINISTRATIVA|BANCARIA|RETIDOS)/i.test(normStr(l)))desp=toNum(v);
+        if(/^Total de (Receitas|RECEITAS)/i.test(l)&&v)rec=toNum(v);
+        if(/^Total de (Despesas|DESPESAS)/i.test(l)&&v&&!/(COM |PUBLICA|PREVENTIVA|CONSERVA|ADMINISTRATIVA|BANCARIA|RETIDOS)/i.test(normStr(l)))desp=toNum(v);
         if(l.startsWith('Cota Churrasqueira')&&v)ch=toNum(v);
         if(/^Saldo em \d{2}\/\d{2}\/\d{4}/.test(l)&&v&&inD)saldo=toNum(v);
         if(/Total de DESPESAS COM TERCEIROS/i.test(normStr(l))&&v)ct.terceiros=toNum(v);

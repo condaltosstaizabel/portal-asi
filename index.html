@@ -116,6 +116,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p id="hdr-usuario">Condomínio Altos Santa Izabel</p></div>
   <div class="hdr-ico" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
   <div class="hdr-ico" onclick="abrirAdmin()" id="btn-admin" style="display:none">⚙️</div>
+  <div class="hdr-ico" id="btn-usuarios" onclick="window.open('usuarios.html','_blank')" style="display:none;position:relative">👥<span id="badge-usuarios" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4"></span></div>
   <div class="hdr-ico" onclick="fazerLogout()" title="Sair">🚪</div>
 </div>
 
@@ -427,6 +428,9 @@ auth.onAuthStateChanged(function(user){
       // Mostrar itens exclusivos de admin (nav e acesso rápido)
       document.querySelectorAll('.admin-only').forEach(function(el){el.style.display='';});
       adminLogado=true;
+      var btnUsu=document.getElementById('btn-usuarios');
+      if(btnUsu) btnUsu.style.display='flex';
+      verificarPendentes();
       // Adicionar link gerenciar usuários no admin
       var tabsEl=document.querySelector('.admin-tabs');
       if(tabsEl&&!document.getElementById('tab-usuarios')){
@@ -823,6 +827,15 @@ var dadosAdmin={
     {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'canceled'}
   ]
 };
+
+function verificarPendentes(){
+  db.collection('usuarios').where('status','==','pendente').get().then(function(snap){
+    var badge=document.getElementById('badge-usuarios');
+    if(!badge) return;
+    if(snap.size>0){badge.textContent=snap.size;badge.style.display='block';}
+    else{badge.style.display='none';}
+  }).catch(function(){});
+}
 
 // Carrega TODOS os dados do Firestore na inicialização
 function carregarTodosOsDados(callback){

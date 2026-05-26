@@ -126,6 +126,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <input type="hidden" id="edit-uid">
     <div class="form-group"><label>Nome</label><input id="edit-nome"></div>
     <div class="form-group"><label>Unidade (Apto)</label><input id="edit-unidade" type="number" min="1001" max="2164" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
+    <div class="form-group"><label>Senha</label>
+      <div style="display:flex;gap:8px">
+        <input id="edit-senha" type="text" placeholder="Nova senha (min. 6 caracteres)" style="flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:#fafafa">
+        <button onclick="gerarSenha()" style="padding:9px 12px;background:#f0efe8;border:none;border-radius:8px;cursor:pointer;font-size:12px;white-space:nowrap">🎲 Gerar</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button onclick="definirSenha()" style="flex:1;padding:8px;background:#e8f5e9;color:#2d7a3a;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">💾 Definir senha</button>
+        <button onclick="enviarResetLink()" style="flex:1;padding:8px;background:#e3f0fb;color:#1565c0;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">📧 Enviar link</button>
+      </div>
+      <div id="msg-senha" style="margin-top:6px;font-size:12px"></div>
+    </div>
     <div class="form-group"><label>Celular</label><input id="edit-cel"></div>
     <div class="form-group"><label>Tipo</label>
       <select id="edit-tipo"><option>Proprietário</option><option>Inquilino</option><option>Familiar</option></select>
@@ -260,7 +271,47 @@ function abrirEdicao(uid,nome,unidade,cel,tipo,perfil,status){
   document.getElementById('edit-status').value=status||'pendente';
   document.getElementById('modal-edicao').classList.add('on');
 }
-function fecharModal(){document.getElementById('modal-edicao').classList.remove('on');}
+function gerarSenha(){
+  var chars='ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  var senha='';
+  for(var i=0;i<8;i++) senha+=chars.charAt(Math.floor(Math.random()*chars.length));
+  document.getElementById('edit-senha').value=senha;
+}
+function definirSenha(){
+  var uid=document.getElementById('edit-uid').value;
+  var senha=document.getElementById('edit-senha').value.trim();
+  var msgEl=document.getElementById('msg-senha');
+  if(!senha||senha.length<6){msgEl.innerHTML='<span style="color:#c0392b">Mínimo 6 caracteres.</span>';return;}
+  // Usa Firebase Admin via re-autenticação não disponível no client SDK
+  // Alternativa: atualizar senha via API REST do Firebase
+  var apiKey='AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s';
+  // Precisamos do idToken do admin para usar a API Admin
+  auth.currentUser.getIdToken().then(function(token){
+    return fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key='+apiKey,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({idToken:token,password:senha,returnSecureToken:false})
+    });
+  }).then(function(r){return r.json();})
+  .then(function(data){
+    if(data.error){msgEl.innerHTML='<span style="color:#c0392b">❌ Erro: '+data.error.message+'</span>';return;}
+    msgEl.innerHTML='<span style="color:#2d7a3a">✅ Senha atualizada!</span>';
+    document.getElementById('edit-senha').value='';
+  }).catch(function(e){msgEl.innerHTML='<span style="color:#c0392b">❌ Erro: '+e.message+'</span>';});
+}
+function enviarResetLink(){
+  var uid=document.getElementById('edit-uid').value;
+  var msgEl=document.getElementById('msg-senha');
+  // Buscar e-mail do usuário
+  db.collection('usuarios').doc(uid).get().then(function(doc){
+    if(!doc.exists){msgEl.innerHTML='<span style="color:#c0392b">❌ Usuário não encontrado.</span>';return;}
+    var email=doc.data().email;
+    return auth.sendPasswordResetEmail(email).then(function(){
+      msgEl.innerHTML='<span style="color:#1565c0">📧 Link enviado para '+email+'</span>';
+    });
+  }).catch(function(e){msgEl.innerHTML='<span style="color:#c0392b">❌ Erro: '+e.message+'</span>';});
+}
+function fecharModal(){document.getElementById('modal-edicao').classList.remove('on');document.getElementById('msg-senha').innerHTML='';document.getElementById('edit-senha').value='';}
 function excluirUsuario(){
   var uid=document.getElementById('edit-uid').value;
   var nome=document.getElementById('edit-nome').value;

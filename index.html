@@ -205,12 +205,7 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">Fonte</div><div class="mc-val" style="font-size:11px;margin-top:6px;color:var(--txt3)" id="churr-fonte">Demonstrativo</div></div>
   </div>
   <div class="sec">Histórico de uso</div>
-  <div class="card" style="padding:0"><div class="tw"><table>
-    <thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead>
-    <tbody id="churr-tbody">
-      <tr><td colspan="3" style="text-align:center;color:var(--txt3)">Carregando...</td></tr>
-    </tbody>
-  </table></div></div>
+  <div id="churr-historico"></div>
 </div>
 
 <!-- FINANCEIRO -->
@@ -1024,6 +1019,14 @@ function renderRealizacoes(){
       '</div>';
   }).join('');
 }
+function toggleChurrAno(header){
+  var content=header.nextElementSibling;
+  var chevron=header.querySelector('.chevron-churr');
+  var aberto=content.style.display==='block';
+  content.style.display=aberto?'none':'block';
+  chevron.style.transform=aberto?'rotate(0deg)':'rotate(90deg)';
+  header.style.background=aberto?'var(--card)':'#f0f5fb';
+}
 function toggleAno(header){
   var content=header.nextElementSibling;
   var chevron=header.querySelector('.chevron-ano');
@@ -1094,20 +1097,41 @@ function sincronizarFinanceiro(){
       if(e2) e2.textContent='R$ '+Math.round(totalChurr/(allMeses.length||1));
       if(e3) e3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
       if(e4) e4.textContent=mesesComValor.length+'x';
-      // Atualizar tabela historico sem duplicar
-      var tbody=document.getElementById('churr-tbody');
-      if(tbody){
+      // Renderizar histórico agrupado por ano
+      var el=document.getElementById('churr-historico');
+      if(el){
         var totalLocacoes=0;
-        var rows=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;})
-          .map(function(m){
+        var mesesComValor=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;});
+        // Agrupar por ano
+        var grupos={};
+        mesesComValor.forEach(function(m){
+          var ano=m.split('/')[1];
+          if(ano&&ano.length===2) ano='20'+ano;
+          if(!grupos[ano]) grupos[ano]=[];
+          grupos[ano].push(m);
+        });
+        var anos=Object.keys(grupos).sort(function(a,b){return b-a;});
+        el.innerHTML=anos.map(function(ano,idx){
+          var aberto=idx===0;
+          var locAno=0;
+          var recAno=0;
+          var rows=grupos[ano].map(function(m){
             var receita=allChurr[m].v;
             var locacoes=Math.round(receita/30);
-            totalLocacoes+=locacoes;
+            locAno+=locacoes; recAno+=receita; totalLocacoes+=locacoes;
             return '<tr><td>'+m+'</td><td>'+locacoes+'x</td><td>R$ '+receita.toFixed(2).replace('.',',')+'</td></tr>';
           }).join('');
-        rows+='<tr style="font-weight:700"><td>Total</td><td>'+totalLocacoes+'x</td><td>R$ '+totalChurr.toFixed(2).replace('.',',')+'</td></tr>';
-        tbody.innerHTML=rows;
-        // Atualizar metrica de total locacoes
+          rows+='<tr style="font-weight:700;background:#f8f8f5"><td>Total '+ano+'</td><td>'+locAno+'x</td><td>R$ '+recAno.toFixed(2).replace('.',',')+'</td></tr>';
+          return '<div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">'+
+            '<div onclick="toggleChurrAno(this)" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;background:'+(aberto?'#f0f5fb':'var(--card)')+'">'+
+            '<span style="font-weight:700;font-size:14px;color:var(--azul)">'+ano+'</span>'+
+            '<span style="font-size:13px;color:var(--txt3)">'+locAno+'x &nbsp;·&nbsp; R$ '+recAno.toFixed(2).replace('.',',')+' <span class="chevron-churr" style="display:inline-block;transition:transform .2s;transform:'+(aberto?'rotate(90deg)':'rotate(0deg)')+'">›</span></span>'+
+            '</div>'+
+            '<div class="churr-ano-content" style="display:'+(aberto?'block':'none')+'">'+
+            '<div class="tw"><table><thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+            '</div></div>';
+        }).join('');
+        // Atualizar métrica total locações
         var e4=document.getElementById('churr-total-loc');
         if(e4) e4.textContent=totalLocacoes+'x';
       }

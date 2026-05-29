@@ -123,7 +123,7 @@ textarea.fi{height:75px;resize:vertical}
 <div class="nav-wrap"><div class="nav">
   <button class="nb on" onclick="nav('inicio')">Início</button>
   <button class="nb" onclick="nav('projetos')">Projetos</button>
-  <button class="nb" onclick="nav('orcamentos')">Orçamentos</button>
+  <button class="nb admin-only" id="nav-orcamentos" style="display:none" onclick="nav('orcamentos')">Orçamentos</button>
   <button class="nb" onclick="nav('contratos')">Contratos</button>
   <button class="nb" onclick="nav('churrasqueira')">Churrasqueira</button>
   <button class="nb" onclick="nav('financeiro')">Financeiro</button>
@@ -140,7 +140,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="sec">Acesso rápido</div>
   <div class="grid2" id="grid-acesso-rapido">
     <div class="gcard" onclick="nav('projetos')"><div class="gico" style="background:#fff3e0">🔨</div><div><div style="font-weight:600;font-size:13px">Projetos</div><div style="font-size:11px;color:var(--txt3)">Em andamento</div></div></div>
-    <div class="gcard" onclick="nav('orcamentos')"><div class="gico" style="background:#e8f5e9">💰</div><div><div style="font-weight:600;font-size:13px">Orçamentos</div><div style="font-size:11px;color:var(--txt3)">Propostas e cotações</div></div></div>
+    <div class="gcard admin-only" style="display:none" onclick="nav('orcamentos')"><div class="gico" style="background:#e8f5e9">💰</div><div><div style="font-weight:600;font-size:13px">Orçamentos</div><div style="font-size:11px;color:var(--txt3)">Propostas e cotações</div></div></div>
     <div class="gcard" onclick="nav('contratos')"><div class="gico" style="background:#e3f0fb">📋</div><div><div style="font-weight:600;font-size:13px">Contratos</div><div style="font-size:11px;color:var(--txt3)">Vigentes e vencimentos</div></div></div>
     <div class="gcard" onclick="nav('churrasqueira')"><div class="gico" style="background:#fdecea">🍖</div><div><div style="font-weight:600;font-size:13px">Churrasqueira</div><div style="font-size:11px;color:var(--txt3)">Reservas e histórico</div></div></div>
     <div class="gcard" onclick="nav('financeiro')"><div class="gico" style="background:#f0eeff">📊</div><div><div style="font-weight:600;font-size:13px">Financeiro</div><div style="font-size:11px;color:var(--txt3)">Histórico anual</div></div></div>
@@ -464,7 +464,7 @@ function nav(id){
   // Financeiro redireciona direto
   if(id==='financeiro'){window.location.href='financeiro.html';return;}
   // Bloquear documentos e assembleias para não-admin
-  if((id==='documentos'||id==='assembleias')&&!adminLogado) return;
+  if((id==='documentos'||id==='assembleias'||id==='orcamentos')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
   document.querySelectorAll('.bni').forEach(function(b){b.classList.remove('on');});

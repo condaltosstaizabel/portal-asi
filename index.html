@@ -209,8 +209,15 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <!-- FINANCEIRO -->
-<div id="pg-financeiro" class="pg" style="padding:0">
-  <iframe id="iframe-financeiro" src="" style="width:100%;height:calc(100vh - 130px);border:none;display:block" allow="same-origin"></iframe>
+<div id="pg-financeiro" class="pg">
+  <div style="text-align:center;padding:40px 20px">
+    <div style="font-size:48px;margin-bottom:12px">📊</div>
+    <div style="font-weight:700;font-size:18px;color:var(--azul);margin-bottom:8px">Painel Financeiro</div>
+    <div style="font-size:13px;color:var(--txt3);margin-bottom:24px">Histórico, saldos, gráficos e análise detalhada</div>
+    <a href="financeiro.html" style="display:inline-flex;align-items:center;gap:10px;background:var(--azul);color:#fff;border-radius:12px;padding:14px 28px;text-decoration:none;font-weight:600;font-size:15px">
+      Abrir Financeiro →
+    </a>
+  </div>
 </div>
 
 <!-- DOCUMENTOS -->
@@ -454,11 +461,8 @@ var BNAV_IDS=['inicio','projetos','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
-  // Financeiro carrega via iframe
-  if(id==='financeiro'){
-    var iframe=document.getElementById('iframe-financeiro');
-    if(iframe&&!iframe.src) iframe.src='financeiro.html';
-  }
+  // Financeiro redireciona direto
+  if(id==='financeiro'){window.location.href='financeiro.html';return;}
   // Bloquear documentos e assembleias para não-admin
   if((id==='documentos'||id==='assembleias')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});

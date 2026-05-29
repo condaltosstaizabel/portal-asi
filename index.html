@@ -191,7 +191,7 @@ textarea.fi{height:75px;resize:vertical}
 <div id="pg-contratos" class="pg">
   <div class="sec">Prazos e vencimentos</div>
   <div class="card" style="padding:0"><div class="tw"><table>
-    <thead><tr><th>Documento</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
+    <thead><tr><th>Documento</th><th>Ramo</th><th>Emissão</th><th>Validade</th><th>Status</th></tr></thead>
     <tbody id="tbody-contratos"></tbody>
   </table></div></div>
 </div>
@@ -345,6 +345,7 @@ textarea.fi{height:75px;resize:vertical}
       <div class="admin-sec" id="asec-contratos">
         <div id="edit-contratos"></div>
         <button class="add-btn" onclick="addContrato()">+ Adicionar contrato</button>
+        <button class="add-btn" onclick="addRamoContrato()" style="background:#f0eeff;color:#7c3aed">+ Ramo</button>
         <button class="save-btn" onclick="salvarContratos()">💾 Salvar contratos</button>
       </div>
       <div class="admin-sec" id="asec-prestadores">
@@ -813,10 +814,10 @@ var dadosAdmin={
     {nome:'Criação Car Wash',sub:'Não Aprovado',pct:0,status:'canceled'}
   ],
   contratos:[
-    {doc:'AVCB',emissao:'Mar/2021',validade:'Mar/2026',status:'bad'},
-    {doc:'Seguro',emissao:'Fev/2026',validade:'Fev/2027',status:'ok'},
-    {doc:'Contrato Jardinagem',emissao:'Mai/2026',validade:'Abr/2027',status:'ok'},
-    {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'canceled'}
+    {doc:'AVCB',emissao:'Mar/2021',validade:'Mar/2026',status:'bad',ramo:'Juridico'},
+    {doc:'Seguro',emissao:'Fev/2026',validade:'Fev/2027',status:'ok',ramo:'Administrativo'},
+    {doc:'Contrato Jardinagem',emissao:'Mai/2026',validade:'Abr/2027',status:'ok',ramo:'Jardinagem'},
+    {doc:'Contrato Concierge',emissao:'—',validade:'A verificar',status:'canceled',ramo:'Portaria Remota'}
   ]
 };
 
@@ -858,6 +859,8 @@ function carregarTodosOsDados(callback){
 }
 // ===== ADMIN =====
 var SENHA='altos2026';
+var RAMOS_CONTRATO=JSON.parse(localStorage.getItem('asi_ramos_contrato')||'null')||['Portaria Remota','Jardinagem','Facilities','Juridico','Administrativo','Manutenção'];
+function salvarRamosContrato(){localStorage.setItem('asi_ramos_contrato',JSON.stringify(RAMOS_CONTRATO));}
 var stContratoOpts=[
   {v:'ok',l:'🟢 Vigente'},
   {v:'bad',l:'🔴 Vencido'},
@@ -958,6 +961,10 @@ function renderAdmin(){
     return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
       ordemBtns.replace('{UP}','moverItem(dadosAdmin.contratos,'+i+',-1,renderAdmin)').replace('{DOWN}','moverItem(dadosAdmin.contratos,'+i+',1,renderAdmin)')+
       '<input class="ie-txt" style="min-width:110px" value="'+esc(c.doc)+'" onchange="dadosAdmin.contratos['+i+'].doc=this.value" placeholder="Documento">'+
+      '<select style="width:130px;font-size:11px;padding:4px 6px;border:1px solid #ddd;border-radius:6px" onchange="dadosAdmin.contratos['+i+'].ramo=this.value">'+
+        RAMOS_CONTRATO.map(function(r){return '<option value="'+r+'"'+(r===(c.ramo||'')?' selected':'')+'>'+r+'</option>';}).join('')+
+        '<option value=""'+(!(c.ramo||'')?' selected':'')+'>— Sem ramo —</option>'+
+      '</select>'+
       '<input style="width:75px" value="'+esc(c.emissao)+'" onchange="dadosAdmin.contratos['+i+'].emissao=this.value" placeholder="Emissão">'+
       '<input style="width:85px" value="'+esc(c.validade)+'" onchange="dadosAdmin.contratos['+i+'].validade=this.value" placeholder="Validade">'+
       '<select class="ie-sel" onchange="dadosAdmin.contratos['+i+'].status=this.value;renderAdmin()">'+stContratoOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===c.status?' selected':'')+'>'+o.l+'</option>';}).join('')+'</select>'+
@@ -967,7 +974,17 @@ function renderAdmin(){
 function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'warn'});renderAdmin();}
 function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}
 function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
-function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'gray'});renderAdmin();}
+function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'ok',ramo:''});renderAdmin();}
+function addRamoContrato(){
+  var r=prompt('Nome do novo ramo de atividade:');
+  if(!r||!r.trim()) return;
+  r=r.trim();
+  if(RAMOS_CONTRATO.indexOf(r)>=0){alert('Ramo já existe.');return;}
+  RAMOS_CONTRATO.push(r);
+  salvarRamosContrato();
+  renderAdmin();
+  alert('✅ Ramo "'+r+'" adicionado!');
+}
 function salvarNoFirestore(colecao,dados,callback){
   db.collection('portal').doc(colecao).set({items:dados}).then(function(){
     if(callback) callback();
@@ -1053,7 +1070,7 @@ function renderProjetosAdmin(){
 }
 function renderContratosAdmin(){
   var el=document.getElementById('tbody-contratos');if(!el)return;
-  el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+(stContratoMap[c.status]||c.status)+'</span></td></tr>';}).join('');
+  el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td><span style="font-size:11px;background:#f0efe8;padding:2px 8px;border-radius:99px;color:#555">'+(c.ramo||'—')+'</span></td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+(stContratoMap[c.status]||c.status)+'</span></td></tr>';}).join('');
 }
 
 // ===== CHURRASQUEIRA SINCRONIZADA COM FIRESTORE =====

@@ -64,7 +64,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <body>
 <div class="hdr">
   <div><h1>Financeiro</h1><p>Condominio Altos de Santa Izabel</p></div>
-  <a href="index.html" class="back-btn">Voltar ao portal</a>
+  <a href="index.html" class="back-btn" id="btn-voltar">Voltar ao portal</a>
 </div>
 <div class="wrap">
   <div id="areaAdmin" style="display:none">
@@ -115,6 +115,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </div>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+// Detectar se esta dentro de iframe e esconder header/botao voltar
+(function(){
+  try{
+    if(window.self!==window.top){
+      var hdr=document.querySelector('.hdr');
+      if(hdr) hdr.style.display='none';
+    }
+  }catch(e){}
+})();
 firebase.initializeApp({apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",authDomain:"portal-altos-santa-izabel.firebaseapp.com",projectId:"portal-altos-santa-izabel",storageBucket:"portal-altos-santa-izabel.firebasestorage.app",messagingSenderId:"314879065622",appId:"1:314879065622:web:76be1b38e018a0cbed3f37"});
 var auth=firebase.auth(),db=firebase.firestore(),chartSaldo,filtroAtual='todos',isAdmin=false,periodos=[];
 var PRIO={'16A':3,'11A':2,'20C':1};

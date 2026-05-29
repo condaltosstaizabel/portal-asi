@@ -209,20 +209,8 @@ textarea.fi{height:75px;resize:vertical}
 </div>
 
 <!-- FINANCEIRO -->
-<div id="pg-financeiro" class="pg">
-  <div class="alert blue"><span>📊</span><div>Painel financeiro completo com leitor de PDF. Abre em página dedicada.</div></div>
-  <a href="financeiro.html" style="display:flex;align-items:center;gap:12px;background:var(--azul);color:#fff;border-radius:12px;padding:16px;text-decoration:none;margin-bottom:12px">
-    <span style="font-size:28px">📊</span>
-    <div style="flex:1"><div style="font-weight:700;font-size:15px">Abrir Painel Financeiro</div><div style="font-size:12px;opacity:.75;margin-top:2px">Carregar PDFs, gráficos, análise por categoria e item</div></div>
-    <span style="font-size:18px">→</span>
-  </a>
-  <div class="card" style="padding:0 15px">
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">📤</div><div style="flex:1"><div style="font-weight:500">Carregue o PDF do demonstrativo</div><div style="font-size:11px;color:var(--txt3)">Direto no painel financeiro — atualiza tudo automaticamente</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e3f0fb">📈</div><div style="flex:1"><div style="font-weight:500">Saldo, receitas e despesas por mês</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#f0eeff">🔍</div><div style="flex:1"><div style="font-weight:500">Análise detalhada por item — clique para ver por mês</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#fdecea">🏆</div><div style="flex:1"><div style="font-weight:500">Top 10 maiores ofensores</div></div></div>
-    <div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Receita da churrasqueira por mês</div></div></div>
-  </div>
+<div id="pg-financeiro" class="pg" style="padding:0">
+  <iframe id="iframe-financeiro" src="" style="width:100%;height:calc(100vh - 130px);border:none;display:block" allow="same-origin"></iframe>
 </div>
 
 <!-- DOCUMENTOS -->
@@ -466,8 +454,11 @@ var BNAV_IDS=['inicio','projetos','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
-  // Financeiro abre direto na pagina dedicada
-  if(id==='financeiro'){window.open('financeiro.html','_blank');return;}
+  // Financeiro carrega via iframe
+  if(id==='financeiro'){
+    var iframe=document.getElementById('iframe-financeiro');
+    if(iframe&&!iframe.src) iframe.src='financeiro.html';
+  }
   // Bloquear documentos e assembleias para não-admin
   if((id==='documentos'||id==='assembleias')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});

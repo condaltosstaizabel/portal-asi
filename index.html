@@ -377,8 +377,8 @@ textarea.fi{height:75px;resize:vertical}
 <div class="bnav"><div class="bnav-items">
   <button class="bni on" onclick="nav('inicio')"><span class="bni-ico">🏠</span>Início</button>
   <button class="bni" onclick="nav('projetos')"><span class="bni-ico">🔨</span>Projetos</button>
-  <button class="bni" onclick="nav('contratos')"><span class="bni-ico">📋</span>Contratos</button>
-  <button class="bni" onclick="nav('churrasqueira')"><span class="bni-ico">🍖</span>Reservas</button>
+  <button class="bni" onclick="nav('prestadores')"><span class="bni-ico">👤</span>Prestadores</button>
+  <button class="bni" onclick="window.open('financeiro.html','_blank')"><span class="bni-ico">📊</span>Financeiro</button>
   <button class="bni" onclick="nav('defeitos')"><span class="bni-ico">🔧</span>Defeitos</button>
 </div></div>
 
@@ -462,10 +462,12 @@ function fazerLogout(){
 
 var WA='5519989360523';
 var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos','mapa'];
-var BNAV_IDS=['inicio','projetos','contratos','churrasqueira','defeitos'];
+var BNAV_IDS=['inicio','projetos','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
+  // Financeiro abre direto na pagina dedicada
+  if(id==='financeiro'){window.open('financeiro.html','_blank');return;}
   // Bloquear documentos e assembleias para não-admin
   if((id==='documentos'||id==='assembleias')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});

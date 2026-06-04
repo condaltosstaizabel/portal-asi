@@ -505,8 +505,8 @@ function carregarChamados(){
   var query=db.collection('chamados').orderBy('criadoEm','desc').limit(50);
   // Morador ve apenas os chamados da sua unidade
   if(!adminLogado&&u.unidade){
-    var unidadeNum=(u.unidade||'').toString().replace(/[^0-9]/g,'');
-    query=db.collection('chamados').where('apto','==',unidadeNum).orderBy('criadoEm','desc').limit(50);
+    var unidadeNum=(u.unidade||'').replace(/[^0-9]/g,'');
+    query=db.collection('chamados').where('apto','>=',unidadeNum).where('apto','<=',unidadeNum+'z').orderBy('apto').limit(50);
   }
   query.get().then(function(snap){
     chamados=[];
@@ -705,7 +705,8 @@ function renderPrestadores(){
       html+='<div class="file-row">'+
         '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0')+'">'+(catIcos[cat]||'👤')+'</div>'+
         '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>'+
-        '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>'+
+        '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">📞 Ligar</a>'+
+        '<a href="https://wa.me/'+tel+'" target="_blank" class="badge ok" style="text-decoration:none;margin-right:4px">💬 WhatsApp</a>'+
         (adminLogado?'<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>':'')+
       '</div>';
     });
@@ -1240,4 +1241,3 @@ window.addEventListener('beforeinstallprompt',function(e){
 </script>
 </body>
 </html>
- 

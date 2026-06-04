@@ -659,7 +659,7 @@ function renderSugestoes(){
         '<div style="font-size:13px;color:var(--txt2);margin-top:6px;margin-bottom:8px">'+escHtml(s.desc)+'</div>'+
         (msgs.length?'<div style="background:#fafaf7;border-radius:10px;padding:10px;margin-bottom:8px">'+chatHtml+'</div>':'')+
                 '<div style="display:flex;gap:6px">'+
-          '<input id="sug-chat-'+s.id+'" data-sid="'+s.id+'" placeholder="Digite uma mensagem..." style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px">'+
+          '<input id="sug-chat-'+s.id+'" data-sid="'+s.id+'" autocomplete="off" placeholder="Digite uma mensagem..." style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px">'+
           '<button data-sid="'+s.id+'" onclick="enviarMensagemSugestao(this.dataset.sid)" class="badge blue" style="cursor:pointer;border:none;padding:7px 12px">Enviar</button>'+
         '</div>'+'</div>'+
       '</div>';
@@ -883,7 +883,7 @@ function renderChamados(){
         (adminLogado?statusBtns:'')+
         (msgs.length?'<div style="background:#fafaf7;border-radius:10px;padding:10px;margin-bottom:8px">'+chatHtml+'</div>':'')+
                 '<div style="display:flex;gap:6px">'+
-          '<input id="chat-input-'+x.id+'" data-xid="'+x.id+'" placeholder="Digite uma mensagem..." style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px">'+
+          '<input id="chat-input-'+x.id+'" data-xid="'+x.id+'" autocomplete="off" placeholder="Digite uma mensagem..." style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px">'+
           '<button data-xid="'+x.id+'" onclick="enviarMensagemChamado(this.dataset.xid)" class="badge blue" style="cursor:pointer;border:none;padding:7px 12px">Enviar</button>'+
         '</div>'+'</div>'+
       '</div>';

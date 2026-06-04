@@ -559,52 +559,51 @@ function enviarSugestao(){
   }).catch(function(e){alert('Erro: '+e.message);});
 }
 
-var stSugMap={
-  'Recebido':'🔵 Recebido',
-  'Em Análise':'🟡 Em Análise',
-  'Respondido':'🟢 Respondido',
-  'Encerrado':'⚫ Encerrado'
-};
+var stSugMap={};
+stSugMap['Recebido']='🔵 Recebido';
+stSugMap['Em Análise']='🟡 Em Análise';
+stSugMap['Respondido']='🟢 Respondido';
+stSugMap['Encerrado']='⚫ Encerrado';
 
 function renderSugestoes(){
   var el=document.getElementById('lista-sugestoes');if(!el)return;
   if(!sugestoes.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px">Nenhuma sugestão ou solicitação ainda.</div>';return;}
-  el.innerHTML=sugestoes.map(function(s){
+  var html='';
+  sugestoes.forEach(function(s){
     var data=s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
-    var stColor={Recebido:'blue','Em Análise':'warn',Respondido:'ok',Encerrado:'gray'}[s.status]||'gray';
-    var adminArea=adminLogado?
-      '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">'+
-        '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
-          '<select onchange="atualizarStatusSug(''+s.id+'',this.value)" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">'+
-            Object.keys(stSugMap).map(function(k){return '<option value="'+k+'"'+(k===s.status?' selected':'')+'>'+stSugMap[k]+'</option>';}).join('')+
-          '</select>'+
-          '<input id="resp-'+s.id+'" placeholder="Resposta ao morador..." value="'+(s.resposta||'')+'" style="flex:1;min-width:160px;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">'+
-          '<button onclick="salvarRespostaSug(''+s.id+'')" class="badge ok" style="cursor:pointer;border:none">Salvar</button>'+
-        '</div>'+
-      '</div>':'';
-    var respostaArea=(s.resposta&&!adminLogado)?
-      '<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a"><strong>Resposta:</strong> '+s.resposta+'</div>':'';
-    return '<div class="card" style="padding:14px;margin-bottom:8px">'+
-      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
-        '<div style="flex:1">'+
-          '<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">'+
-            '<span class="badge '+stColor+'" style="font-size:11px">'+(stSugMap[s.status]||s.status)+'</span>'+
-            '<span style="font-size:11px;background:#f0eeff;color:#6d28d9;padding:2px 8px;border-radius:99px">'+s.tipo+'</span>'+
-          '</div>'+
-          '<div style="font-weight:600;font-size:14px">'+s.assunto+'</div>'+
-          '<div style="font-size:12px;color:var(--txt3);margin-top:2px">'+
-            (adminLogado?s.nome+' · Apto '+s.unidade+' · ':'')+data+
-          '</div>'+
-          '<div style="font-size:13px;color:var(--txt2);margin-top:6px">'+s.desc+'</div>'+
-          respostaArea+
-        '</div>'+
-      '</div>'+
-      adminArea+
-    '</div>';
-  }).join('');
+    var stColorMap={};stColorMap['Recebido']='blue';stColorMap['Em Análise']='warn';stColorMap['Respondido']='ok';stColorMap['Encerrado']='gray';
+    var stColor=stColorMap[s.status]||'gray';
+    var stLabel=stSugMap[s.status]||s.status;
+    html+='<div class="card" style="padding:14px;margin-bottom:8px">';
+    html+='<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">';
+    html+='<span class="badge '+stColor+'" style="font-size:11px">'+stLabel+'</span>';
+    html+='<span style="font-size:11px;background:#f0eeff;color:#6d28d9;padding:2px 8px;border-radius:99px">'+s.tipo+'</span>';
+    html+='</div>';
+    html+='<div style="font-weight:600;font-size:14px">'+s.assunto+'</div>';
+    html+='<div style="font-size:12px;color:var(--txt3);margin-top:2px">';
+    if(adminLogado) html+=s.nome+' · Apto '+s.unidade+' · ';
+    html+=data+'</div>';
+    html+='<div style="font-size:13px;color:var(--txt2);margin-top:6px">'+s.desc+'</div>';
+    if(s.resposta&&!adminLogado){
+      html+='<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a"><strong>Resposta:</strong> '+s.resposta+'</div>';
+    }
+    if(adminLogado){
+      html+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">';
+      html+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
+      html+='<select data-id="'+s.id+'" onchange="atualizarStatusSug(this.dataset.id,this.value)" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">';
+      Object.keys(stSugMap).forEach(function(k){
+        html+='<option value="'+k+'"'+(k===s.status?' selected':'')+'>'+stSugMap[k]+'</option>';
+      });
+      html+='</select>';
+      html+='<input id="resp-'+s.id+'" placeholder="Resposta ao morador..." value="'+(s.resposta||'')+'" style="flex:1;min-width:160px;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">';
+      html+='<button data-id="'+s.id+'" onclick="salvarRespostaSug(this.dataset.id)" class="badge ok" style="cursor:pointer;border:none">Salvar</button>';
+      html+='</div></div>';
+    }
+    html+='</div>';
+  });
+  el.innerHTML=html;
 }
-
-function atualizarStatusSug(id,novoStatus){
+function function atualizarStatusSug(id,novoStatus){
   db.collection('sugestoes').doc(id).update({status:novoStatus}).then(function(){
     var s=sugestoes.find(function(x){return x.id===id;});
     if(s) s.status=novoStatus;

@@ -291,7 +291,7 @@ textarea.fi{height:75px;resize:vertical}
     <textarea id="sug-desc" placeholder="Descreva sua sugestão ou solicitação..." style="width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:13px;font-family:inherit;resize:vertical;margin-bottom:10px"></textarea>
     <button class="btn primary" onclick="enviarSugestao()" style="width:100%">📤 Enviar</button>
   </div>
-  <div class="sec">Histórico</div>
+  <div class="sec" style="display:flex;justify-content:space-between;align-items:center">Histórico<button id="btn-export-sugestoes" style="display:none;font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid var(--border);background:#f0f5fb;color:var(--azul);cursor:pointer" onclick="exportarSugestoes()">⬇️ Exportar CSV</button></div>
   <div id="lista-sugestoes"><div style="color:var(--txt3);font-size:13px;padding:8px">Carregando...</div></div>
 </div>
 
@@ -307,6 +307,7 @@ textarea.fi{height:75px;resize:vertical}
     <div class="mc"><div class="mc-lbl">Em análise</div><div class="mc-val warn" id="cnt-an">0</div></div>
     <div class="mc"><div class="mc-lbl">Resolvidos</div><div class="mc-val ok" id="cnt-re">0</div></div>
   </div>
+  <div class="sec" style="display:flex;justify-content:space-between;align-items:center">Chamados<button id="btn-export-chamados" style="display:none;font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid var(--border);background:#f0f5fb;color:var(--azul);cursor:pointer" onclick="exportarChamados()">⬇️ Exportar CSV</button></div>
   <div class="sec">Registrar defeito</div>
   <div class="card">
     <label class="fl">Apartamento / local</label><input class="fi" id="f-apto" placeholder="Ex: Ap. 1121 ou Garagem B">
@@ -449,6 +450,10 @@ auth.onAuthStateChanged(function(user){
       var btnUsu=document.getElementById('btn-usuarios');
       if(btnUsu) btnUsu.style.display='flex';
       verificarPendentes();
+      var btnExpC=document.getElementById('btn-export-chamados');
+      if(btnExpC) btnExpC.style.display='block';
+      var btnExpS=document.getElementById('btn-export-sugestoes');
+      if(btnExpS) btnExpS.style.display='block';
       // Adicionar link gerenciar usuários no admin
       var tabsEl=document.querySelector('.admin-tabs');
       if(tabsEl&&!document.getElementById('tab-usuarios')){
@@ -524,6 +529,40 @@ function reservaWA(){
 }
 
 // ===== DEFEITOS =====
+// ===== EXPORTAR =====
+function exportarCSV(dados, nome){
+  var bom='﻿';
+  var csv=bom+dados.map(function(row){
+    return row.map(function(cell){
+      var s=(cell||'').toString().replace(/"/g,'""');
+      return '"'+s+'"';
+    }).join(',');
+  }).join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url; a.download=nome+'.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportarChamados(){
+  var rows=[['Data','Apto','Morador','Categoria','Urgência','Descrição','Status']];
+  chamados.forEach(function(c){
+    var data=c.criadoEm&&c.criadoEm.toDate?c.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
+    rows.push([data,c.apto||'',c.usuario||'',c.cat||'',c.urg||'',c.desc||'',c.status||'']);
+  });
+  exportarCSV(rows,'chamados-'+new Date().toISOString().slice(0,10));
+}
+
+function exportarSugestoes(){
+  var rows=[['Data','Apto','Morador','Tipo','Assunto','Descrição','Status','Resposta']];
+  sugestoes.forEach(function(s){
+    var data=s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
+    rows.push([data,s.unidade||'',s.nome||'',s.tipo||'',s.assunto||'',s.desc||'',s.status||'',s.resposta||'']);
+  });
+  exportarCSV(rows,'sugestoes-'+new Date().toISOString().slice(0,10));
+}
+
 // ===== SUGESTÕES =====
 var sugestoes=[];
 
@@ -556,9 +595,7 @@ function enviarSugestao(){
     document.getElementById('sug-assunto').value='';
     document.getElementById('sug-desc').value='';
     alert('✅ Enviado com sucesso! Acompanhe o andamento aqui.');
-    var assunto=encodeURIComponent('['+tipo+'] '+assunto);
-    var corpo=encodeURIComponent(tipo+' registrada\n\nMorador: '+sug.nome+' · Apto '+sug.unidade+'\nAssunto: '+assunto+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
-    window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
+
     carregarSugestoes();
   }).catch(function(e){alert('Erro: '+e.message);});
 }
@@ -676,9 +713,7 @@ function registrar(){
     renderChamados();
     alert('✅ Chamado registrado! O síndico receberá uma notificação.');
     // Enviar email
-    var assunto=encodeURIComponent('[Defeito '+urg+'] '+cat+' — '+apto);
-    var corpo=encodeURIComponent('Registro de defeito\n\nLocal: '+apto+'\nCategoria: '+cat+'\nUrgência: '+urg+'\nData: '+data+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
-    window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
+
   }).catch(function(e){alert('Erro ao registrar: '+e.message);});
 }
 

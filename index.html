@@ -556,6 +556,9 @@ function enviarSugestao(){
     document.getElementById('sug-assunto').value='';
     document.getElementById('sug-desc').value='';
     alert('✅ Enviado com sucesso! Acompanhe o andamento aqui.');
+    var assunto=encodeURIComponent('['+tipo+'] '+assunto);
+    var corpo=encodeURIComponent(tipo+' registrada\n\nMorador: '+sug.nome+' · Apto '+sug.unidade+'\nAssunto: '+assunto+'\nDescrição: '+desc+'\n\nEnviado pelo Portal Altos Santa Izabel.');
+    window.open('mailto:altosdesantaizabelcondominio@gmail.com?subject='+assunto+'&body='+corpo);
     carregarSugestoes();
   }).catch(function(e){alert('Erro: '+e.message);});
 }

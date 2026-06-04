@@ -827,16 +827,18 @@ function atualizarBadgeNotif(){
   if(!badge) return;
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
   if(adminLogado){
-    // Admin: conta itens sem resposta
-    db.collection('chamados').where('resposta','==','').get().then(function(s1){
-      db.collection('sugestoes').where('status','==','Recebido').get().then(function(s2){
-        var total=s1.size+s2.size;
-        badge.textContent=total;
-        badge.style.display=total>0?'inline-block':'none';
-      }).catch(function(){});
-    }).catch(function(){
-      badge.style.display='none';
-    });
+    // Admin: conta chamados sem resposta do admin + sugestoes sem resposta
+    var semRespostaCham=chamados.filter(function(x){
+      var msgs=x.mensagens||[];
+      return !msgs.some(function(m){return m.role==='admin';});
+    }).length;
+    var semRespostaSug=sugestoes.filter(function(s){
+      var msgs=s.mensagens||[];
+      return s.status==='Recebido'&&!msgs.some(function(m){return m.role==='admin';});
+    }).length;
+    var total=semRespostaCham+semRespostaSug;
+    badge.textContent=total;
+    badge.style.display=total>0?'inline-block':'none';
   } else {
     // Morador: conta mensagens do admin não lidas
     var uid=u.uid||'';
@@ -1004,16 +1006,18 @@ function atualizarBadgeNotif(){
   if(!badge) return;
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
   if(adminLogado){
-    // Admin: conta itens sem resposta
-    db.collection('chamados').where('resposta','==','').get().then(function(s1){
-      db.collection('sugestoes').where('status','==','Recebido').get().then(function(s2){
-        var total=s1.size+s2.size;
-        badge.textContent=total;
-        badge.style.display=total>0?'inline-block':'none';
-      }).catch(function(){});
-    }).catch(function(){
-      badge.style.display='none';
-    });
+    // Admin: conta chamados sem resposta do admin + sugestoes sem resposta
+    var semRespostaCham=chamados.filter(function(x){
+      var msgs=x.mensagens||[];
+      return !msgs.some(function(m){return m.role==='admin';});
+    }).length;
+    var semRespostaSug=sugestoes.filter(function(s){
+      var msgs=s.mensagens||[];
+      return s.status==='Recebido'&&!msgs.some(function(m){return m.role==='admin';});
+    }).length;
+    var total=semRespostaCham+semRespostaSug;
+    badge.textContent=total;
+    badge.style.display=total>0?'inline-block':'none';
   } else {
     // Morador: conta respostas não lidas
     var uid=u.uid||'';

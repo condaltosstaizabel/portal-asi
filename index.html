@@ -114,7 +114,7 @@ textarea.fi{height:75px;resize:vertical}
 <div class="hdr">
   <div class="hdr-logo">🏢</div>
   <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p id="hdr-usuario">Condomínio Altos Santa Izabel</p></div>
-  <div class="hdr-ico" onclick="nav('defeitos')">🔔<div class="notif-dot"></div></div>
+  <div class="hdr-ico" onclick="nav('defeitos')" style="position:relative">🔔<span id="badge-notif" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4;min-width:16px;text-align:center"></span></div>
   <div class="hdr-ico" onclick="abrirAdmin()" id="btn-admin" style="display:none">⚙️</div>
   <div class="hdr-ico" id="btn-usuarios" onclick="window.open('usuarios.html','_blank')" style="display:none;position:relative">👥<span id="badge-usuarios" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4"></span></div>
   <div class="hdr-ico" onclick="fazerLogout()" title="Sair">🚪</div>
@@ -583,7 +583,7 @@ function carregarSugestoes(){
   query.get().then(function(snap){
     sugestoes=[];
     snap.forEach(function(doc){sugestoes.push(Object.assign({id:doc.id},doc.data()));});
-    renderSugestoes();
+    renderSugestoes();atualizarBadgeNotif();
   }).catch(function(e){console.log('Erro sugestoes:',e);});
 }
 
@@ -618,40 +618,61 @@ stSugMap['Encerrado']='⚫ Encerrado';
 function renderSugestoes(){
   var el=document.getElementById('lista-sugestoes');if(!el)return;
   if(!sugestoes.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px">Nenhuma sugestão ou solicitação ainda.</div>';return;}
-  var html='';
-  sugestoes.forEach(function(s){
-    var data=s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
-    var stColorMap={};stColorMap['Recebido']='blue';stColorMap['Em Análise']='warn';stColorMap['Respondido']='ok';stColorMap['Encerrado']='gray';
-    var stColor=stColorMap[s.status]||'gray';
-    var stLabel=stSugMap[s.status]||s.status;
-    html+='<div class="card" style="padding:14px;margin-bottom:8px">';
-    html+='<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">';
-    html+='<span class="badge '+stColor+'" style="font-size:11px">'+stLabel+'</span>';
-    html+='<span style="font-size:11px;background:#f0eeff;color:#6d28d9;padding:2px 8px;border-radius:99px">'+s.tipo+'</span>';
-    html+='</div>';
-    html+='<div style="font-weight:600;font-size:14px">'+s.assunto+'</div>';
-    html+='<div style="font-size:12px;color:var(--txt3);margin-top:2px">';
-    if(adminLogado) html+=s.nome+' · Apto '+s.unidade+' · ';
-    html+=data+'</div>';
-    html+='<div style="font-size:13px;color:var(--txt2);margin-top:6px">'+s.desc+'</div>';
-    if(s.resposta&&!adminLogado){
-      html+='<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a"><strong>Resposta:</strong> '+escHtml(s.resposta)+'</div>';
-    }
-    if(adminLogado){
-      html+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">';
-      html+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
-      html+='<select data-id="'+s.id+'" onchange="atualizarStatusSug(this.dataset.id,this.value)" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">';
-      Object.keys(stSugMap).forEach(function(k){
-        html+='<option value="'+k+'"'+(k===s.status?' selected':'')+'>'+stSugMap[k]+'</option>';
-      });
-      html+='</select>';
-      html+='<input id="resp-'+s.id+'" placeholder="Resposta ao morador..." value="'+(s.resposta||'')+'" style="flex:1;min-width:160px;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">';
-      html+='<button data-id="'+s.id+'" onclick="salvarRespostaSug(this.dataset.id)" class="badge ok" style="cursor:pointer;border:none">Salvar</button>';
-      html+='</div></div>';
-    }
-    html+='</div>';
-  });
-  el.innerHTML=html;
+  var grupos=[
+    {label:'🔵 Recebido',key:'Recebido',aberto:true},
+    {label:'🟡 Em Análise',key:'Em Análise',aberto:true},
+    {label:'🟢 Respondido',key:'Respondido',aberto:false},
+    {label:'⚫ Encerrado',key:'Encerrado',aberto:false}
+  ];
+  el.innerHTML=grupos.map(function(g){
+    var itens=sugestoes.filter(function(s){return s.status===g.key;});
+    if(!itens.length) return '';
+    var rows=itens.map(function(s){
+      var data=s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
+      var stColorMap={};stColorMap['Recebido']='blue';stColorMap['Em Análise']='warn';stColorMap['Respondido']='ok';stColorMap['Encerrado']='gray';
+      var stColor=stColorMap[s.status]||'gray';
+      var stLabel=stSugMap[s.status]||s.status;
+      var html='<div class="card" style="padding:12px;margin-bottom:6px">';
+      html+='<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">';
+      html+='<span class="badge '+stColor+'" style="font-size:11px">'+stLabel+'</span>';
+      html+='<span style="font-size:11px;background:#f0eeff;color:#6d28d9;padding:2px 8px;border-radius:99px">'+s.tipo+'</span>';
+      html+='</div>';
+      html+='<div style="font-weight:600;font-size:14px">'+escHtml(s.assunto)+'</div>';
+      html+='<div style="font-size:12px;color:var(--txt3);margin-top:2px">';
+      if(adminLogado) html+=escHtml(s.nome)+' · Apto '+s.unidade+' · ';
+      html+=data+'</div>';
+      html+='<div style="font-size:13px;color:var(--txt2);margin-top:6px">'+escHtml(s.desc)+'</div>';
+      if(s.resposta&&!adminLogado){
+        html+='<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a">';
+        html+='<strong>Resposta</strong>'+(s.respondidoPor?' de '+escHtml(s.respondidoPor):'');
+        html+=(s.respondidoEm&&s.respondidoEm.toDate?' em '+s.respondidoEm.toDate().toLocaleDateString('pt-BR'):'');
+        html+=': '+escHtml(s.resposta);
+        if(!s.lido) html+='<div style="margin-top:6px"><button data-id="'+s.id+'" onclick="marcarLidoSugestao(this.dataset.id,this)" class="badge gray" style="cursor:pointer;border:none;font-size:11px">✓ Marcar como lido</button></div>';
+        html+='</div>';
+      }
+      if(adminLogado){
+        html+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">';
+        html+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
+        html+='<select data-id="'+s.id+'" onchange="atualizarStatusSug(this.dataset.id,this.value)" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">';
+        Object.keys(stSugMap).forEach(function(k){
+          html+='<option value="'+k+'"'+(k===s.status?' selected':'')+'>'+stSugMap[k]+'</option>';
+        });
+        html+='</select>';
+        html+='<input id="resp-'+s.id+'" placeholder="Resposta ao morador..." value="'+escHtml(s.resposta||'')+'" style="flex:1;min-width:160px;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">';
+        html+='<button data-id="'+s.id+'" onclick="salvarRespostaSug(this.dataset.id)" class="badge ok" style="cursor:pointer;border:none">Salvar</button>';
+        html+='</div></div>';
+      }
+      html+='</div>';
+      return html;
+    }).join('');
+    return '<div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">'+
+      '<div onclick="toggleGrupo(this)" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:'+(g.aberto?'#f0f5fb':'var(--card)')+'">'+
+        '<span style="font-weight:700;font-size:13px">'+g.label+'</span>'+
+        '<span style="font-size:12px;color:var(--txt3)">'+itens.length+' item(s) <span class="chevron-grupo" style="display:inline-block;transition:transform .2s;transform:'+(g.aberto?'rotate(90deg)':'rotate(0deg)')+'">›</span></span>'+
+      '</div>'+
+      '<div class="grupo-content" style="display:'+(g.aberto?'block':'none')+'">'+rows+'</div>'+
+    '</div>';
+  }).join('');
 }
 function atualizarStatusSug(id,novoStatus){
   db.collection('sugestoes').doc(id).update({status:novoStatus}).then(function(){
@@ -663,9 +684,12 @@ function atualizarStatusSug(id,novoStatus){
 
 function salvarRespostaSug(id){
   var resp=document.getElementById('resp-'+id).value.trim();
+  var u2=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
   db.collection('sugestoes').doc(id).update({
     resposta:resp,
     status:'Respondido',
+    respondidoPor:u2.nome||'Admin',
+    lido:false,
     respondidoEm:firebase.firestore.FieldValue.serverTimestamp()
   }).then(function(){
     var s=sugestoes.find(function(x){return x.id===id;});
@@ -695,7 +719,7 @@ function carregarChamados(){
       var tb=b.criadoEm&&b.criadoEm.toDate?b.criadoEm.toDate():new Date(0);
       return tb-ta;
     });
-    renderChamados();
+    renderChamados();atualizarBadgeNotif();
   }).catch(function(e){console.log('Erro chamados:',e);});
 }
 
@@ -726,6 +750,70 @@ function registrar(){
   }).catch(function(e){alert('Erro ao registrar: '+e.message);});
 }
 
+function salvarRespostaChamado(id){
+  var resp=document.getElementById('cham-resp-'+id);
+  if(!resp) return;
+  var texto=resp.value.trim();
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  db.collection('chamados').doc(id).update({
+    resposta:texto,
+    respondidoPor:u.nome||'Admin',
+    respondidoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    lido:false,
+    status:'Resolvido'
+  }).then(function(){
+    var x=chamados.find(function(x){return x.id===id;});
+    if(x){x.resposta=texto;x.respondidoPor=u.nome||'Admin';x.status='Resolvido';x.lido=false;}
+    renderChamados();
+    alert('✅ Resposta salva!');
+  }).catch(function(e){alert('Erro: '+e.message);});
+}
+
+function marcarLidoChamado(id,btn){
+  db.collection('chamados').doc(id).update({lido:true}).then(function(){
+    var x=chamados.find(function(x){return x.id===id;});
+    if(x) x.lido=true;
+    if(btn) btn.closest('.card,div[style*="margin-top:8px"]').style.display='none';
+    atualizarBadgeNotif();
+  }).catch(function(){});
+}
+
+function marcarLidoSugestao(id,btn){
+  db.collection('sugestoes').doc(id).update({lido:true}).then(function(){
+    var s=sugestoes.find(function(s){return s.id===id;});
+    if(s) s.lido=true;
+    if(btn){var el=btn.closest('div[style*="e8f5e9"]');if(el)el.style.display='none';}
+    atualizarBadgeNotif();
+  }).catch(function(){});
+}
+
+function atualizarBadgeNotif(){
+  var badge=document.getElementById('badge-notif');
+  if(!badge) return;
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  if(adminLogado){
+    // Admin: conta itens sem resposta
+    db.collection('chamados').where('resposta','==','').get().then(function(s1){
+      db.collection('sugestoes').where('status','==','Recebido').get().then(function(s2){
+        var total=s1.size+s2.size;
+        badge.textContent=total;
+        badge.style.display=total>0?'inline-block':'none';
+      }).catch(function(){});
+    }).catch(function(){
+      badge.style.display='none';
+    });
+  } else {
+    // Morador: conta respostas não lidas
+    var uid=u.uid||'';
+    if(!uid){badge.style.display='none';return;}
+    var naoLidos=0;
+    chamados.forEach(function(x){if(x.resposta&&!x.lido) naoLidos++;});
+    sugestoes.forEach(function(s){if(s.resposta&&!s.lido) naoLidos++;});
+    badge.textContent=naoLidos;
+    badge.style.display=naoLidos>0?'inline-block':'none';
+  }
+}
+
 function atualizarStatus(id,novoStatus){
   db.collection('chamados').doc(id).update({status:novoStatus}).then(function(){
     var c=chamados.find(function(x){return x.id===id;});
@@ -735,38 +823,52 @@ function atualizarStatus(id,novoStatus){
 }
 
 function renderChamados(){
-  var ab=chamados.filter(function(c){return c.status==='Aberto';}).length;
-  var an=chamados.filter(function(c){return c.status==='Em análise';}).length;
-  var re=chamados.filter(function(c){return c.status==='Resolvido';}).length;
+  var ab=chamados.filter(function(x){return x.status==='Aberto';}).length;
+  var an=chamados.filter(function(x){return x.status==='Em análise';}).length;
+  var re=chamados.filter(function(x){return x.status==='Resolvido';}).length;
   document.getElementById('cnt-ab').textContent=ab;
   document.getElementById('cnt-an').textContent=an;
   document.getElementById('cnt-re').textContent=re;
   var el=document.getElementById('lista-chamados');
-  if(!chamados.length){
-    el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado registrado.</div>';
-    return;
-  }
-  var corMap={Aberto:'#c0392b','Em análise':'#b8630a',Resolvido:'#2d7a3a'};
-  var bgMap={Aberto:'bad','Em análise':'warn',Resolvido:'ok'};
-  el.innerHTML=chamados.map(function(c){
-    var cor=corMap[c.status]||'#888';
-    var bg=bgMap[c.status]||'gray';
-    return '<div class="chamado">'+
-      '<div class="sdot" style="background:'+cor+'"></div>'+
-      '<div style="flex:1">'+
-        '<div style="font-weight:600">'+c.cat+' — '+c.apto+'</div>'+
-        '<div style="font-size:12px;color:var(--txt3);margin-top:2px">'+c.desc.substring(0,80)+(c.desc.length>80?'...':'')+'</div>'+
-        '<div style="font-size:11px;color:var(--txt3);margin-top:2px">'+c.data+(c.usuario?' · '+c.usuario:'')+'</div>'+
-        (adminLogado
-          ?'<div style="margin-top:6px;display:flex;gap:6px">'+
+  if(!chamados.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhum chamado registrado.</div>';return;}
+  var grupos=[
+    {label:'🔴 Aberto',key:'Aberto',badge:'bad',aberto:true},
+    {label:'🟡 Em Análise',key:'Em análise',badge:'warn',aberto:true},
+    {label:'🟢 Resolvido',key:'Resolvido',badge:'ok',aberto:false}
+  ];
+  el.innerHTML=grupos.map(function(g){
+    var itens=chamados.filter(function(x){return x.status===g.key;});
+    if(!itens.length) return '';
+    var rows=itens.map(function(x){
+      return '<div class="chamado">'+
+        '<div style="flex:1">'+
+          '<div style="font-weight:600">'+x.cat+' — '+x.apto+'</div>'+
+          '<div style="font-size:12px;color:var(--txt3);margin-top:2px">'+x.desc.substring(0,80)+(x.desc.length>80?'...':'')+'</div>'+
+          '<div style="font-size:11px;color:var(--txt3);margin-top:2px">'+x.data+(x.usuario?' · '+x.usuario:'')+'</div>'+
+          (adminLogado?'<div style="margin-top:8px">'+
+            '<div style="display:flex;gap:6px;margin-bottom:6px">'+
             ['Aberto','Em análise','Resolvido'].map(function(s){
-              return '<button onclick="atualizarStatus(\''+(c.id||'')+'\',\''+s+'\')" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:'+(c.status===s?'var(--azul)':'transparent')+';color:'+(c.status===s?'#fff':'var(--txt2)')+';cursor:pointer">'+s+'</button>';
+              return '<button data-id="'+x.id+'" data-st="'+s+'" onclick="atualizarStatus(this.dataset.id,this.dataset.st)" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:'+(x.status===s?'var(--azul)':'transparent')+';color:'+(x.status===s?'#fff':'var(--txt2)')+';cursor:pointer">'+s+'</button>';
             }).join('')+
-          '</div>'
-          :''
-        )+
+            '</div>'+
+            '<div style="display:flex;gap:6px;align-items:center">'+
+              '<input id="cham-resp-'+x.id+'" placeholder="Resposta ao morador..." value="'+(x.resposta||'')+'" style="flex:1;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">'+
+              '<button data-id="'+x.id+'" onclick="salvarRespostaChamado(this.dataset.id)" class="badge ok" style="cursor:pointer;border:none;white-space:nowrap">Salvar resposta</button>'+
+            '</div>'+
+            '</div>':'')+
+          (x.resposta&&!adminLogado?'<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a">'+
+            '<strong>Resposta</strong>'+(x.respondidoPor?' de '+x.respondidoPor:'')+(x.respondidoEm&&x.respondidoEm.toDate?' em '+x.respondidoEm.toDate().toLocaleDateString("pt-BR"):'')+': '+escHtml(x.resposta)+
+            '<div style="margin-top:6px"><button data-id="'+x.id+'" onclick="marcarLidoChamado(this.dataset.id,this)" class="badge gray" style="cursor:pointer;border:none;font-size:11px">✓ Marcar como lido</button></div>'+
+          '</div>':'+')+
+        '</div>'+
+      '</div>';
+    }).join('');
+    return '<div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">'+
+      '<div onclick="toggleGrupo(this)" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:'+(g.aberto?'#f0f5fb':'var(--card)')+'">'+
+        '<span style="font-weight:700;font-size:13px">'+g.label+'</span>'+
+        '<span style="font-size:12px;color:var(--txt3)">'+itens.length+' item(s) <span class="chevron-grupo" style="display:inline-block;transition:transform .2s;transform:'+(g.aberto?'rotate(90deg)':'rotate(0deg)')+'">›</span></span>'+
       '</div>'+
-      '<span class="badge '+bg+'">'+c.status+'</span>'+
+      '<div class="grupo-content" style="display:'+(g.aberto?'block':'none')+';padding:0 14px">'+rows+'</div>'+
     '</div>';
   }).join('');
 }
@@ -1228,6 +1330,14 @@ function renderRealizacoes(){
       '<div class="ano-content" style="display:'+(aberto?'block':'none')+';padding:0 15px">'+itens+'</div>'+
       '</div>';
   }).join('');
+}
+function toggleGrupo(header){
+  var content=header.nextElementSibling;
+  var chevron=header.querySelector('.chevron-grupo');
+  var aberto=content.style.display==='block';
+  content.style.display=aberto?'none':'block';
+  if(chevron) chevron.style.transform=aberto?'rotate(0deg)':'rotate(90deg)';
+  header.style.background=aberto?'var(--card)':'#f0f5fb';
 }
 function toggleChurrAno(header){
   var content=header.nextElementSibling;

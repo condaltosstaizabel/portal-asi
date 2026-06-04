@@ -131,6 +131,7 @@ textarea.fi{height:75px;resize:vertical}
   <button class="nb" onclick="nav('prestadores')">Prestadores</button>
   <button class="nb admin-only" id="nav-assembleias" style="display:none" onclick="nav('assembleias')">Assembleias</button>
   <button class="nb" onclick="nav('defeitos')">Defeitos</button>
+  <button class="nb" onclick="nav('sugestoes')">Sugestões</button>
   <button class="nb" id="nav-mapa" style="display:none" onclick="nav('mapa')">🏢 Mapa</button>
 </div></div>
 
@@ -268,6 +269,31 @@ textarea.fi{height:75px;resize:vertical}
   </div>
 </div>
 
+<!-- SUGESTÕES -->
+<div id="pg-sugestoes" class="pg">
+  <div class="sec">Nova sugestão ou solicitação</div>
+  <div class="card" style="padding:15px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:4px">Tipo</div>
+        <select id="sug-tipo" class="fi" style="margin-bottom:0">
+          <option value="Sugestão">💡 Sugestão</option>
+          <option value="Solicitação">📋 Solicitação</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:4px">Assunto</div>
+        <input id="sug-assunto" class="fi" placeholder="Ex: Iluminação do corredor" style="margin-bottom:0">
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:4px">Descrição</div>
+    <textarea id="sug-desc" placeholder="Descreva sua sugestão ou solicitação..." style="width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:13px;font-family:inherit;resize:vertical;margin-bottom:10px"></textarea>
+    <button class="btn primary" onclick="enviarSugestao()" style="width:100%">📤 Enviar</button>
+  </div>
+  <div class="sec">Histórico</div>
+  <div id="lista-sugestoes"><div style="color:var(--txt3);font-size:13px;padding:8px">Carregando...</div></div>
+</div>
+
 <!-- MAPA -->
 <div id="pg-mapa" class="pg">
   <iframe src="mapa.html" style="width:100%;height:calc(100vh - 120px);border:none;border-radius:12px" title="Mapa de Apartamentos"></iframe>
@@ -372,7 +398,7 @@ textarea.fi{height:75px;resize:vertical}
 
 <div class="bnav"><div class="bnav-items">
   <button class="bni on" onclick="nav('inicio')"><span class="bni-ico">🏠</span>Início</button>
-  <button class="bni" onclick="nav('projetos')"><span class="bni-ico">🔨</span>Projetos</button>
+  <button class="bni" onclick="nav('sugestoes')"><span class="bni-ico">💡</span>Sugestões</button>
   <button class="bni" onclick="nav('prestadores')"><span class="bni-ico">👤</span>Prestadores</button>
   <button class="bni" onclick="nav('financeiro')"><span class="bni-ico">📊</span>Financeiro</button>
   <button class="bni" onclick="nav('defeitos')"><span class="bni-ico">🔧</span>Defeitos</button>
@@ -435,7 +461,7 @@ auth.onAuthStateChanged(function(user){
     // Inicializar portal — carrega dados do Firestore
     carregarTodosOsDados(function(){
       renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
-      renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();
+      renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();carregarSugestoes();
     });
     // Preencher unidade do morador no campo de defeito
     var aptoField=document.getElementById('f-apto');
@@ -457,8 +483,8 @@ function fazerLogout(){
 // ===== FIM AUTH =====
 
 var WA='5519989360523';
-var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos','mapa'];
-var BNAV_IDS=['inicio','projetos','prestadores','','defeitos'];
+var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos','mapa','sugestoes'];
+var BNAV_IDS=['inicio','sugestoes','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
@@ -497,6 +523,109 @@ function reservaWA(){
 }
 
 // ===== DEFEITOS =====
+// ===== SUGESTÕES =====
+var sugestoes=[];
+
+function carregarSugestoes(){
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  var query=adminLogado
+    ? db.collection('sugestoes').orderBy('criadoEm','desc').limit(100)
+    : db.collection('sugestoes').where('uid','==',u.uid||'').orderBy('criadoEm','desc').limit(50);
+  query.get().then(function(snap){
+    sugestoes=[];
+    snap.forEach(function(doc){sugestoes.push(Object.assign({id:doc.id},doc.data()));});
+    renderSugestoes();
+  }).catch(function(e){console.log('Erro sugestoes:',e);});
+}
+
+function enviarSugestao(){
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  var tipo=document.getElementById('sug-tipo').value;
+  var assunto=document.getElementById('sug-assunto').value.trim();
+  var desc=document.getElementById('sug-desc').value.trim();
+  if(!assunto||!desc){alert('Preencha o assunto e a descrição.');return;}
+  var sug={
+    tipo:tipo, assunto:assunto, desc:desc,
+    status:'Recebido',
+    uid:u.uid||'', nome:u.nome||'', unidade:u.unidade||'',
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    resposta:'', respondidoEm:null
+  };
+  db.collection('sugestoes').add(sug).then(function(ref){
+    document.getElementById('sug-assunto').value='';
+    document.getElementById('sug-desc').value='';
+    alert('✅ Enviado com sucesso! Acompanhe o andamento aqui.');
+    carregarSugestoes();
+  }).catch(function(e){alert('Erro: '+e.message);});
+}
+
+var stSugMap={
+  'Recebido':'🔵 Recebido',
+  'Em Análise':'🟡 Em Análise',
+  'Respondido':'🟢 Respondido',
+  'Encerrado':'⚫ Encerrado'
+};
+
+function renderSugestoes(){
+  var el=document.getElementById('lista-sugestoes');if(!el)return;
+  if(!sugestoes.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px">Nenhuma sugestão ou solicitação ainda.</div>';return;}
+  el.innerHTML=sugestoes.map(function(s){
+    var data=s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
+    var stColor={Recebido:'blue','Em Análise':'warn',Respondido:'ok',Encerrado:'gray'}[s.status]||'gray';
+    var adminArea=adminLogado?
+      '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">'+
+        '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+          '<select onchange="atualizarStatusSug(''+s.id+'',this.value)" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">'+
+            Object.keys(stSugMap).map(function(k){return '<option value="'+k+'"'+(k===s.status?' selected':'')+'>'+stSugMap[k]+'</option>';}).join('')+
+          '</select>'+
+          '<input id="resp-'+s.id+'" placeholder="Resposta ao morador..." value="'+(s.resposta||'')+'" style="flex:1;min-width:160px;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:7px">'+
+          '<button onclick="salvarRespostaSug(''+s.id+'')" class="badge ok" style="cursor:pointer;border:none">Salvar</button>'+
+        '</div>'+
+      '</div>':'';
+    var respostaArea=(s.resposta&&!adminLogado)?
+      '<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a"><strong>Resposta:</strong> '+s.resposta+'</div>':'';
+    return '<div class="card" style="padding:14px;margin-bottom:8px">'+
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
+        '<div style="flex:1">'+
+          '<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">'+
+            '<span class="badge '+stColor+'" style="font-size:11px">'+(stSugMap[s.status]||s.status)+'</span>'+
+            '<span style="font-size:11px;background:#f0eeff;color:#6d28d9;padding:2px 8px;border-radius:99px">'+s.tipo+'</span>'+
+          '</div>'+
+          '<div style="font-weight:600;font-size:14px">'+s.assunto+'</div>'+
+          '<div style="font-size:12px;color:var(--txt3);margin-top:2px">'+
+            (adminLogado?s.nome+' · Apto '+s.unidade+' · ':'')+data+
+          '</div>'+
+          '<div style="font-size:13px;color:var(--txt2);margin-top:6px">'+s.desc+'</div>'+
+          respostaArea+
+        '</div>'+
+      '</div>'+
+      adminArea+
+    '</div>';
+  }).join('');
+}
+
+function atualizarStatusSug(id,novoStatus){
+  db.collection('sugestoes').doc(id).update({status:novoStatus}).then(function(){
+    var s=sugestoes.find(function(x){return x.id===id;});
+    if(s) s.status=novoStatus;
+    renderSugestoes();
+  }).catch(function(e){alert('Erro: '+e.message);});
+}
+
+function salvarRespostaSug(id){
+  var resp=document.getElementById('resp-'+id).value.trim();
+  db.collection('sugestoes').doc(id).update({
+    resposta:resp,
+    status:'Respondido',
+    respondidoEm:firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function(){
+    var s=sugestoes.find(function(x){return x.id===id;});
+    if(s){s.resposta=resp;s.status='Respondido';}
+    renderSugestoes();
+    alert('✅ Resposta salva!');
+  }).catch(function(e){alert('Erro: '+e.message);});
+}
+
 // ===== DEFEITOS / CHAMADOS =====
 var chamados=[];
 
@@ -705,8 +834,7 @@ function renderPrestadores(){
       html+='<div class="file-row">'+
         '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0')+'">'+(catIcos[cat]||'👤')+'</div>'+
         '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>'+
-        '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">📞 Ligar</a>'+
-        '<a href="https://wa.me/'+tel+'" target="_blank" class="badge ok" style="text-decoration:none;margin-right:4px">💬 WhatsApp</a>'+
+        '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>'+
         (adminLogado?'<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>':'')+
       '</div>';
     });

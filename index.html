@@ -619,6 +619,18 @@ stSugMap['Encerrado']='⚫ Encerrado';
 
 function renderSugestoes(){
   var el=document.getElementById('lista-sugestoes');if(!el)return;
+  // Morador: marcar como lido automaticamente ao visualizar
+  if(!adminLogado){
+    sugestoes.forEach(function(s){
+      var msgs=s.mensagens||[];
+      var temAdminNaoLido=msgs.some(function(m){return m.role==='admin';})&&!s.lido;
+      if(temAdminNaoLido){
+        db.collection('sugestoes').doc(s.id).update({lido:true}).catch(function(){});
+        s.lido=true;
+      }
+    });
+    atualizarBadgeNotif();
+  }
   if(!sugestoes.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px">Nenhuma sugestão ou solicitação ainda.</div>';return;}
   var grupos=[
     {label:'🔵 Recebido',key:'Recebido',aberto:true},
@@ -804,9 +816,9 @@ function enviarMensagemChamado(id){
 function navNotif(){
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
   if(adminLogado){nav('defeitos');return;}
-  // Morador: vai para onde tem resposta não lida
-  var temCham=chamados.some(function(x){return x.resposta&&!x.lido;});
-  var temSug=sugestoes.some(function(s){return s.resposta&&!s.lido;});
+  // Morador: vai para onde tem mensagem do admin não lida
+  var temCham=chamados.some(function(x){var msgs=x.mensagens||[];return msgs.some(function(m){return m.role==='admin';})&&!x.lido;});
+  var temSug=sugestoes.some(function(s){var msgs=s.mensagens||[];return msgs.some(function(m){return m.role==='admin';})&&!s.lido;});
   if(temSug) nav('sugestoes');
   else nav('defeitos');
 }
@@ -826,12 +838,20 @@ function atualizarBadgeNotif(){
       badge.style.display='none';
     });
   } else {
-    // Morador: conta respostas não lidas
+    // Morador: conta mensagens do admin não lidas
     var uid=u.uid||'';
     if(!uid){badge.style.display='none';return;}
     var naoLidos=0;
-    chamados.forEach(function(x){if(x.resposta&&!x.lido) naoLidos++;});
-    sugestoes.forEach(function(s){if(s.resposta&&!s.lido) naoLidos++;});
+    chamados.forEach(function(x){
+      var msgs=x.mensagens||[];
+      var temAdminNaoLido=msgs.some(function(m){return m.role==='admin';})&&!x.lido;
+      if(temAdminNaoLido) naoLidos++;
+    });
+    sugestoes.forEach(function(s){
+      var msgs=s.mensagens||[];
+      var temAdminNaoLido=msgs.some(function(m){return m.role==='admin';})&&!s.lido;
+      if(temAdminNaoLido) naoLidos++;
+    });
     badge.textContent=naoLidos;
     badge.style.display=naoLidos>0?'inline-block':'none';
   }
@@ -843,6 +863,7 @@ function atualizarStatus(id,novoStatus){
     if(c) c.status=novoStatus;
     renderChamados();
   });
+}
 
 function excluirChamado(id){
   if(!confirm('Excluir este defeito permanentemente? Esta ação não pode ser desfeita.')) return;
@@ -852,9 +873,20 @@ function excluirChamado(id){
     atualizarBadgeNotif();
   }).catch(function(e){alert('Erro ao excluir: '+e.message);});
 }
-}
 
 function renderChamados(){
+  // Morador: marcar como lido automaticamente ao visualizar
+  if(!adminLogado){
+    chamados.forEach(function(x){
+      var msgs=x.mensagens||[];
+      var temAdminNaoLido=msgs.some(function(m){return m.role==='admin';})&&!x.lido;
+      if(temAdminNaoLido){
+        db.collection('chamados').doc(x.id).update({lido:true}).catch(function(){});
+        x.lido=true;
+      }
+    });
+    atualizarBadgeNotif();
+  }
   var ab=chamados.filter(function(x){return x.status==='Aberto';}).length;
   var an=chamados.filter(function(x){return x.status==='Em análise';}).length;
   var re=chamados.filter(function(x){return x.status==='Resolvido';}).length;

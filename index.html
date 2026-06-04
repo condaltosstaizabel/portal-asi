@@ -505,8 +505,8 @@ function carregarChamados(){
   var query=db.collection('chamados').orderBy('criadoEm','desc').limit(50);
   // Morador ve apenas os chamados da sua unidade
   if(!adminLogado&&u.unidade){
-    var unidadeNum=(u.unidade||'').replace(/[^0-9]/g,'');
-    query=db.collection('chamados').where('apto','>=',unidadeNum).where('apto','<=',unidadeNum+'z').orderBy('apto').limit(50);
+    var unidadeNum=(u.unidade||'').toString().replace(/[^0-9]/g,'');
+    query=db.collection('chamados').where('apto','==',unidadeNum).orderBy('criadoEm','desc').limit(50);
   }
   query.get().then(function(snap){
     chamados=[];
@@ -1240,3 +1240,4 @@ window.addEventListener('beforeinstallprompt',function(e){
 </script>
 </body>
 </html>
+ 

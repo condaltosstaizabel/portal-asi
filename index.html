@@ -146,6 +146,7 @@ textarea.fi{height:75px;resize:vertical}
     <div class="gcard" onclick="nav('churrasqueira')"><div class="gico" style="background:#fdecea">🍖</div><div><div style="font-weight:600;font-size:13px">Churrasqueira</div><div style="font-size:11px;color:var(--txt3)">Reservas e histórico</div></div></div>
     <div class="gcard" onclick="nav('financeiro')"><div class="gico" style="background:#f0eeff">📊</div><div><div style="font-weight:600;font-size:13px">Financeiro</div><div style="font-size:11px;color:var(--txt3)">Histórico anual</div></div></div>
     <div class="gcard" onclick="nav('defeitos')"><div class="gico" style="background:#fdecea">🔧</div><div><div style="font-weight:600;font-size:13px">Reportar defeito</div><div style="font-size:11px;color:var(--txt3)">Formulário rápido</div></div></div>
+    <div class="gcard" onclick="nav('sugestoes')"><div class="gico" style="background:#f0eeff">💡</div><div><div style="font-weight:600;font-size:13px">Sugestões</div><div style="font-size:11px;color:var(--txt3)">Sugestões e solicitações</div></div></div>
     <div class="gcard admin-only" style="display:none" onclick="nav('documentos')"><div class="gico" style="background:#e8f5e9">📁</div><div><div style="font-weight:600;font-size:13px">Documentos</div><div style="font-size:11px;color:var(--txt3)">Plantas, regimento...</div></div></div>
     <div class="gcard admin-only" style="display:none" onclick="nav('assembleias')"><div class="gico" style="background:#e3f0fb">🏛</div><div><div style="font-weight:600;font-size:13px">Assembleias</div><div style="font-size:11px;color:var(--txt3)">Atas registradas</div></div></div>
   </div>
@@ -603,7 +604,7 @@ function renderSugestoes(){
   });
   el.innerHTML=html;
 }
-function function atualizarStatusSug(id,novoStatus){
+function atualizarStatusSug(id,novoStatus){
   db.collection('sugestoes').doc(id).update({status:novoStatus}).then(function(){
     var s=sugestoes.find(function(x){return x.id===id;});
     if(s) s.status=novoStatus;

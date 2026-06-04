@@ -114,7 +114,7 @@ textarea.fi{height:75px;resize:vertical}
 <div class="hdr">
   <div class="hdr-logo">🏢</div>
   <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p id="hdr-usuario">Condomínio Altos Santa Izabel</p></div>
-  <div class="hdr-ico" onclick="nav('defeitos')" style="position:relative">🔔<span id="badge-notif" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4;min-width:16px;text-align:center"></span></div>
+  <div class="hdr-ico" onclick="navNotif()" style="position:relative">🔔<span id="badge-notif" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4;min-width:16px;text-align:center"></span></div>
   <div class="hdr-ico" onclick="abrirAdmin()" id="btn-admin" style="display:none">⚙️</div>
   <div class="hdr-ico" id="btn-usuarios" onclick="window.open('usuarios.html','_blank')" style="display:none;position:relative">👥<span id="badge-usuarios" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4"></span></div>
   <div class="hdr-ico" onclick="fazerLogout()" title="Sair">🚪</div>
@@ -621,7 +621,7 @@ function renderSugestoes(){
   var grupos=[
     {label:'🔵 Recebido',key:'Recebido',aberto:true},
     {label:'🟡 Em Análise',key:'Em Análise',aberto:true},
-    {label:'🟢 Respondido',key:'Respondido',aberto:false},
+    {label:'🟢 Respondido',key:'Respondido',aberto:true},
     {label:'⚫ Encerrado',key:'Encerrado',aberto:false}
   ];
   el.innerHTML=grupos.map(function(g){
@@ -773,7 +773,11 @@ function marcarLidoChamado(id,btn){
   db.collection('chamados').doc(id).update({lido:true}).then(function(){
     var x=chamados.find(function(x){return x.id===id;});
     if(x) x.lido=true;
-    if(btn) btn.closest('.card,div[style*="margin-top:8px"]').style.display='none';
+    if(btn){
+      var el=btn;
+      while(el&&!el.style.background.includes('e8f5e9')&&el.parentElement) el=el.parentElement;
+      if(el) el.style.display='none';
+    }
     atualizarBadgeNotif();
   }).catch(function(){});
 }
@@ -782,11 +786,25 @@ function marcarLidoSugestao(id,btn){
   db.collection('sugestoes').doc(id).update({lido:true}).then(function(){
     var s=sugestoes.find(function(s){return s.id===id;});
     if(s) s.lido=true;
-    if(btn){var el=btn.closest('div[style*="e8f5e9"]');if(el)el.style.display='none';}
+    // Hide the response box
+    if(btn){
+      var el=btn;
+      while(el&&!el.style.background.includes('e8f5e9')&&el.parentElement) el=el.parentElement;
+      if(el) el.style.display='none';
+    }
     atualizarBadgeNotif();
   }).catch(function(){});
 }
 
+function navNotif(){
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  if(adminLogado){nav('defeitos');return;}
+  // Morador: vai para onde tem resposta não lida
+  var temCham=chamados.some(function(x){return x.resposta&&!x.lido;});
+  var temSug=sugestoes.some(function(s){return s.resposta&&!s.lido;});
+  if(temSug) nav('sugestoes');
+  else nav('defeitos');
+}
 function atualizarBadgeNotif(){
   var badge=document.getElementById('badge-notif');
   if(!badge) return;

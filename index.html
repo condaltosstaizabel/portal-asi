@@ -529,6 +529,15 @@ function reservaWA(){
 }
 
 // ===== DEFEITOS =====
+function escHtml(s){
+  return (s||'').toString()
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
 // ===== EXPORTAR =====
 function exportarCSV(dados, nome){
   var bom='﻿';
@@ -626,7 +635,7 @@ function renderSugestoes(){
     html+=data+'</div>';
     html+='<div style="font-size:13px;color:var(--txt2);margin-top:6px">'+s.desc+'</div>';
     if(s.resposta&&!adminLogado){
-      html+='<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a"><strong>Resposta:</strong> '+s.resposta+'</div>';
+      html+='<div style="margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;font-size:12px;color:#2d7a3a"><strong>Resposta:</strong> '+escHtml(s.resposta)+'</div>';
     }
     if(adminLogado){
       html+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">';
@@ -871,7 +880,7 @@ function renderPrestadores(){
       var tel=p.tel.replace(/[^0-9]/g,''); if(tel.length>=10) tel='55'+tel;
       html+='<div class="file-row">'+
         '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0')+'">'+(catIcos[cat]||'👤')+'</div>'+
-        '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+p.ind:'')+'</div></div>'+
+        '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+escHtml(p.ind):'')+'</div></div>'+
         '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">Ligar</a>'+
         (adminLogado?'<button class="del-btn" onclick="removerPrestador('+idx+')">✕</button>':'')+
       '</div>';
@@ -1025,7 +1034,6 @@ function carregarTodosOsDados(callback){
   });
 }
 // ===== ADMIN =====
-var SENHA='altos2026';
 var RAMOS_CONTRATO=JSON.parse(localStorage.getItem('asi_ramos_contrato')||'null')||['Portaria Remota','Jardinagem','Facilities','Juridico','Administrativo','Manutenção'];
 function salvarRamosContrato(){localStorage.setItem('asi_ramos_contrato',JSON.stringify(RAMOS_CONTRATO));}
 var stContratoOpts=[
@@ -1078,13 +1086,34 @@ function abrirAdmin(){
   }
 }
 function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('on');}
+var SENHA_H='ebc91a10ca5887e7c0378130f4d436194a44c3795c6a51bf075246db702ccc55';
+async function hashSenha(s){
+  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+}
 function verificarSenha(){
-  if(document.getElementById('adminSenha').value===SENHA){
-    adminLogado=true;
+  var senha=document.getElementById('adminSenha').value;
+  if(!senha){document.getElementById('erroSenha').style.display='block';return;}
+  var user=firebase.auth().currentUser;
+  if(!user){document.getElementById('erroSenha').style.display='block';return;}
+  db.collection('usuarios').doc(user.uid).get().then(function(doc){
+    if(!doc.exists||doc.data().perfil!=='admin'){
+      document.getElementById('erroSenha').style.display='block';return;
+    }
+    hashSenha(senha).then(function(h){
+      if(h===SENHA_H){
+        abrirPainelAdmin();
+      } else {
+        document.getElementById('erroSenha').style.display='block';
+      }
+    });
+  });
+}
+function abrirPainelAdmin(){
+  adminLogado=true;
     document.getElementById('adminLogin').style.display='none';
     document.getElementById('adminPainel').style.display='block';
     renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
-  } else {document.getElementById('erroSenha').style.display='block';}
 }
 function adminTab(id,btn){
   document.querySelectorAll('.admin-sec').forEach(function(s){s.classList.remove('on');});

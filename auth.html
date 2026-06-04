@@ -257,9 +257,40 @@ function solicitarCadastro(){
 function enviarResetSenha(){
   var email=document.getElementById('reset-email').value.trim();
   if(!email){setMsg('msg-reset','Informe seu e-mail.','bad');return;}
-  auth.sendPasswordResetEmail(email)
-    .then(function(){setMsg('msg-reset','✅ Link de redefinição enviado para '+email,'ok');})
-    .catch(function(){setMsg('msg-reset','E-mail não encontrado.','bad');});
+  setMsg('msg-reset','<span class="spinner" style="border-top-color:var(--azul);border-color:rgba(0,0,0,.1)"></span> Verificando...','blue');
+  // 1. Verificar se e-mail existe no Firestore
+  db.collection('usuarios').where('email','==',email).limit(1).get()
+    .then(function(snap){
+      if(snap.empty){
+        setMsg('msg-reset','❌ E-mail não encontrado. Verifique o e-mail cadastrado ou solicite acesso.','bad');
+        return;
+      }
+      var dados=snap.docs[0].data();
+      if(dados.status==='pendente'){
+        setMsg('msg-reset','⏳ Seu cadastro ainda está pendente de aprovação. Aguarde o síndico aprovar antes de redefinir a senha.','blue');
+        return;
+      }
+      if(dados.status==='rejeitado'){
+        setMsg('msg-reset','❌ Cadastro não aprovado. Entre em contato com a administração.','bad');
+        return;
+      }
+      // 2. E-mail existe e aprovado — enviar link
+      return auth.sendPasswordResetEmail(email)
+        .then(function(){
+          setMsg('msg-reset','✅ Link de redefinição enviado para <strong>'+email+'</strong>. Verifique sua caixa de entrada e a pasta de spam.','ok');
+        })
+        .catch(function(err){
+          var msgs={
+            'auth/user-not-found':'E-mail não encontrado no sistema de autenticação.',
+            'auth/invalid-email':'E-mail inválido.',
+            'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos.'
+          };
+          setMsg('msg-reset',msgs[err.code]||'Erro ao enviar. Tente novamente.','bad');
+        });
+    })
+    .catch(function(){
+      setMsg('msg-reset','Erro ao verificar e-mail. Tente novamente.','bad');
+    });
 }
 </script>
 </body>

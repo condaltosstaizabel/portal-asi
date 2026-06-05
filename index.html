@@ -955,8 +955,17 @@ function atualizarBadgeNotif(){
   if(!badge) return;
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}')
 ;  if(adminLogado){
-    var semRespostaCham=chamados.filter(function(x){var msgs=x.mensagens||[];return !msgs.some(function(m){return m.role==='admin';});}).length;
-    var semRespostaSug=sugestoes.filter(function(s){var msgs=s.mensagens||[];return s.status==='Recebido'&&!msgs.some(function(m){return m.role==='admin';});}).length;
+    var semRespostaCham=chamados.filter(function(x){
+      var msgs=x.mensagens||[];
+      var temMsgAdmin=msgs.some(function(m){return m.role==='admin';});
+      var temRespostaLegado=x.resposta&&x.resposta.trim()!=='';
+      return !temMsgAdmin&&!temRespostaLegado;
+    }).length;
+    var semRespostaSug=sugestoes.filter(function(s){
+      var msgs=s.mensagens||[];
+      var temMsgAdmin=msgs.some(function(m){return m.role==='admin';});
+      return s.status==='Recebido'&&!temMsgAdmin;
+    }).length;
     var total=semRespostaCham+semRespostaSug;
     badge.textContent=total;
     badge.style.display=total>0?'inline-block':'none';

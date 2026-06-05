@@ -165,7 +165,7 @@ textarea.fi{height:75px;resize:vertical}
     <div style="flex:1"><div style="font-weight:600">Phoenix Global — Administradora/Boletos</div><div style="font-size:12px;color:var(--txt3)">(19) 99269-6889</div></div>
     <button class="btn success" onclick="window.open('https://wa.me/5519992696889?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'))">WhatsApp</button>
   </div>
-  <div style="text-align:center;padding:16px 0 4px;font-size:11px;color:var(--txt3)">Portal Altos Santa Izabel · v1.13.0 · Jun/2026</div>
+  <div style="text-align:center;padding:16px 0 4px;font-size:11px;color:var(--txt3)">Portal Altos Santa Izabel · v1.12.0 · Mai/2026</div>
 </div>
 
 <!-- PROJETOS -->
@@ -216,7 +216,7 @@ textarea.fi{height:75px;resize:vertical}
     <div style="font-size:48px;margin-bottom:12px">📊</div>
     <div style="font-weight:700;font-size:18px;color:var(--azul);margin-bottom:8px">Painel Financeiro</div>
     <div style="font-size:13px;color:var(--txt3);margin-bottom:24px">Histórico, saldos, gráficos e análise detalhada</div>
-    <a href="financeiro.html" style="display:inline-flex;align-items:center;gap:10px;background:var(--azul);color:#fff;border-radius:12px;padding:14px 28px;text-decoration:none;font-weight:600;font-size:15px">
+    <a href="financeiro.html" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:var(--azul);color:#fff;border-radius:12px;padding:14px 28px;text-decoration:none;font-weight:600;font-size:15px">
       Abrir Financeiro →
     </a>
   </div>
@@ -425,6 +425,7 @@ auth.onAuthStateChanged(function(user){
     window.location.href='auth.html';
     return;
   }
+  // Verificar se ainda tem acesso
   db.collection('usuarios').doc(user.uid).get().then(function(doc){
     if(!doc.exists||!['aprovado','Aprovado'].includes(doc.data().status)){
       auth.signOut();
@@ -434,13 +435,16 @@ auth.onAuthStateChanged(function(user){
     }
     usuarioAtual=Object.assign({uid:user.uid},doc.data());
     localStorage.setItem('asi_usuario',JSON.stringify(usuarioAtual));
+    // Atualizar header
     var hdr=document.getElementById('hdr-usuario');
     if(hdr) hdr.textContent=usuarioAtual.nome+' · '+usuarioAtual.unidade;
+    // Mostrar botão admin se for admin
     if(usuarioAtual.perfil==='admin'){
       var btnAdmin=document.getElementById('btn-admin');
       if(btnAdmin) btnAdmin.style.display='flex';
       var navMapa=document.getElementById('nav-mapa');
       if(navMapa) navMapa.style.display='block';
+      // Mostrar itens exclusivos de admin (nav e acesso rápido)
       document.querySelectorAll('.admin-only').forEach(function(el){el.style.display='';});
       adminLogado=true;
       var btnUsu=document.getElementById('btn-usuarios');
@@ -450,6 +454,7 @@ auth.onAuthStateChanged(function(user){
       if(btnExpC) btnExpC.style.display='block';
       var btnExpS=document.getElementById('btn-export-sugestoes');
       if(btnExpS) btnExpS.style.display='block';
+      // Adicionar link gerenciar usuários no admin
       var tabsEl=document.querySelector('.admin-tabs');
       if(tabsEl&&!document.getElementById('tab-usuarios')){
         var btn=document.createElement('button');
@@ -459,14 +464,17 @@ auth.onAuthStateChanged(function(user){
         tabsEl.appendChild(btn);
       }
     }
+    // Inicializar portal — carrega dados do Firestore
     carregarTodosOsDados(function(){
       renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
       renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();carregarSugestoes();
     });
+    // Preencher unidade do morador no campo de defeito
     var aptoField=document.getElementById('f-apto');
     if(aptoField&&usuarioAtual&&usuarioAtual.unidade) aptoField.value=usuarioAtual.unidade;
   }).catch(function(e){
     console.error('Erro ao verificar usuario:',e);
+    // Nao redirecionar em erro de rede — manter na pagina
     document.body.innerHTML='<div style="padding:40px;text-align:center;font-family:sans-serif"><p style="color:#c0392b">Erro ao carregar o portal.</p><p style="margin-top:8px;font-size:13px;color:#666">Verifique sua conexão e <a href="index.html">tente novamente</a>.</p></div>';
   });
 });
@@ -478,6 +486,7 @@ function fazerLogout(){
     window.location.href='auth.html';
   });
 }
+// ===== FIM AUTH =====
 
 var WA='5519989360523';
 var NAV_IDS=['inicio','projetos','orcamentos','contratos','churrasqueira','financeiro','documentos','prestadores','assembleias','defeitos','mapa','sugestoes'];
@@ -485,7 +494,9 @@ var BNAV_IDS=['inicio','sugestoes','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
-  if(id==='financeiro'){window.location.href='financeiro.html';return;}
+  // Financeiro redireciona direto
+  if(id==='financeiro'){window.open('financeiro.html','_blank');return;}
+  // Bloquear documentos e assembleias para não-admin
   if((id==='documentos'||id==='assembleias'||id==='orcamentos')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
@@ -498,6 +509,26 @@ function nav(id){
 
 function chamarWA(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.'));}
 
+// ===== RESERVAS =====
+var reservas=[];
+function fazerReserva(){
+  var a=document.getElementById('res-apto').value.trim(), d=document.getElementById('res-data').value;
+  if(!a||!d){alert('Preencha apartamento e data');return;}
+  reservas.push({apto:a,data:d,hora:document.getElementById('res-hora').value,pess:document.getElementById('res-pessoas').value});
+  document.getElementById('res-apto').value='';document.getElementById('res-data').value='';document.getElementById('res-pessoas').value='';
+  renderReservas();alert('Reserva registrada!');
+}
+function renderReservas(){
+  var el=document.getElementById('lista-reservas');
+  if(!reservas.length){el.innerHTML='<div style="color:var(--txt3);font-size:13px;padding:8px 0">Nenhuma reserva ainda.</div>';return;}
+  el.innerHTML=reservas.slice().reverse().map(function(r){return '<div class="file-row"><div class="file-ico" style="background:#e8f5e9">🍖</div><div style="flex:1"><div style="font-weight:500">Ap. '+r.apto+'</div><div style="font-size:11px;color:var(--txt3)">'+r.data+' · '+r.hora+(r.pess?' · '+r.pess+' pessoas':'')+'</div></div><span class="badge ok">Reservado</span></div>';}).join('');
+}
+function reservaWA(){
+  var msg='*Reserva Churrasqueira — Altos de Santa Izabel*\n\nApartamento: '+(document.getElementById('res-apto').value||'(não informado)')+'\nData: '+(document.getElementById('res-data').value||'(não informada)')+'\nHorário: '+document.getElementById('res-hora').value;
+  window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(msg));
+}
+
+// ===== DEFEITOS =====
 function escHtml(s){
   return (s||'').toString()
     .replace(/&/g,'&amp;')
@@ -507,8 +538,9 @@ function escHtml(s){
     .replace(/'/g,'&#39;');
 }
 
+// ===== EXPORTAR =====
 function exportarCSV(dados, nome){
-  var bom='\uFEFF';
+  var bom='﻿';
   var csv=bom+dados.map(function(row){
     return row.map(function(cell){
       var s=(cell||'').toString().replace(/"/g,'""');
@@ -532,10 +564,10 @@ function exportarChamados(){
 }
 
 function exportarSugestoes(){
-  var rows=[['Data','Apto','Morador','Tipo','Assunto','Descrição','Status']];
+  var rows=[['Data','Apto','Morador','Tipo','Assunto','Descrição','Status','Resposta']];
   sugestoes.forEach(function(s){
     var data=s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—';
-    rows.push([data,s.unidade||'',s.nome||'',s.tipo||'',s.assunto||'',s.desc||'',s.status||'']);
+    rows.push([data,s.unidade||'',s.nome||'',s.tipo||'',s.assunto||'',s.desc||'',s.status||'',s.resposta||'']);
   });
   exportarCSV(rows,'sugestoes-'+new Date().toISOString().slice(0,10));
 }
@@ -572,6 +604,7 @@ function enviarSugestao(){
     document.getElementById('sug-assunto').value='';
     document.getElementById('sug-desc').value='';
     alert('✅ Enviado com sucesso! Acompanhe o andamento aqui.');
+
     carregarSugestoes();
   }).catch(function(e){alert('Erro: '+e.message);});
 }
@@ -613,7 +646,7 @@ function renderSugestoes(){
         var isMe=m.uid===u.uid||(!m.uid&&adminLogado&&m.role==='admin');
         var dt=m.criadoEm&&m.criadoEm.toDate?m.criadoEm.toDate().toLocaleString('pt-BR'):(m.criadoEm||'');
         return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';margin-bottom:6px">'+
-          '<div style="max-width:80%;background:'+(isMe?'var(--azul)':'#f0f0eb')+';color:'+(isMe?'#fff':'var(--txt)')+';border-radius:12px;padding:8px 12px;font-size:13px">'+
+          '<div style="max-width:80%;background:'+(isMe?'var(--azul)':'#f0f0eb')+';color:'+(isMe?'#fff':'var(--txt1)')+';border-radius:12px;padding:8px 12px;font-size:13px">'+
             escHtml(m.texto)+
           '</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+escHtml(m.autor)+(dt?' · '+dt:'')+'</div>'+
@@ -635,10 +668,10 @@ function renderSugestoes(){
           (s.criadoEm&&s.criadoEm.toDate?s.criadoEm.toDate().toLocaleDateString('pt-BR'):'—')+'</div>'+
         '<div style="font-size:13px;color:var(--txt2);margin-top:6px;margin-bottom:8px">'+escHtml(s.desc)+'</div>'+
         (msgs.length?'<div style="background:#fafaf7;border-radius:10px;padding:10px;margin-bottom:8px">'+chatHtml+'</div>':'')+
-        '<div style="display:flex;gap:6px">'+
+                '<div style="display:flex;gap:6px">'+
           '<input id="sug-chat-'+s.id+'" data-sid="'+s.id+'" autocomplete="off" placeholder="Digite uma mensagem..." style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px">'+
           '<button data-sid="'+s.id+'" onclick="enviarMensagemSugestao(this.dataset.sid)" class="badge blue" style="cursor:pointer;border:none;padding:7px 12px">Enviar</button>'+
-        '</div>'+
+        '</div>'+'</div>'+
       '</div>';
     }).join('');
     return '<div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">'+
@@ -646,7 +679,7 @@ function renderSugestoes(){
         '<span style="font-weight:700;font-size:13px">'+g.label+'</span>'+
         '<span style="font-size:12px;color:var(--txt3)">'+itens.length+' item(s) <span class="chevron-grupo" style="display:inline-block;transition:transform .2s;transform:'+(g.aberto?'rotate(90deg)':'rotate(0deg)')+'">›</span></span>'+
       '</div>'+
-      '<div class="grupo-content" style="display:'+(g.aberto?'block':'none')+';padding:0 14px">'+rows+'</div>'+
+      '<div class="grupo-content" style="display:'+(g.aberto?'block':'none')+'">'+rows+'</div>'+
     '</div>';
   }).join('');
 }
@@ -657,7 +690,13 @@ function enviarMensagemSugestao(id){
   var texto=inp.value.trim();
   if(!texto) return;
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
-  var msg={texto:texto,autor:u.nome||'Usuário',uid:u.uid||'',role:adminLogado?'admin':'morador',criadoEm:new Date().toLocaleString('pt-BR')};
+  var msg={
+    texto:texto,
+    autor:u.nome||'Usuário',
+    uid:u.uid||'',
+    role:adminLogado?'admin':'morador',
+    criadoEm:new Date().toLocaleString('pt-BR')
+  };
   var s=sugestoes.find(function(s){return s.id===id;});
   if(!s) return;
   var msgs=(s.mensagens||[]).concat([msg]);
@@ -671,7 +710,6 @@ function enviarMensagemSugestao(id){
     atualizarBadgeNotif();
   }).catch(function(e){alert('Erro: '+e.message);});
 }
-
 function atualizarStatusSug(id,novoStatus){
   db.collection('sugestoes').doc(id).update({status:novoStatus}).then(function(){
     var s=sugestoes.find(function(x){return x.id===id;});
@@ -689,19 +727,23 @@ function excluirSugestao(id){
   }).catch(function(e){alert('Erro ao excluir: '+e.message);});
 }
 
+
+
 // ===== DEFEITOS / CHAMADOS =====
 var chamados=[];
 
 function carregarChamados(){
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
   var query=db.collection('chamados').orderBy('criadoEm','desc').limit(50);
+  // Morador ve apenas os chamados da sua unidade
   if(!adminLogado&&u.unidade){
     var unidadeNum=(u.unidade||'').replace(/[^0-9]/g,'');
-    query=db.collection('chamados').where('apto','==',unidadeNum).orderBy('criadoEm','desc').limit(50);
+    query=db.collection('chamados').where('apto','>=',unidadeNum).where('apto','<=',unidadeNum+'z').orderBy('apto').limit(50);
   }
   query.get().then(function(snap){
     chamados=[];
     snap.forEach(function(doc){chamados.push(Object.assign({id:doc.id},doc.data()));});
+    // Ordenar por data desc no cliente
     chamados.sort(function(a,b){
       var ta=a.criadoEm&&a.criadoEm.toDate?a.criadoEm.toDate():new Date(0);
       var tb=b.criadoEm&&b.criadoEm.toDate?b.criadoEm.toDate():new Date(0);
@@ -719,7 +761,13 @@ function registrar(){
   var desc=document.getElementById('f-desc').value.trim()||'Sem descrição';
   var urg=document.getElementById('f-urg').value;
   var data=new Date().toLocaleDateString('pt-BR');
-  var chamado={apto:apto,cat:cat,desc:desc,urg:urg,data:data,status:'Aberto',usuario:u.nome||'',unidade:u.unidade||'',criadoEm:firebase.firestore.FieldValue.serverTimestamp()};
+  var chamado={
+    apto:apto,cat:cat,desc:desc,urg:urg,data:data,
+    status:'Aberto',
+    usuario:u.nome||'',
+    unidade:u.unidade||'',
+    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  };
   db.collection('chamados').add(chamado).then(function(ref){
     chamado.id=ref.id;
     chamados.unshift(chamado);
@@ -727,6 +775,8 @@ function registrar(){
     document.getElementById('f-desc').value='';
     renderChamados();
     alert('✅ Chamado registrado! O síndico receberá uma notificação.');
+    // Enviar email
+
   }).catch(function(e){alert('Erro ao registrar: '+e.message);});
 }
 
@@ -736,11 +786,20 @@ function enviarMensagemChamado(id){
   var texto=inp.value.trim();
   if(!texto) return;
   var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
-  var msg={texto:texto,autor:u.nome||'Usuário',uid:u.uid||'',role:adminLogado?'admin':'morador',criadoEm:new Date().toLocaleString('pt-BR')};
+  var msg={
+    texto:texto,
+    autor:u.nome||'Usuário',
+    uid:u.uid||'',
+    role:adminLogado?'admin':'morador',
+    criadoEm:new Date().toLocaleString('pt-BR')
+  };
   var x=chamados.find(function(x){return x.id===id;});
   if(!x) return;
   var msgs=(x.mensagens||[]).concat([msg]);
-  db.collection('chamados').doc(id).update({mensagens:msgs,lido:false}).then(function(){
+  db.collection('chamados').doc(id).update({
+    mensagens:msgs,
+    lido:false
+  }).then(function(){
     x.mensagens=msgs;
     inp.value='';
     renderChamados();
@@ -748,33 +807,10 @@ function enviarMensagemChamado(id){
   }).catch(function(e){alert('Erro: '+e.message);});
 }
 
-function navNotif(){
-  if(adminLogado){nav('defeitos');return;}
-  var temSug=sugestoes.some(function(s){var msgs=s.mensagens||[];return msgs.some(function(m){return m.role==='admin';})&&!s.lido;});
-  if(temSug) nav('sugestoes');
-  else nav('defeitos');
-}
 
-function atualizarBadgeNotif(){
-  var badge=document.getElementById('badge-notif');
-  if(!badge) return;
-  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
-  if(adminLogado){
-    var semRespostaCham=chamados.filter(function(x){var msgs=x.mensagens||[];return !msgs.some(function(m){return m.role==='admin';});}).length;
-    var semRespostaSug=sugestoes.filter(function(s){var msgs=s.mensagens||[];return s.status==='Recebido'&&!msgs.some(function(m){return m.role==='admin';});}).length;
-    var total=semRespostaCham+semRespostaSug;
-    badge.textContent=total;
-    badge.style.display=total>0?'inline-block':'none';
-  } else {
-    var uid=u.uid||'';
-    if(!uid){badge.style.display='none';return;}
-    var naoLidos=0;
-    chamados.forEach(function(x){var msgs=x.mensagens||[];if(msgs.some(function(m){return m.role==='admin';})&&!x.lido) naoLidos++;});
-    sugestoes.forEach(function(s){var msgs=s.mensagens||[];if(msgs.some(function(m){return m.role==='admin';})&&!s.lido) naoLidos++;});
-    badge.textContent=naoLidos;
-    badge.style.display=naoLidos>0?'inline-block':'none';
-  }
-}
+
+
+
 
 function atualizarStatus(id,novoStatus){
   db.collection('chamados').doc(id).update({status:novoStatus}).then(function(){
@@ -829,7 +865,7 @@ function renderChamados(){
         var isMe=m.uid===u.uid||(!m.uid&&adminLogado&&m.role==='admin');
         var dt=m.criadoEm&&m.criadoEm.toDate?m.criadoEm.toDate().toLocaleString('pt-BR'):(m.criadoEm||'');
         return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';margin-bottom:6px">'+
-          '<div style="max-width:80%;background:'+(isMe?'var(--azul)':'#f0f0eb')+';color:'+(isMe?'#fff':'var(--txt)')+';border-radius:12px;padding:8px 12px;font-size:13px">'+
+          '<div style="max-width:80%;background:'+(isMe?'var(--azul)':'#f0f0eb')+';color:'+(isMe?'#fff':'var(--txt1)')+';border-radius:12px;padding:8px 12px;font-size:13px">'+
             escHtml(m.texto)+
           '</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+escHtml(m.autor)+(dt?' · '+dt:'')+'</div>'+
@@ -843,19 +879,16 @@ function renderChamados(){
       return '<div class="chamado" style="display:block;padding:12px 0">'+
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'+
           '<div style="font-weight:600">'+escHtml(x.cat)+' — '+escHtml(x.apto)+'</div>'+
-          '<div style="display:flex;align-items:center;gap:6px">'+
-            '<span class="badge '+(stBadge[x.status]||'gray')+'">'+x.status+'</span>'+
-            (adminLogado?'<button data-xid="'+x.id+'" onclick="excluirChamado(this.dataset.xid)" title="Excluir" style="width:26px;height:26px;border-radius:6px;border:none;background:#fdecea;color:#c0392b;cursor:pointer;font-size:13px;flex-shrink:0">🗑️</button>':'')+
-          '</div>'+
+          '<span class="badge '+(stBadge[x.status]||'gray')+'">'+x.status+'</span>'+
         '</div>'+
-        '<div style="font-size:12px;color:var(--txt3);margin-bottom:4px">'+(x.desc.length>150?escHtml(x.desc.substring(0,150))+'<span id="ds-'+x.id+'">... <button onclick="document.getElementById(\'ds-'+x.id+'\').style.display=\'none\';document.getElementById(\'df-'+x.id+'\').style.display=\'inline\'" style="font-size:11px;color:var(--azul);border:none;background:none;cursor:pointer;padding:0">ver mais</button></span><span id="df-'+x.id+'" style="display:none">'+escHtml(x.desc.substring(150))+'</span>':escHtml(x.desc))+'</div>'+
+        '<div style="font-size:12px;color:var(--txt3);margin-bottom:4px">'+escHtml(x.desc.substring(0,100))+(x.desc.length>100?'...':'')+'</div>'+
         '<div style="font-size:11px;color:var(--txt3);margin-bottom:8px">'+escHtml(x.data)+(x.usuario?' · '+escHtml(x.usuario):'')+'</div>'+
         (adminLogado?statusBtns:'')+
         (msgs.length?'<div style="background:#fafaf7;border-radius:10px;padding:10px;margin-bottom:8px">'+chatHtml+'</div>':'')+
-        '<div style="display:flex;gap:6px">'+
+                '<div style="display:flex;gap:6px">'+
           '<input id="chat-input-'+x.id+'" data-xid="'+x.id+'" autocomplete="off" placeholder="Digite uma mensagem..." style="flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:8px">'+
           '<button data-xid="'+x.id+'" onclick="enviarMensagemChamado(this.dataset.xid)" class="badge blue" style="cursor:pointer;border:none;padding:7px 12px">Enviar</button>'+
-        '</div>'+
+        '</div>'+'</div>'+
       '</div>';
     }).join('');
     return '<div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">'+
@@ -868,10 +901,31 @@ function renderChamados(){
   }).join('');
 }
 
+function salvarRespostaChamado(id){
+  var resp=document.getElementById('cham-resp-'+id);
+  if(!resp) return;
+  var texto=resp.value.trim();
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  db.collection('chamados').doc(id).update({
+    resposta:texto,
+    respondidoPor:u.nome||'Admin',
+    respondidoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    lido:false,
+    status:'Resolvido'
+  }).then(function(){
+    var x=chamados.find(function(x){return x.id===id;});
+    if(x){x.resposta=texto;x.respondidoPor=u.nome||'Admin';x.status='Resolvido';x.lido=false;}
+    renderChamados();
+    alert('✅ Resposta salva!');
+  }).catch(function(e){alert('Erro: '+e.message);});
+}
+
 function marcarLidoChamado(id){
   db.collection('chamados').doc(id).update({lido:true}).then(function(){
     var x=chamados.find(function(x){return x.id===id;});
     if(x) x.lido=true;
+    var el=document.getElementById('resp-box-cham-'+id);
+    if(el) el.style.display='none';
     atualizarBadgeNotif();
   }).catch(function(){});
 }
@@ -880,8 +934,38 @@ function marcarLidoSugestao(id){
   db.collection('sugestoes').doc(id).update({lido:true}).then(function(){
     var s=sugestoes.find(function(s){return s.id===id;});
     if(s) s.lido=true;
+    var el=document.getElementById('resp-box-sug-'+id);
+    if(el) el.style.display='none';
     atualizarBadgeNotif();
   }).catch(function(){});
+}
+
+
+function navNotif(){
+  if(adminLogado){nav('defeitos');return;}
+  var temSug=sugestoes.some(function(s){var msgs=s.mensagens||[];return msgs.some(function(m){return m.role==='admin';})&&!s.lido;});
+  if(temSug) nav('sugestoes');
+  else nav('defeitos');
+}
+function atualizarBadgeNotif(){
+  var badge=document.getElementById('badge-notif');
+  if(!badge) return;
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}')
+;  if(adminLogado){
+    var semRespostaCham=chamados.filter(function(x){var msgs=x.mensagens||[];return !msgs.some(function(m){return m.role==='admin';});}).length;
+    var semRespostaSug=sugestoes.filter(function(s){var msgs=s.mensagens||[];return s.status==='Recebido'&&!msgs.some(function(m){return m.role==='admin';});}).length;
+    var total=semRespostaCham+semRespostaSug;
+    badge.textContent=total;
+    badge.style.display=total>0?'inline-block':'none';
+  } else {
+    var uid=u.uid||'';
+    if(!uid){badge.style.display='none';return;}
+    var naoLidos=0;
+    chamados.forEach(function(x){var msgs=x.mensagens||[];if(msgs.some(function(m){return m.role==='admin';})&&!x.lido) naoLidos++;});
+    sugestoes.forEach(function(s){var msgs=s.mensagens||[];if(msgs.some(function(m){return m.role==='admin';})&&!s.lido) naoLidos++;});
+    badge.textContent=naoLidos;
+    badge.style.display=naoLidos>0?'inline-block':'none';
+  }
 }
 
 // ===== ORÇAMENTOS =====
@@ -900,6 +984,7 @@ var orcamentos=[
 ];
 function salvarOrcamentos(){salvarNoFirestore('orcamentos',orcamentos,function(){});}
 var orcStatusTxt={warn:'Em análise',bad:'Urgente',blue:'Novo',ok:'Concluído',gray:'Cotação'};
+
 var CATS_ORC=['Quiosque','Car Wash','Pintura','Portaria','Documentação','Limpeza','Jardinagem','Pl. Solar','Câmeras','Outros'];
 var filtroAtualOrc='todos';
 function renderFiltrosOrc(){
@@ -911,7 +996,11 @@ function renderFiltrosOrc(){
     return '<button onclick="filtrarOrc(\''+c+'\')" style="font-size:12px;padding:5px 12px;border-radius:99px;border:1px solid '+(on?'var(--azul)':'var(--border)')+';background:'+(on?'var(--azul)':'transparent')+';color:'+(on?'#fff':'var(--txt2)')+';cursor:pointer">'+(c==='todos'?'Todos':c)+'</button>';
   }).join('');
 }
-function filtrarOrc(cat){filtroAtualOrc=cat;renderFiltrosOrc();renderOrcamentos();}
+function filtrarOrc(cat){
+  filtroAtualOrc=cat;
+  renderFiltrosOrc();
+  renderOrcamentos();
+}
 function renderOrcamentos(){
   var el=document.getElementById('orc-lista');if(!el)return;
   renderFiltrosOrc();
@@ -932,7 +1021,7 @@ function renderOrcamentos(){
 }
 function addOrcamento(){
   var n=prompt('Nome do orçamento:');if(!n)return;
-  var c=prompt('Categoria:')||'Outros';
+  var c=prompt('Categoria (Quiosque, Car Wash, Pintura, Portaria, Documentação, Limpeza, Jardinagem, Pl. Solar, Câmeras, Outros):')||'Outros';
   if(!CATS_ORC.includes(c)) c='Outros';
   orcamentos.push({nome:n,cat:c,status:'gray',arquivos:[]});
   salvarOrcamentos();renderFiltrosOrc();renderOrcamentos();
@@ -987,7 +1076,7 @@ function renderPrestadores(){
       var idx=prestadores.indexOf(p);
       var tel=p.tel.replace(/[^0-9]/g,''); if(tel.length>=10) tel='55'+tel;
       html+='<div class="file-row">'+
-        '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0')+'"> '+(catIcos[cat]||'👤')+'</div>'+
+        '<div class="file-ico" style="background:'+(catBg[cat]||'#f0f0f0')+'">'+(catIcos[cat]||'👤')+'</div>'+
         '<div style="flex:1"><div style="font-weight:600">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.tel+(p.ind?' · Ind: '+escHtml(p.ind):'')+'</div></div>'+
         '<a href="tel:+'+tel+'" class="badge blue" style="text-decoration:none;margin-right:4px">📞 Ligar</a>'+
         '<a href="https://wa.me/'+tel+'?text='+encodeURIComponent('Olá! Entrei em contato pelo Portal Altos Santa Izabel.')+'" target="_blank" class="badge ok" style="text-decoration:none;margin-right:4px">💬 WhatsApp</a>'+
@@ -1069,9 +1158,11 @@ function renderTarefasAdmin(){
 }
 function addTarefa(){tarefas.push({txt:'Nova tarefa',sub:'',status:'gray'});renderTarefasAdmin();}
 
-// ===== DADOS ADMIN =====
+// ===== DADOS ADMIN — carregados do Firestore =====
 var dadosAdmin={
-  alertas:[{txt:'AVCB — renovação urgente',sub:'Venceu Mar/2026 - Em Renovação',status:'bad'}],
+  alertas:[
+    {txt:'AVCB — renovação urgente',sub:'Venceu Mar/2026 - Em Renovação',status:'bad'}
+  ],
   realizacoes:[
     {data:'Abr/2026',txt:'Jardim - Área do Play - 01/04'},
     {data:'Mar/2026',txt:"Limpeza Caixa D'agua 31/03 e 01/04"},
@@ -1113,13 +1204,14 @@ function verificarPendentes(){
   }).catch(function(){});
 }
 
+// Carrega TODOS os dados do Firestore na inicialização
 function carregarTodosOsDados(callback){
   var secoes={
-    alertas:function(d){dadosAdmin.alertas=d;},
+    alertas:   function(d){dadosAdmin.alertas=d;},
     realizacoes:function(d){dadosAdmin.realizacoes=d;},
-    projetos:function(d){dadosAdmin.projetos=d;},
-    contratos:function(d){dadosAdmin.contratos=d;},
-    tarefas:function(d){tarefas=d;},
+    projetos:  function(d){dadosAdmin.projetos=d;},
+    contratos: function(d){dadosAdmin.contratos=d;},
+    tarefas:   function(d){tarefas=d;},
     orcamentos:function(d){orcamentos=d;},
     documentos:function(d){documentos=d;},
     prestadores:function(d){prestadores=d;}
@@ -1128,20 +1220,28 @@ function carregarTodosOsDados(callback){
   var pendentes=keys.length;
   keys.forEach(function(sec){
     db.collection('portal').doc(sec).get().then(function(doc){
-      if(doc.exists&&doc.data().items&&doc.data().items.length>0) secoes[sec](doc.data().items);
+      if(doc.exists && doc.data().items && doc.data().items.length>0){
+        secoes[sec](doc.data().items);
+      }
       pendentes--;
-      if(pendentes===0&&callback) callback();
+      if(pendentes===0 && callback) callback();
     }).catch(function(){
       pendentes--;
-      if(pendentes===0&&callback) callback();
+      if(pendentes===0 && callback) callback();
     });
   });
 }
-
 // ===== ADMIN =====
 var RAMOS_CONTRATO=JSON.parse(localStorage.getItem('asi_ramos_contrato')||'null')||['Portaria Remota','Jardinagem','Facilities','Juridico','Administrativo','Manutenção'];
 function salvarRamosContrato(){localStorage.setItem('asi_ramos_contrato',JSON.stringify(RAMOS_CONTRATO));}
-var stContratoOpts=[{v:'ok',l:'🟢 Vigente'},{v:'bad',l:'🔴 Vencido'},{v:'warn',l:'🟡 Em Renovação'},{v:'blue',l:'🔵 Em Cotação'},{v:'purple',l:'🟣 Finalizado'},{v:'canceled',l:'🚫 Cancelado'}];
+var stContratoOpts=[
+  {v:'ok',l:'🟢 Vigente'},
+  {v:'bad',l:'🔴 Vencido'},
+  {v:'warn',l:'🟡 Em Renovação'},
+  {v:'blue',l:'🔵 Em Cotação'},
+  {v:'purple',l:'🟣 Finalizado'},
+  {v:'canceled',l:'🚫 Cancelado'}
+];
 var stContratoMap={ok:'Vigente',bad:'Vencido',warn:'Em Renovação',blue:'Em Cotação',purple:'Finalizado',canceled:'Cancelado'};
 var stOpts=[{v:'bad',l:'🔴 Urgente'},{v:'warn',l:'🟡 Pend. Aprovação'},{v:'blue',l:'🔵 Em Orçamento'},{v:'ok',l:'🟢 Em Andamento'},{v:'construction',l:'🟠 Em Construção'},{v:'approved',l:'✅ Aprovado'},{v:'purple',l:'🟣 Concluído'},{v:'canceled',l:'🚫 Cancelado'},{v:'gray',l:'⚪ Não Aprovado'}];
 var stMap={bad:'Urgente',warn:'Pend. Aprovação',blue:'Em Orçamento',ok:'Em Andamento',construction:'Em Construção',approved:'Aprovado',purple:'Concluído',canceled:'Cancelado',gray:'Não Aprovado'};
@@ -1149,22 +1249,31 @@ function esc(s){return (s||'').replace(/"/g,'&quot;');}
 function moverItem(arr,i,dir,renderFn){var j=i+dir;if(j<0||j>=arr.length)return;var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;renderFn();}
 function onStatusChange(arr,i,val,renderFn){
   arr[i].status=val;
-  if(val==='purple'||val==='canceled'||val==='gray'){var item=arr.splice(i,1)[0];arr.push(item);}
+  // Se concluído ou cancelado, mover para o final
+  if(val==='purple'||val==='canceled'||val==='gray'){
+    var item=arr.splice(i,1)[0];
+    arr.push(item);
+  }
   renderFn();
 }
 var ordemBtns='<div class="ordem-btns"><button onclick="{UP}">▲</button><button onclick="{DOWN}">▼</button></div>';
 function selOpts(val){return stOpts.map(function(o){return '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.l+'</option>';}).join('');}
 
 function abrirAdmin(){
-  if(!adminLogado){alert('Acesso restrito ao administrador.');return;}
+  if(!adminLogado){
+    alert('Acesso restrito ao administrador.');
+    return;
+  }
   document.getElementById('adminOverlay').classList.add('on');
   document.getElementById('adminLogin').style.display='none';
   document.getElementById('adminPainel').style.display='block';
+  // Resetar para aba Alertas
   document.querySelectorAll('.admin-sec').forEach(function(s){s.classList.remove('on');});
   document.querySelectorAll('.at').forEach(function(b){b.classList.remove('on');});
   document.getElementById('asec-alertas').classList.add('on');
   document.querySelector('.at').classList.add('on');
   renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();renderDocumentosAdmin();
+  // Adicionar aba Usuários se ainda não existe
   if(!document.getElementById('tab-usuarios')){
     var tabsEl=document.querySelector('.admin-tabs');
     var btn=document.createElement('button');
@@ -1186,18 +1295,23 @@ function verificarSenha(){
   var user=firebase.auth().currentUser;
   if(!user){document.getElementById('erroSenha').style.display='block';return;}
   db.collection('usuarios').doc(user.uid).get().then(function(doc){
-    if(!doc.exists||doc.data().perfil!=='admin'){document.getElementById('erroSenha').style.display='block';return;}
+    if(!doc.exists||doc.data().perfil!=='admin'){
+      document.getElementById('erroSenha').style.display='block';return;
+    }
     hashSenha(senha).then(function(h){
-      if(h===SENHA_H) abrirPainelAdmin();
-      else document.getElementById('erroSenha').style.display='block';
+      if(h===SENHA_H){
+        abrirPainelAdmin();
+      } else {
+        document.getElementById('erroSenha').style.display='block';
+      }
     });
   });
 }
 function abrirPainelAdmin(){
   adminLogado=true;
-  document.getElementById('adminLogin').style.display='none';
-  document.getElementById('adminPainel').style.display='block';
-  renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminPainel').style.display='block';
+    renderAdmin();renderPrestadores();renderOrcamentos();renderTarefasAdmin();renderPrestadoresAdmin();renderOrcamentosAdmin();
 }
 function adminTab(id,btn){
   document.querySelectorAll('.admin-sec').forEach(function(s){s.classList.remove('on');});
@@ -1214,6 +1328,7 @@ function renderAdmin(){
       '<input class="ie-sub" value="'+esc(a.sub)+'" onchange="dadosAdmin.alertas['+i+'].sub=this.value" placeholder="Detalhe">'+
       '<button class="del-btn" onclick="dadosAdmin.alertas.splice('+i+',1);renderAdmin()">✕</button></div>';
   }).join('');
+
   var er=document.getElementById('edit-realizacoes');
   er.innerHTML=dadosAdmin.realizacoes.map(function(r,i){
     return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
@@ -1223,6 +1338,7 @@ function renderAdmin(){
       '<input style="width:100%;margin-top:4px;font-size:11px" value="'+esc(r.foto||'')+'" onchange="dadosAdmin.realizacoes['+i+'].foto=this.value" placeholder="🖼️ Link da foto no Drive (opcional)">'+
       '<button class="del-btn" onclick="dadosAdmin.realizacoes.splice('+i+',1);renderAdmin()">&#x2715;</button></div>';
   }).join('');
+
   var ep=document.getElementById('edit-projetos');
   ep.innerHTML=dadosAdmin.projetos.map(function(p,i){
     return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
@@ -1233,6 +1349,7 @@ function renderAdmin(){
       '<select class="ie-sel" onchange="onStatusChange(dadosAdmin.projetos,'+i+',this.value,renderAdmin)">'+selOpts(p.status)+'</select>'+
       '<button class="del-btn" onclick="dadosAdmin.projetos.splice('+i+',1);renderAdmin()">✕</button></div>';
   }).join('');
+
   var ec=document.getElementById('edit-contratos');
   ec.innerHTML=dadosAdmin.contratos.map(function(c,i){
     return '<div class="item-edit" style="flex-wrap:wrap;gap:6px">'+
@@ -1249,7 +1366,7 @@ function renderAdmin(){
   }).join('');
 }
 function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'warn'});renderAdmin();}
-function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Jun/2026',txt:'Nova realização'});renderAdmin();}
+function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}
 function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
 function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'ok',ramo:''});renderAdmin();}
 function addRamoContrato(){
@@ -1294,7 +1411,10 @@ function renderRealizacoes(){
     var itens=grupos[ano].map(function(r){
       var fotoUrl=r.foto?driveUrl(r.foto):null;
       return '<div class="file-row" style="align-items:flex-start">'+
-        (fotoUrl?'<img src="'+fotoUrl+'" onclick="abrirFoto(\''+(r.foto||'')+'\')" style="width:56px;height:56px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" onerror="this.style.display=\'none\'">':'<div class="file-ico" style="background:#e8f5e9">✅</div>')+
+        (fotoUrl
+          ?'<img src="'+fotoUrl+'" onclick="abrirFoto(\''+(r.foto||'')+'\')" style="width:56px;height:56px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0" onerror="this.style.display=\'none\'">'
+          :'<div class="file-ico" style="background:#e8f5e9">✅</div>'
+        )+
         '<div style="flex:1"><div style="font-size:12px;color:var(--txt3)">'+r.data+'</div><div style="font-weight:500">'+r.txt+'</div></div>'+
         '<span class="badge ok">✓</span></div>';
     }).join('');
@@ -1331,12 +1451,14 @@ function toggleAno(header){
   chevron.style.transform=aberto?'rotate(0deg)':'rotate(90deg)';
   header.style.background=aberto?'var(--card)':'#f0f5fb';
 }
+
 function driveUrl(link){
   if(!link) return null;
   var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w200';
   return link;
 }
+
 function abrirFoto(link){
   var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/);
   var url=m?'https://drive.google.com/file/d/'+m[1]+'/view':link;
@@ -1345,24 +1467,28 @@ function abrirFoto(link){
 function renderProjetosAdmin(){
   var el=document.getElementById('lista-projetos-admin');if(!el)return;
   var corBar={bad:'var(--bad)',warn:'var(--warn)',blue:'#1565c0',ok:'var(--ok)',purple:'#7c3aed',gray:'#888',construction:'#d97706',approved:'#2d7a3a',canceled:'#999'};
-  el.innerHTML=dadosAdmin.projetos.map(function(p){return '<div class="card clickable" style="margin-bottom:8px"><div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(stMap[p.status]||p.status)+'</span></div><div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div><div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+(corBar[p.status]||'#888')+'"></div></div></div>';}).join('');
+  var lblBar=stMap;
+  el.innerHTML=dadosAdmin.projetos.map(function(p){return '<div class="card clickable" style="margin-bottom:8px"><div class="row" style="margin-bottom:9px"><div style="flex:1"><div style="font-weight:600;font-size:15px">'+p.nome+'</div><div style="font-size:12px;color:var(--txt3)">'+p.sub+'</div></div><span class="badge '+p.status+'">'+(lblBar[p.status]||p.status)+'</span></div><div class="pl"><span>Andamento</span><span>'+p.pct+'%</span></div><div class="bw"><div class="br" style="width:'+p.pct+'%;background:'+(corBar[p.status]||'#888')+'"></div></div></div>';}).join('');
 }
 function renderContratosAdmin(){
   var el=document.getElementById('tbody-contratos');if(!el)return;
   el.innerHTML=dadosAdmin.contratos.map(function(c){return '<tr><td>'+c.doc+'</td><td><span style="font-size:11px;background:#f0efe8;padding:2px 8px;border-radius:99px;color:#555">'+(c.ramo||'—')+'</span></td><td>'+c.emissao+'</td><td>'+c.validade+'</td><td><span class="badge '+c.status+'">'+(stContratoMap[c.status]||c.status)+'</span></td></tr>';}).join('');
 }
 
-// ===== CHURRASQUEIRA =====
+// ===== CHURRASQUEIRA SINCRONIZADA COM FIRESTORE =====
 function sincronizarFinanceiro(){
   db.collection('financeiro').orderBy('periodo').get().then(function(snap){
     if(snap.empty) return;
-    var allChurr={};
+    var allChurr={}; // mes -> valor (sem duplicata)
+    var totalChurr=0;
     var allMeses=[];
     snap.forEach(function(doc){
       var p=doc.data();
       if(!p.mes) return;
+      // Prioridade: 16A > 11A > 20C para mesmo mes
       var PRIO={'16A':3,'11A':2,'20C':1};
       if(allChurr[p.mes]!==undefined){
+        // ja existe — so substitui se novo tem maior prioridade
         if((PRIO[p.tipo]||0)<=(PRIO[allChurr[p.mes].tipo]||0)) return;
       }
       allChurr[p.mes]={v:p.churr||0,tipo:p.tipo};
@@ -1376,7 +1502,7 @@ function sincronizarFinanceiro(){
       if(ya!==yb)return ya-yb;
       return(mMap[pa[0]]||0)-(mMap[pb[0]]||0);
     });
-    var totalChurr=allMeses.reduce(function(acc,m){return acc+(allChurr[m]?allChurr[m].v:0);},0);
+    totalChurr=allMeses.reduce(function(acc,m){return acc+(allChurr[m]?allChurr[m].v:0);},0);
     var mesesComValor=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;});
     if(totalChurr>0){
       var e1=document.getElementById('churr-total-rec');
@@ -1386,9 +1512,13 @@ function sincronizarFinanceiro(){
       if(e1) e1.textContent='R$ '+totalChurr.toLocaleString('pt-BR',{minimumFractionDigits:2});
       if(e2) e2.textContent='R$ '+Math.round(totalChurr/(allMeses.length||1));
       if(e3) e3.textContent='Demonstrativo ('+allMeses[0]+' a '+allMeses[allMeses.length-1]+')';
+      if(e4) e4.textContent=mesesComValor.length+'x';
+      // Renderizar histórico agrupado por ano
       var el=document.getElementById('churr-historico');
       if(el){
         var totalLocacoes=0;
+        var mesesComValor=allMeses.filter(function(m){return allChurr[m]&&allChurr[m].v>0;});
+        // Agrupar por ano
         var grupos={};
         mesesComValor.forEach(function(m){
           var ano=m.split('/')[1];
@@ -1417,6 +1547,8 @@ function sincronizarFinanceiro(){
             '<div class="tw"><table><thead><tr><th>Mês</th><th>Locações</th><th>Receita</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
             '</div></div>';
         }).join('');
+        // Atualizar métrica total locações
+        var e4=document.getElementById('churr-total-loc');
         if(e4) e4.textContent=totalLocacoes+'x';
       }
     }
@@ -1434,8 +1566,14 @@ var documentos=[
   {nome:'Planta Elétrica',sub:'22 folhas',status:'ok',link:'',secao:'plantas'},
   {nome:'Planta Arquitetura',sub:'',status:'ok',link:'',secao:'plantas'}
 ];
-function salvarDocumentos(){salvarNoFirestore('documentos',documentos,function(){renderDocumentos();alert('✅ Documentos salvos!');});}
+
+function salvarDocumentos(){
+  salvarNoFirestore('documentos',documentos,function(){renderDocumentos();alert('✅ Documentos salvos!');});
+}
+
+var docIco={bad:'📄',warn:'📄',ok:'📄',blue:'📄'};
 var docBg={bad:'#fdecea',warn:'#fff3e0',ok:'#e3f0fb',blue:'#e3f0fb'};
+
 function renderDocumentos(){
   ['docs','plantas'].forEach(function(secao){
     var elId=secao==='docs'?'lista-documentos':'lista-plantas';
@@ -1444,13 +1582,18 @@ function renderDocumentos(){
     if(!filtrados.length){el.innerHTML='<div style="padding:12px;color:var(--txt3);font-size:13px">Nenhum documento cadastrado.</div>';return;}
     el.innerHTML=filtrados.map(function(d){
       var inner='<div class="file-ico" style="background:'+(docBg[d.status]||'#e3f0fb')+'">📄</div>'+
-        '<div style="flex:1"><div style="font-weight:500">'+d.nome+'</div>'+(d.sub?'<div style="font-size:11px;color:var(--txt3)">'+d.sub+'</div>':'')+
-        '</div><span class="badge '+d.status+'">'+stMap[d.status]+'</span>';
-      if(d.link) return '<a href="'+driveLink(d.link)+'" target="_blank" class="file-row" style="text-decoration:none;color:inherit">'+inner+'<span style="color:#1565c0;font-size:12px;margin-left:6px">🔗</span></a>';
+        '<div style="flex:1"><div style="font-weight:500">'+d.nome+'</div>'+
+        (d.sub?'<div style="font-size:11px;color:var(--txt3)">'+d.sub+'</div>':'')+
+        '</div>'+
+        '<span class="badge '+d.status+'">'+stMap[d.status]+'</span>';
+      if(d.link){
+        return '<a href="'+driveLink(d.link)+'" target="_blank" class="file-row" style="text-decoration:none;color:inherit">'+inner+'<span style="color:#1565c0;font-size:12px;margin-left:6px">🔗</span></a>';
+      }
       return '<div class="file-row">'+inner+'</div>';
     }).join('');
   });
 }
+
 function driveLink(link){
   if(!link) return '#';
   var m=link.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -1459,6 +1602,7 @@ function driveLink(link){
   if(mf) return 'https://drive.google.com/drive/folders/'+mf[1];
   return link;
 }
+
 function renderDocumentosAdmin(){
   var el=document.getElementById('edit-documentos');if(!el)return;
   el.innerHTML=documentos.map(function(d,i){
@@ -1476,7 +1620,15 @@ function renderDocumentosAdmin(){
     '</div>';
   }).join('');
 }
-function addDocumento(){documentos.push({nome:'Novo documento',sub:'',status:'ok',link:'',secao:'docs'});renderDocumentosAdmin();}
+
+function addDocumento(){
+  documentos.push({nome:'Novo documento',sub:'',status:'ok',link:'',secao:'docs'});
+  renderDocumentosAdmin();
+}
+
+// ===== FIM DOCUMENTOS =====
+
+
 
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
 window.addEventListener('beforeinstallprompt',function(e){

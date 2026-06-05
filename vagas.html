@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a3a5c">
+<title>Vagas de Garagem — Portal ASI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--azul:#1a3a5c;--ok:#2d7a3a;--warn:#b8630a;--bad:#c0392b;--bg:#f4f4ef;--card:#fff;--border:#e4e4dc;--txt:#1a1a1a;--txt2:#666;--txt3:#999}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg);color:var(--txt);min-height:100vh}
+.hdr{background:var(--azul);color:#fff;padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.back-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600;text-decoration:none;flex-shrink:0}
+.hdr-title{flex:1}.hdr-title h1{font-size:15px;font-weight:700}.hdr-title p{font-size:11px;opacity:.65;margin-top:1px}
+.wrap{max-width:900px;margin:0 auto;padding:14px 14px 40px}
+.fi{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;margin-bottom:14px}
+.fi:focus{outline:none;border-color:var(--azul)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.mc{background:var(--card);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
+.mc-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.mc-val{font-size:20px;font-weight:700;color:var(--azul)}
+.torre-sec{margin-bottom:20px}
+.torre-titulo{font-size:11px;font-weight:700;color:var(--txt3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.torre-titulo span{flex:1;height:1px;background:var(--border);display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.vaga-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;transition:box-shadow .15s}
+.vaga-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.vaga-card.sem-vaga{background:#fafaf7;border-style:dashed}
+.vaga-card.destaque{border-color:var(--azul);box-shadow:0 0 0 2px rgba(26,58,92,.3)}
+.apto-label{font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.apto-num{font-size:13px;font-weight:700;color:var(--txt)}
+.vaga-label{font-size:10px;color:var(--txt3);margin-top:6px}
+.vaga-num{font-size:22px;font-weight:800;color:var(--azul);line-height:1.1}
+.vaga-num.sem{font-size:13px;color:var(--txt3);font-weight:500}
+.badge-vaga{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:600;margin-top:4px}
+.badge-especial{background:#f0eeff;color:#7c3aed}
+.badge-pne{background:#e8f5e9;color:#2d7a3a}
+.edit-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
+.edit-overlay.on{display:flex}
+.edit-box{background:var(--card);border-radius:16px;padding:24px;width:92%;max-width:400px}
+.edit-box h3{font-size:15px;font-weight:700;color:var(--azul);margin-bottom:16px}
+.fl{display:block;font-size:12px;color:var(--txt2);font-weight:600;margin-bottom:3px}
+.save-btn{width:100%;padding:11px;border-radius:9px;background:var(--azul);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
+.cancel-btn{width:100%;padding:10px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer;font-size:13px;margin-top:6px}
+.no-result{text-align:center;padding:40px 20px;color:var(--txt3)}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<div class="hdr">
+  <a class="back-btn" href="index.html">← Voltar</a>
+  <div class="hdr-title">
+    <h1>🚗 Vagas de Garagem</h1>
+    <p>Altos Santa Izabel · 128 unidades</p>
+  </div>
+  <div id="btn-edit-admin" style="display:none">
+    <button onclick="abrirEdicao()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600">✏️ Editar</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <input class="fi" id="busca" placeholder="🔍  Buscar por apartamento ou número da vaga..." oninput="renderVagas()">
+
+  <div class="metrics">
+    <div class="mc"><div class="mc-lbl">Total aptos</div><div class="mc-val" id="m-total">128</div></div>
+    <div class="mc"><div class="mc-lbl">Com vaga</div><div class="mc-val" id="m-com" style="color:var(--ok)">0</div></div>
+    <div class="mc"><div class="mc-lbl">Sem vaga</div><div class="mc-val" id="m-sem" style="color:var(--txt3)">0</div></div>
+  </div>
+
+  <div id="resultado"></div>
+</div>
+
+<div class="edit-overlay" id="editOverlay">
+  <div class="edit-box">
+    <h3>✏️ Editar vaga</h3>
+    <label class="fl">Apartamento</label>
+    <input class="fi" id="edit-apto" readonly style="background:#f8f8f4">
+    <label class="fl">Número da vaga</label>
+    <input class="fi" id="edit-vaga" placeholder="Ex: 042 ou V8 ou PNE 01" style="margin-bottom:4px">
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">Deixe em branco se não houver vaga atribuída.</div>
+    <button class="save-btn" onclick="salvarEdicao()">💾 Salvar</button>
+    <button class="cancel-btn" onclick="fecharEdicao()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyAxifeD5tvV3A4s4SE6d5-P-HyI1Pf0h8s",
+  authDomain:"portal-altos-santa-izabel.firebaseapp.com",
+  projectId:"portal-altos-santa-izabel",
+  storageBucket:"portal-altos-santa-izabel.firebasestorage.app",
+  messagingSenderId:"314879065622",
+  appId:"1:314879065622:web:76be1b38e018a0cbed3f37"
+});
+var auth=firebase.auth();
+var db=firebase.firestore();
+var adminLogado=false;
+var editandoApto=null;
+
+var vagas=[
+  {"apto":"1001","vaga":"004"},{"apto":"1002","vaga":"127"},{"apto":"1003","vaga":"126"},{"apto":"1004","vaga":"002"},
+  {"apto":"1011","vaga":"094"},{"apto":"1012","vaga":"036"},{"apto":"1013","vaga":"020"},{"apto":"1014","vaga":"028"},
+  {"apto":"1021","vaga":"034"},{"apto":"1022","vaga":"022"},{"apto":"1023","vaga":"V8"},{"apto":"1024","vaga":"010"},
+  {"apto":"1031","vaga":"053"},{"apto":"1032","vaga":"039"},{"apto":"1033","vaga":"042"},{"apto":"1034","vaga":"007"},
+  {"apto":"1041","vaga":"075"},{"apto":"1042","vaga":"083"},{"apto":"1043","vaga":"059"},{"apto":"1044","vaga":"055"},
+  {"apto":"1051","vaga":"005"},{"apto":"1052","vaga":""},{"apto":"1053","vaga":"091"},{"apto":"1054","vaga":"085"},
+  {"apto":"1061","vaga":"030"},{"apto":"1062","vaga":""},{"apto":"1063","vaga":"068"},{"apto":"1064","vaga":"097"},
+  {"apto":"1071","vaga":"056"},{"apto":"1072","vaga":"051"},{"apto":"1073","vaga":"049"},{"apto":"1074","vaga":"046"},
+  {"apto":"1081","vaga":""},{"apto":"1082","vaga":"65"},{"apto":"1083","vaga":"052"},{"apto":"1084","vaga":"093"},
+  {"apto":"1091","vaga":"035"},{"apto":"1092","vaga":"098"},{"apto":"1093","vaga":""},{"apto":"1094","vaga":"041"},
+  {"apto":"1101","vaga":"111"},{"apto":"1102","vaga":"114"},{"apto":"1103","vaga":"V9"},{"apto":"1104","vaga":"117"},
+  {"apto":"1111","vaga":"029"},{"apto":"1112","vaga":"087"},{"apto":"1113","vaga":"106"},{"apto":"1114","vaga":"PNE 01"},
+  {"apto":"1121","vaga":"007"},{"apto":"1122","vaga":"101"},{"apto":"1123","vaga":"069"},{"apto":"1124","vaga":"017"},
+  {"apto":"1131","vaga":"054"},{"apto":"1132","vaga":"103"},{"apto":"1133","vaga":"044"},{"apto":"1134","vaga":"096"},
+  {"apto":"1141","vaga":"V11"},{"apto":"1142","vaga":""},{"apto":"1143","vaga":"032"},{"apto":"1144","vaga":"V12"},
+  {"apto":"1151","vaga":"062"},{"apto":"1152","vaga":"070"},{"apto":"1153","vaga":"080"},{"apto":"1154","vaga":"009"},
+  {"apto":"2001","vaga":"008"},{"apto":"2002","vaga":"125"},{"apto":"2003","vaga":"128"},{"apto":"2004","vaga":"006"},
+  {"apto":"2011","vaga":"019"},{"apto":"2012","vaga":"099"},{"apto":"2013","vaga":"006"},{"apto":"2014","vaga":"115"},
+  {"apto":"2021","vaga":"060"},{"apto":"2022","vaga":"078"},{"apto":"2023","vaga":"058"},{"apto":"2024","vaga":"061"},
+  {"apto":"2031","vaga":"037"},{"apto":"2032","vaga":"109"},{"apto":"2033","vaga":"045"},{"apto":"2034","vaga":""},
+  {"apto":"2041","vaga":"013"},{"apto":"2042","vaga":"015"},{"apto":"2043","vaga":"043"},{"apto":"2044","vaga":"010"},
+  {"apto":"2051","vaga":"027"},{"apto":"2052","vaga":"058"},{"apto":"2053","vaga":"100"},{"apto":"2054","vaga":"023"},
+  {"apto":"2061","vaga":"073"},{"apto":"2062","vaga":""},{"apto":"2063","vaga":"057"},{"apto":"2064","vaga":"048"},
+  {"apto":"2071","vaga":"003"},{"apto":"2072","vaga":"014"},{"apto":"2073","vaga":"089"},{"apto":"2074","vaga":"018"},
+  {"apto":"2081","vaga":"013"},{"apto":"2082","vaga":"021"},{"apto":"2083","vaga":"082"},{"apto":"2084","vaga":"063"},
+  {"apto":"2091","vaga":"079"},{"apto":"2092","vaga":"040"},{"apto":"2093","vaga":"031"},{"apto":"2094","vaga":"110"},
+  {"apto":"2101","vaga":"104"},{"apto":"2102","vaga":"038"},{"apto":"2103","vaga":"084"},{"apto":"2104","vaga":"112"},
+  {"apto":"2111","vaga":"105"},{"apto":"2112","vaga":"012"},{"apto":"2113","vaga":"025"},{"apto":"2114","vaga":"092"},
+  {"apto":"2121","vaga":"076"},{"apto":"2122","vaga":"074"},{"apto":"2123","vaga":"071"},{"apto":"2124","vaga":"077"},
+  {"apto":"2131","vaga":"016"},{"apto":"2132","vaga":"072"},{"apto":"2133","vaga":"067"},{"apto":"2134","vaga":"081"},
+  {"apto":"2141","vaga":"116"},{"apto":"2142","vaga":"095"},{"apto":"2143","vaga":"057"},{"apto":"2144","vaga":"107"},
+  {"apto":"2151","vaga":"024"},{"apto":"2152","vaga":"086"},{"apto":"2153","vaga":"113"},{"apto":"2154","vaga":"118"}
+];
+
+function carregarVagas(){
+  db.collection('portal').doc('vagas').get().then(function(doc){
+    if(doc.exists&&doc.data().items&&doc.data().items.length) vagas=doc.data().items;
+    renderVagas();
+  }).catch(function(){renderVagas();});
+}
+
+function tipoVaga(v){
+  if(!v||!v.trim()) return 'sem';
+  if(v.toUpperCase().startsWith('V')) return 'especial';
+  if(v.toUpperCase().startsWith('PNE')) return 'pne';
+  return 'normal';
+}
+
+function renderVagas(){
+  var q=(document.getElementById('busca').value||'').toLowerCase().trim();
+  var filtrados=vagas.filter(function(v){
+    return v.apto.includes(q)||(v.vaga||'').toLowerCase().includes(q);
+  });
+  var comVaga=vagas.filter(function(v){return v.vaga&&v.vaga.trim();}).length;
+  document.getElementById('m-total').textContent=vagas.length;
+  document.getElementById('m-com').textContent=comVaga;
+  document.getElementById('m-sem').textContent=vagas.length-comVaga;
+
+  var el=document.getElementById('resultado');
+  if(!filtrados.length){
+    el.innerHTML='<div class="no-result">🔍 Nenhum resultado para "'+q+'"</div>';
+    return;
+  }
+
+  var torres={'Torre 1':[],'Torre 2':[]};
+  filtrados.forEach(function(v){
+    if(v.apto.startsWith('1')) torres['Torre 1'].push(v);
+    else torres['Torre 2'].push(v);
+  });
+
+  var html='';
+  ['Torre 1','Torre 2'].forEach(function(torre){
+    var itens=torres[torre];
+    if(!itens.length) return;
+    html+='<div class="torre-sec">'+
+      '<div class="torre-titulo">'+torre+' <span></span></div>'+
+      '<div class="grid">'+
+      itens.map(function(v){
+        var tipo=tipoVaga(v.vaga);
+        var badge='';
+        if(tipo==='especial') badge='<span class="badge-vaga badge-especial">Especial</span>';
+        if(tipo==='pne') badge='<span class="badge-vaga badge-pne">PNE</span>';
+        var editBtn=adminLogado?'<button data-apto="'+v.apto+'" onclick="abrirEdicaoApto(this.dataset.apto)" style="margin-top:6px;font-size:10px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:#f8f8f4;cursor:pointer;color:var(--txt2)">✏️</button>':'';
+        return '<div class="vaga-card'+(tipo==='sem'?' sem-vaga':'')+'" id="card-'+v.apto+'">'+
+          '<div class="apto-label">Apto</div>'+
+          '<div class="apto-num">'+v.apto+'</div>'+
+          '<div class="vaga-label">Vaga</div>'+
+          (tipo==='sem'?'<div class="vaga-num sem">—</div>':'<div class="vaga-num">'+v.vaga+'</div>')+
+          badge+editBtn+
+        '</div>';
+      }).join('')+
+      '</div></div>';
+  });
+  el.innerHTML=html;
+
+  // Destaque do apto do morador
+  var u=JSON.parse(localStorage.getItem('asi_usuario')||'{}');
+  var unidade=(u.unidade||'').replace(/[^0-9]/g,'');
+  if(unidade){
+    var card=document.getElementById('card-'+unidade);
+    if(card){card.classList.add('destaque');card.scrollIntoView({behavior:'smooth',block:'center'});}
+  }
+}
+
+function abrirEdicaoApto(apto){
+  editandoApto=apto;
+  var v=vagas.find(function(x){return x.apto===apto;})||{};
+  document.getElementById('edit-apto').value=apto;
+  document.getElementById('edit-vaga').value=v.vaga||'';
+  document.getElementById('editOverlay').classList.add('on');
+}
+
+function abrirEdicao(){
+  document.getElementById('busca').focus();
+  alert('💡 Busque o apartamento e clique em ✏️ no card para editar.');
+}
+
+function fecharEdicao(){
+  document.getElementById('editOverlay').classList.remove('on');
+  editandoApto=null;
+}
+
+function salvarEdicao(){
+  if(!editandoApto) return;
+  var novaVaga=document.getElementById('edit-vaga').value.trim();
+  var v=vagas.find(function(x){return x.apto===editandoApto;});
+  if(v) v.vaga=novaVaga;
+  db.collection('portal').doc('vagas').set({items:vagas}).then(function(){
+    fecharEdicao();
+    renderVagas();
+    alert('✅ Vaga do apto '+editandoApto+' atualizada!');
+  }).catch(function(e){alert('Erro ao salvar: '+e.message);});
+}
+
+auth.onAuthStateChanged(function(user){
+  if(!user){window.location.href='auth.html';return;}
+  db.collection('usuarios').doc(user.uid).get().then(function(doc){
+    if(!doc.exists||!['aprovado','Aprovado'].includes(doc.data().status)){
+      auth.signOut();window.location.href='auth.html';return;
+    }
+    var u=doc.data();
+    localStorage.setItem('asi_usuario',JSON.stringify(Object.assign({uid:user.uid},u)));
+    if(u.perfil==='admin'){
+      adminLogado=true;
+      document.getElementById('btn-edit-admin').style.display='block';
+    }
+    carregarVagas();
+  });
+});
+</script>
+</body>
+</html>

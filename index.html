@@ -216,7 +216,7 @@ textarea.fi{height:75px;resize:vertical}
     <div style="font-size:48px;margin-bottom:12px">📊</div>
     <div style="font-weight:700;font-size:18px;color:var(--azul);margin-bottom:8px">Painel Financeiro</div>
     <div style="font-size:13px;color:var(--txt3);margin-bottom:24px">Histórico, saldos, gráficos e análise detalhada</div>
-    <a href="financeiro.html" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:var(--azul);color:#fff;border-radius:12px;padding:14px 28px;text-decoration:none;font-weight:600;font-size:15px">
+    <a href="financeiro.html" style="display:inline-flex;align-items:center;gap:10px;background:var(--azul);color:#fff;border-radius:12px;padding:14px 28px;text-decoration:none;font-weight:600;font-size:15px">
       Abrir Financeiro →
     </a>
   </div>
@@ -485,7 +485,7 @@ var BNAV_IDS=['inicio','sugestoes','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
-  if(id==='financeiro'){window.open('financeiro.html','_blank');return;}
+  if(id==='financeiro'){window.location.href='financeiro.html';return;}
   if((id==='documentos'||id==='assembleias'||id==='orcamentos')&&!adminLogado) return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});

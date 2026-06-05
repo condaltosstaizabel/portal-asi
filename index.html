@@ -116,7 +116,7 @@ textarea.fi{height:75px;resize:vertical}
   <div class="hdr-title"><h1>Portal Altos Santa Izabel</h1><p id="hdr-usuario">Condomínio Altos Santa Izabel</p></div>
   <div class="hdr-ico" onclick="navNotif()" style="position:relative">🔔<span id="badge-notif" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4;min-width:16px;text-align:center"></span></div>
   <div class="hdr-ico" onclick="abrirAdmin()" id="btn-admin" style="display:none">⚙️</div>
-  <div class="hdr-ico" id="btn-usuarios" onclick="window.open('usuarios.html','_blank')" style="display:none;position:relative">👥<span id="badge-usuarios" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4"></span></div>
+  <div class="hdr-ico" id="btn-usuarios" onclick="window.location.href='usuarios.html'" style="display:none;position:relative">👥<span id="badge-usuarios" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:99px;font-size:10px;font-weight:700;padding:1px 5px;line-height:1.4"></span></div>
   <div class="hdr-ico" onclick="fazerLogout()" title="Sair">🚪</div>
 </div>
 
@@ -460,7 +460,7 @@ auth.onAuthStateChanged(function(user){
         var btn=document.createElement('button');
         btn.className='at'; btn.id='tab-usuarios';
         btn.innerHTML='👥 Usuários';
-        btn.onclick=function(){window.open('usuarios.html','_blank');};
+        btn.onclick=function(){window.location.href='usuarios.html';};
         tabsEl.appendChild(btn);
       }
     }

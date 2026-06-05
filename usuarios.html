@@ -62,6 +62,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="tabs">
   <button class="tab on" onclick="trocarTab('pendentes',this)">🔔 Pendentes <span id="badge-pend"></span></button>
   <button class="tab" onclick="trocarTab('aprovados',this)">✅ Aprovados</button>
+  <button class="tab" onclick="exportarUsuarios()" style="color:var(--ok)">⬇️ Exportar</button>
   <button class="tab" onclick="trocarTab('rejeitados',this)">❌ Rejeitados</button>
   <button class="tab" onclick="trocarTab('criar',this)">➕ Criar usuário</button>
   <button class="tab" onclick="trocarTab('ajuda',this)">❓ Status</button>
@@ -248,11 +249,38 @@ function getColor(c){
 
 function aprovar(uid,nome,email){
   if(!confirm('Aprovar acesso de '+nome+'?')) return;
-  db.collection('usuarios').doc(uid).update({status:'aprovado'}).then(function(){
-    carregarUsuarios();
-    var assunto=encodeURIComponent('[Portal ASI] Seu acesso foi aprovado!');
-    var corpo=encodeURIComponent('Olá, '+nome+'!\n\nSeu acesso ao Portal Altos Santa Izabel foi aprovado.\n\nAcesse: https://condaltosstaizabel.github.io/portal-asi/auth.html\n\nCondomínio Altos Santa Izabel');
-    window.open('mailto:'+email+'?subject='+assunto+'&body='+corpo);
+  db.collection('usuarios').doc(uid).get().then(function(doc){
+    var celular=doc.exists?doc.data().celular||'':'';
+    return db.collection('usuarios').doc(uid).update({status:'aprovado'}).then(function(){
+      carregarUsuarios();
+      var tel=celular.replace(/[^0-9]/g,'');
+      if(tel.length>=10){
+        tel='55'+tel;
+        var msg=encodeURIComponent('Olá, '+nome+'! Seu acesso ao Portal Altos Santa Izabel foi aprovado. Acesse: https://condaltosstaizabel.github.io/portal-asi/auth.html');
+        window.open('https://wa.me/'+tel+'?text='+msg);
+      } else {
+        alert('✅ Aprovado! Celular não cadastrado — avise o morador manualmente.');
+      }
+    });
+  });
+}
+
+function exportarUsuarios(){
+  db.collection('usuarios').get().then(function(snap){
+    var rows=[['Nome','E-mail','Unidade','Celular','Tipo','Perfil','Status']];
+    snap.forEach(function(doc){
+      var d=doc.data();
+      rows.push([d.nome||'',d.email||'',d.unidade||'',d.celular||'',d.tipo||'',d.perfil||'',d.status||'']);
+    });
+    var bom='\uFEFF';
+    var csv=bom+rows.map(function(row){
+      return row.map(function(cell){return '"'+(cell||'').toString().replace(/"/g,'""')+'"';}).join(',');
+    }).join('\n');
+    var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='usuarios-'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+    URL.revokeObjectURL(url);
   });
 }
 

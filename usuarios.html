@@ -267,10 +267,11 @@ function aprovar(uid,nome,email){
 
 function exportarUsuarios(){
   db.collection('usuarios').get().then(function(snap){
-    var rows=[['Nome','E-mail','Unidade','Celular','Tipo','Perfil','Status']];
+    var rows=[['Nome','E-mail','Unidade','Celular','Tipo','Perfil','Status','Cadastro']];
     snap.forEach(function(doc){
       var d=doc.data();
-      rows.push([d.nome||'',d.email||'',d.unidade||'',d.celular||'',d.tipo||'',d.perfil||'',d.status||'']);
+      var data=d.criadoEm&&d.criadoEm.toDate?d.criadoEm.toDate().toLocaleDateString('pt-BR'):'';
+      rows.push([d.nome||'',d.email||'',d.unidade||'',d.celular||'',d.tipo||'',d.perfil||'',d.status||'',data]);
     });
     var bom='\uFEFF';
     var csv=bom+rows.map(function(row){

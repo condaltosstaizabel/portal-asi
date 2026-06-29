@@ -356,8 +356,16 @@ textarea.fi{height:75px;resize:vertical}
         <button class="save-btn" onclick="salvarAlertas()">💾 Salvar alertas</button>
       </div>
       <div class="admin-sec" id="asec-realizacoes">
+        <!-- Formulário rápido fixo no topo -->
+        <div style="background:#f0f5fb;border:1px solid #bbdefb;border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--azul);margin-bottom:8px">➕ Adicionar nova realização</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <input id="nova-real-data" placeholder="Ex: Jun/2026" style="width:90px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+            <input id="nova-real-txt" placeholder="Descrição da realização..." style="flex:1;min-width:160px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit" onkeydown="if(event.key==='Enter')addRealizacaoRapida()">
+            <button onclick="addRealizacaoRapida()" style="padding:6px 14px;border-radius:7px;border:none;background:var(--azul);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Adicionar</button>
+          </div>
+        </div>
         <div id="edit-realizacoes"></div>
-        <button class="add-btn" onclick="addRealizacao()">+ Adicionar realização</button>
         <button class="save-btn" onclick="salvarRealizacoes()">💾 Salvar realizações</button>
       </div>
       <div class="admin-sec" id="asec-projetos">
@@ -1381,6 +1389,18 @@ function renderAdmin(){
 }
 function addAlerta(){dadosAdmin.alertas.push({txt:'Novo alerta',sub:'',status:'warn'});renderAdmin();}
 function addRealizacao(){dadosAdmin.realizacoes.unshift({data:'Abr/2026',txt:'Nova realização'});renderAdmin();}
+function addRealizacaoRapida(){
+  var data=document.getElementById('nova-real-data').value.trim();
+  var txt=document.getElementById('nova-real-txt').value.trim();
+  if(!txt){alert('Informe a descrição.');return;}
+  if(!data){var meses=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];var now=new Date();data=meses[now.getMonth()]+'/'+now.getFullYear();}
+  dadosAdmin.realizacoes.unshift({data:data,txt:txt});
+  document.getElementById('nova-real-data').value='';
+  document.getElementById('nova-real-txt').value='';
+  document.getElementById('nova-real-txt').focus();
+  renderAdmin();
+  salvarRealizacoes();
+}
 function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
 function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'ok',ramo:''});renderAdmin();}
 function addRamoContrato(){

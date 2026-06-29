@@ -375,26 +375,59 @@ textarea.fi{height:75px;resize:vertical}
         <button class="save-btn" onclick="salvarProjetos()">💾 Salvar projetos</button>
       </div>
       <div class="admin-sec" id="asec-tarefas">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Lista de tarefas e ações da aba Projetos.</div>
+        <div style="background:#f0f5fb;border:1px solid #bbdefb;border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--azul);margin-bottom:8px">➕ Adicionar nova tarefa</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <input id="nova-tar-txt" placeholder="Descrição da tarefa..." style="flex:1;min-width:160px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit" onkeydown="if(event.key==='Enter')addTarefaRapida()">
+            <select id="nova-tar-status" style="font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+              <option value="gray">Pendente</option><option value="warn">Parcial</option><option value="ok">Concluído</option><option value="bad">Urgente</option><option value="blue">Andamento</option>
+            </select>
+            <button onclick="addTarefaRapida()" style="padding:6px 14px;border-radius:7px;border:none;background:var(--azul);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Adicionar</button>
+          </div>
+        </div>
         <div id="edit-tarefas"></div>
-        <button class="add-btn" onclick="addTarefa()">+ Adicionar tarefa</button>
         <button class="save-btn" onclick="salvarTarefas()">💾 Salvar tarefas</button>
       </div>
       <div class="admin-sec" id="asec-contratos">
+        <div style="background:#f0f5fb;border:1px solid #bbdefb;border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--azul);margin-bottom:8px">➕ Adicionar novo contrato</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <input id="nova-con-doc" placeholder="Nome do documento..." style="flex:1;min-width:140px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+            <input id="nova-con-val" placeholder="Validade (ex: Fev/2027)" style="width:130px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit" onkeydown="if(event.key==='Enter')addContratoRapido()">
+            <button onclick="addContratoRapido()" style="padding:6px 14px;border-radius:7px;border:none;background:var(--azul);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Adicionar</button>
+          </div>
+        </div>
         <div id="edit-contratos"></div>
-        <button class="add-btn" onclick="addContrato()">+ Adicionar contrato</button>
-        <button class="add-btn" onclick="addRamoContrato()" style="background:#f0eeff;color:#7c3aed">+ Ramo</button>
+        <button class="add-btn" onclick="addRamoContrato()" style="background:#f0eeff;color:#7c3aed">+ Ramo de atividade</button>
         <button class="save-btn" onclick="salvarContratos()">💾 Salvar contratos</button>
       </div>
       <div class="admin-sec" id="asec-prestadores">
+        <div style="background:#f0f5fb;border:1px solid #bbdefb;border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--azul);margin-bottom:8px">➕ Adicionar novo prestador</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <input id="nova-pre-nome" placeholder="Nome..." style="flex:1;min-width:100px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+            <input id="nova-pre-tel" placeholder="Telefone..." style="width:130px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+            <select id="nova-pre-cat" style="font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+              <option>Eletricista</option><option>Jardinagem</option><option>Portaria / Cameras</option><option>Ar Condicionado</option><option>Placa Solar</option><option>FoodTruck</option><option>Smart Store</option><option>Advogado</option>
+            </select>
+            <button onclick="addPrestadorRapido()" style="padding:6px 14px;border-radius:7px;border:none;background:var(--azul);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Adicionar</button>
+          </div>
+        </div>
         <div id="edit-prestadores"></div>
-        <button class="add-btn" onclick="addPrestador()">+ Adicionar prestador</button>
         <button class="save-btn" onclick="salvarPrestadores();renderPrestadores();alert('✅ Prestadores salvos!')">💾 Salvar prestadores</button>
       </div>
       <div class="admin-sec" id="asec-orcamentos">
-        <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Adicione ou remova orçamentos. Status pode ser alterado diretamente na aba.</div>
+        <div style="background:#f0f5fb;border:1px solid #bbdefb;border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--azul);margin-bottom:8px">➕ Adicionar novo orçamento</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <input id="nova-orc-nome" placeholder="Nome do orçamento..." style="flex:1;min-width:160px;font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit" onkeydown="if(event.key==='Enter')addOrcamentoRapido()">
+            <select id="nova-orc-cat" style="font-size:12px;padding:6px 8px;border:1px solid #ddd;border-radius:7px;font-family:inherit">
+              <option>Quiosque</option><option>Car Wash</option><option>Pintura</option><option>Portaria</option><option>Documentação</option><option>Limpeza</option><option>Jardinagem</option><option>Pl. Solar</option><option>Câmeras</option><option>Outros</option>
+            </select>
+            <button onclick="addOrcamentoRapido()" style="padding:6px 14px;border-radius:7px;border:none;background:var(--azul);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Adicionar</button>
+          </div>
+        </div>
         <div id="edit-orcamentos"></div>
-        <button class="add-btn" onclick="addOrcamentoAdmin()">+ Adicionar orçamento</button>
         <button class="save-btn" onclick="salvarOrcamentos();renderOrcamentos();alert('✅ Orçamentos salvos!')">💾 Salvar orçamentos</button>
       </div>
       <div class="admin-sec" id="asec-documentos">
@@ -1062,6 +1095,18 @@ function renderOrcamentosAdmin(){
   }).join('');
 }
 function addOrcamentoAdmin(){orcamentos.push({nome:'Novo orçamento',cat:'Outros',status:'gray',arquivos:[]});renderOrcamentosAdmin();}
+function addOrcamentoRapido(){
+  var nome=document.getElementById('nova-orc-nome').value.trim();
+  if(!nome){alert('Informe o nome.');return;}
+  var cat=document.getElementById('nova-orc-cat').value;
+  orcamentos.unshift({nome:nome,cat:cat,status:'gray',arquivos:[]});
+  document.getElementById('nova-orc-nome').value='';
+  document.getElementById('nova-orc-nome').focus();
+  renderOrcamentosAdmin();
+  salvarOrcamentos();
+  renderFiltrosOrc();
+  renderOrcamentos();
+}
 
 // ===== PRESTADORES =====
 var CATS_PREST=['Eletricista','Jardinagem','Portaria / Cameras','Ar Condicionado','Placa Solar','FoodTruck','Smart Store','Advogado'];
@@ -1119,6 +1164,19 @@ function addPrestador(){
   var t=prompt('Telefone:')||'';
   var ind=prompt('Indicação (opcional):')||'';
   prestadores.push({nome:n,cat:c,tel:t,ind:ind});salvarPrestadores();renderPrestadores();
+}
+function addPrestadorRapido(){
+  var nome=document.getElementById('nova-pre-nome').value.trim();
+  if(!nome){alert('Informe o nome.');return;}
+  var tel=document.getElementById('nova-pre-tel').value.trim();
+  var cat=document.getElementById('nova-pre-cat').value;
+  prestadores.unshift({nome:nome,cat:cat,tel:tel,ind:''});
+  document.getElementById('nova-pre-nome').value='';
+  document.getElementById('nova-pre-tel').value='';
+  document.getElementById('nova-pre-nome').focus();
+  renderPrestadoresAdmin();
+  salvarPrestadores();
+  renderPrestadores();
 }
 function filtrarCatPrest(cat,btn){
   filtroAtualPrest=cat;
@@ -1179,6 +1237,16 @@ function renderTarefasAdmin(){
   }).join('');
 }
 function addTarefa(){tarefas.push({txt:'Nova tarefa',sub:'',status:'gray'});renderTarefasAdmin();}
+function addTarefaRapida(){
+  var txt=document.getElementById('nova-tar-txt').value.trim();
+  if(!txt){alert('Informe a descrição.');return;}
+  var status=document.getElementById('nova-tar-status').value;
+  tarefas.unshift({txt:txt,sub:'',status:status});
+  document.getElementById('nova-tar-txt').value='';
+  document.getElementById('nova-tar-txt').focus();
+  renderTarefasAdmin();
+  salvarTarefas();
+}
 
 // ===== DADOS ADMIN — carregados do Firestore =====
 var dadosAdmin={
@@ -1403,6 +1471,17 @@ function addRealizacaoRapida(){
 }
 function addProjeto(){dadosAdmin.projetos.push({nome:'Novo projeto',sub:'',pct:0,status:'blue'});renderAdmin();}
 function addContrato(){dadosAdmin.contratos.push({doc:'Novo documento',emissao:'—',validade:'—',status:'ok',ramo:''});renderAdmin();}
+function addContratoRapido(){
+  var doc=document.getElementById('nova-con-doc').value.trim();
+  if(!doc){alert('Informe o nome do documento.');return;}
+  var val=document.getElementById('nova-con-val').value.trim()||'—';
+  dadosAdmin.contratos.unshift({doc:doc,emissao:'—',validade:val,status:'ok',ramo:''});
+  document.getElementById('nova-con-doc').value='';
+  document.getElementById('nova-con-val').value='';
+  document.getElementById('nova-con-doc').focus();
+  renderAdmin();
+  salvarContratos();
+}
 function addRamoContrato(){
   var r=prompt('Nome do novo ramo de atividade:');
   if(!r||!r.trim()) return;

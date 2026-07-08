@@ -134,6 +134,7 @@ textarea.fi{height:75px;resize:vertical}
   <button class="nb" onclick="nav('sugestoes')">Sugestões</button>
   <button class="nb" id="nav-mapa" style="display:none" onclick="nav('mapa')">🏢 Mapa</button>
   <button class="nb" onclick="window.location.href='vagas.html'">🚗 Vagas</button>
+  <button class="nb admin-only" id="nav-acessos" style="display:none" onclick="window.location.href='acessos.html'">📊 Acessos</button>
 </div></div>
 
 <!-- INÍCIO -->
@@ -489,6 +490,7 @@ auth.onAuthStateChanged(function(user){
       if(navMapa) navMapa.style.display='block';
       // Mostrar itens exclusivos de admin (nav e acesso rápido)
       document.querySelectorAll('.admin-only').forEach(function(el){el.style.display='';});
+      var navAcessos=document.getElementById('nav-acessos');if(navAcessos) navAcessos.style.display='block';
       adminLogado=true;
       var btnUsu=document.getElementById('btn-usuarios');
       if(btnUsu) btnUsu.style.display='flex';
@@ -508,6 +510,7 @@ auth.onAuthStateChanged(function(user){
       }
     }
     // Inicializar portal — carrega dados do Firestore
+    if(usuarioAtual.perfil!=='admin') _trackInit(user.uid);
     carregarTodosOsDados(function(){
       renderAlertas();renderRealizacoes();renderProjetosAdmin();renderContratosAdmin();
       renderPrestadores();renderOrcamentos();renderTarefas();sincronizarFinanceiro();renderDocumentos();carregarChamados();carregarSugestoes();
@@ -537,6 +540,7 @@ var BNAV_IDS=['inicio','sugestoes','prestadores','','defeitos'];
 var adminLogado=false;
 
 function nav(id){
+  _trackAba(id);
   // Financeiro redireciona direto
   if(id==='financeiro'){window.location.href='financeiro.html';return;}
   // Bloquear documentos e assembleias para não-admin
@@ -1742,6 +1746,54 @@ function addDocumento(){
 // ===== FIM DOCUMENTOS =====
 
 
+
+// ===== TRACKING DE ACESSOS =====
+var _trackSessao={uid:null,inicio:Date.now(),abaAtual:'inicio',abaInicio:Date.now(),abas:{}};
+function _trackInit(uid){
+  _trackSessao.uid=uid;
+  var ref=db.collection('acessos').doc(uid);
+  ref.get().then(function(doc){
+    var regs=(doc.exists?doc.data().registros:[])||[];
+    regs.push({ts:new Date().toISOString(),abas:[],duracao:0});
+    if(regs.length>200) regs=regs.slice(-200);
+    ref.set({registros:regs});
+  });
+  window.addEventListener('beforeunload',function(){_trackSalvar();});
+  setInterval(_trackSalvar,120000);
+}
+function _trackAba(novaAba){
+  if(!_trackSessao.uid) return;
+  var agora=Date.now();
+  var ant=_trackSessao.abaAtual;
+  var tempo=Math.round((agora-_trackSessao.abaInicio)/1000);
+  if(!_trackSessao.abas[ant]) _trackSessao.abas[ant]={cliques:0,tempo:0};
+  _trackSessao.abas[ant].cliques++;
+  _trackSessao.abas[ant].tempo+=tempo;
+  _trackSessao.abaAtual=novaAba;
+  _trackSessao.abaInicio=agora;
+}
+function _trackSalvar(){
+  if(!_trackSessao.uid) return;
+  var agora=Date.now();
+  var at=_trackSessao.abaAtual;
+  if(!_trackSessao.abas[at]) _trackSessao.abas[at]={cliques:0,tempo:0};
+  _trackSessao.abas[at].tempo+=Math.round((agora-_trackSessao.abaInicio)/1000);
+  _trackSessao.abaInicio=agora;
+  var duracao=Math.round((agora-_trackSessao.inicio)/1000);
+  var abasArr=Object.keys(_trackSessao.abas).map(function(k){
+    return {aba:k,cliques:_trackSessao.abas[k].cliques,tempo:_trackSessao.abas[k].tempo};
+  });
+  var ref=db.collection('acessos').doc(_trackSessao.uid);
+  ref.get().then(function(doc){
+    if(!doc.exists) return;
+    var regs=doc.data().registros||[];
+    if(!regs.length) return;
+    regs[regs.length-1].abas=abasArr;
+    regs[regs.length-1].duracao=duracao;
+    ref.set({registros:regs});
+  });
+}
+// ===== FIM TRACKING =====
 
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
 window.addEventListener('beforeinstallprompt',function(e){

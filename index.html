@@ -1759,7 +1759,9 @@ function _trackInit(uid){
     ref.set({registros:regs});
   });
   window.addEventListener('beforeunload',function(){_trackSalvar();});
-  setInterval(_trackSalvar,120000);
+  window.addEventListener('pagehide',function(){_trackSalvar();});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden') _trackSalvar();});
+  setInterval(_trackSalvar,60000);
 }
 function _trackAba(novaAba){
   if(!_trackSessao.uid) return;
@@ -1785,13 +1787,16 @@ function _trackSalvar(){
   });
   var ref=db.collection('acessos').doc(_trackSessao.uid);
   ref.get().then(function(doc){
-    if(!doc.exists) return;
-    var regs=doc.data().registros||[];
-    if(!regs.length) return;
-    regs[regs.length-1].abas=abasArr;
-    regs[regs.length-1].duracao=duracao;
+    var regs=(doc.exists?doc.data().registros:[])||[];
+    if(!regs.length){
+      // documento existe mas sem registros — adicionar
+      regs.push({ts:new Date().toISOString(),abas:abasArr,duracao:duracao});
+    } else {
+      regs[regs.length-1].abas=abasArr;
+      regs[regs.length-1].duracao=duracao;
+    }
     ref.set({registros:regs});
-  });
+  }).catch(function(){});
 }
 // ===== FIM TRACKING =====
 

@@ -470,14 +470,21 @@ function _trackInit(uid){
   _trackSessao.uid=uid;
   _trackSessao.abaAtual='inicio';
   _trackSessao.abaInicio=Date.now();
+  _trackSessao.inicio=Date.now();
   if(!_trackSessao.abas['inicio']) _trackSessao.abas['inicio']={cliques:1,tempo:0};
-  var ref=db.collection('acessos').doc(uid);
-  ref.get().then(function(doc){
-    var regs=(doc.exists?doc.data().registros:[])||[];
-    regs.push({ts:new Date().toISOString(),abas:[{aba:'inicio',cliques:1,tempo:0}],duracao:0});
+  // Gravar acesso direto sem get() primeiro
+  var ts=new Date().toISOString();
+  var novoReg={ts:ts,abas:[{aba:'inicio',cliques:1,tempo:0}],duracao:0};
+  db.collection('acessos').doc(uid).get().then(function(doc){
+    var regs=doc.exists?(doc.data().registros||[]):[];
+    regs.push(novoReg);
     if(regs.length>200) regs=regs.slice(-200);
-    ref.set({registros:regs});
-  }).catch(function(e){console.log('track init error:',e);});
+    return db.collection('acessos').doc(uid).set({uid:uid,registros:regs});
+  }).then(function(){
+    console.log('Track: acesso registrado');
+  }).catch(function(e){
+    console.error('Track init error:',e.code,e.message);
+  });
   window.addEventListener('beforeunload',function(){_trackSalvar();});
   window.addEventListener('pagehide',function(){_trackSalvar();});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden') _trackSalvar();});

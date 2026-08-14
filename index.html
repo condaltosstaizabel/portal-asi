@@ -464,6 +464,61 @@ var auth=firebase.auth();
 var db=firebase.firestore();
 var usuarioAtual=null;
 
+// ===== TRACKING (declarado cedo para estar disponível no onAuthStateChanged) =====
+var _trackSessao={uid:null,inicio:Date.now(),abaAtual:'inicio',abaInicio:Date.now(),abas:{}};
+function _trackInit(uid){
+  _trackSessao.uid=uid;
+  _trackSessao.abaAtual='inicio';
+  _trackSessao.abaInicio=Date.now();
+  if(!_trackSessao.abas['inicio']) _trackSessao.abas['inicio']={cliques:1,tempo:0};
+  var ref=db.collection('acessos').doc(uid);
+  ref.get().then(function(doc){
+    var regs=(doc.exists?doc.data().registros:[])||[];
+    regs.push({ts:new Date().toISOString(),abas:[],duracao:0});
+    if(regs.length>200) regs=regs.slice(-200);
+    ref.set({registros:regs});
+  }).catch(function(){});
+  window.addEventListener('beforeunload',function(){_trackSalvar();});
+  window.addEventListener('pagehide',function(){_trackSalvar();});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden') _trackSalvar();});
+  setInterval(_trackSalvar,60000);
+}
+function _trackAba(novaAba){
+  if(!_trackSessao.uid) return;
+  var agora=Date.now();
+  var ant=_trackSessao.abaAtual;
+  var tempo=Math.round((agora-_trackSessao.abaInicio)/1000);
+  if(!_trackSessao.abas[ant]) _trackSessao.abas[ant]={cliques:0,tempo:0};
+  _trackSessao.abas[ant].cliques++;
+  _trackSessao.abas[ant].tempo+=tempo;
+  _trackSessao.abaAtual=novaAba;
+  _trackSessao.abaInicio=agora;
+}
+function _trackSalvar(){
+  if(!_trackSessao.uid) return;
+  var agora=Date.now();
+  var at=_trackSessao.abaAtual;
+  if(!_trackSessao.abas[at]) _trackSessao.abas[at]={cliques:0,tempo:0};
+  _trackSessao.abas[at].tempo+=Math.round((agora-_trackSessao.abaInicio)/1000);
+  _trackSessao.abaInicio=agora;
+  var duracao=Math.round((agora-_trackSessao.inicio)/1000);
+  var abasArr=Object.keys(_trackSessao.abas).map(function(k){
+    return {aba:k,cliques:_trackSessao.abas[k].cliques,tempo:_trackSessao.abas[k].tempo};
+  });
+  var ref=db.collection('acessos').doc(_trackSessao.uid);
+  ref.get().then(function(doc){
+    var regs=(doc.exists?doc.data().registros:[])||[];
+    if(!regs.length){
+      regs.push({ts:new Date().toISOString(),abas:abasArr,duracao:duracao});
+    } else {
+      regs[regs.length-1].abas=abasArr;
+      regs[regs.length-1].duracao=duracao;
+    }
+    ref.set({registros:regs});
+  }).catch(function(){});
+}
+// ===== FIM TRACKING (declaração antecipada) =====
+
 auth.onAuthStateChanged(function(user){
   if(!user){
     window.location.href='auth.html';
@@ -1798,8 +1853,6 @@ function _trackSalvar(){
     ref.set({registros:regs});
   }).catch(function(){});
 }
-// ===== FIM TRACKING =====
-
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
 
 // Rodapé dinâmico

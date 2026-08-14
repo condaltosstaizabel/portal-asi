@@ -464,7 +464,7 @@ var auth=firebase.auth();
 var db=firebase.firestore();
 var usuarioAtual=null;
 
-// ===== TRACKING (declarado cedo para estar disponível no onAuthStateChanged) =====
+// ===== TRACKING DE ACESSOS =====
 var _trackSessao={uid:null,inicio:Date.now(),abaAtual:'inicio',abaInicio:Date.now(),abas:{}};
 function _trackInit(uid){
   _trackSessao.uid=uid;
@@ -474,10 +474,10 @@ function _trackInit(uid){
   var ref=db.collection('acessos').doc(uid);
   ref.get().then(function(doc){
     var regs=(doc.exists?doc.data().registros:[])||[];
-    regs.push({ts:new Date().toISOString(),abas:[],duracao:0});
+    regs.push({ts:new Date().toISOString(),abas:[{aba:'inicio',cliques:1,tempo:0}],duracao:0});
     if(regs.length>200) regs=regs.slice(-200);
     ref.set({registros:regs});
-  }).catch(function(){});
+  }).catch(function(e){console.log('track init error:',e);});
   window.addEventListener('beforeunload',function(){_trackSalvar();});
   window.addEventListener('pagehide',function(){_trackSalvar();});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden') _trackSalvar();});
@@ -493,6 +493,7 @@ function _trackAba(novaAba){
   _trackSessao.abas[ant].tempo+=tempo;
   _trackSessao.abaAtual=novaAba;
   _trackSessao.abaInicio=agora;
+  _trackSalvar();
 }
 function _trackSalvar(){
   if(!_trackSessao.uid) return;
@@ -515,9 +516,9 @@ function _trackSalvar(){
       regs[regs.length-1].duracao=duracao;
     }
     ref.set({registros:regs});
-  }).catch(function(){});
+  }).catch(function(e){console.log('track save error:',e);});
 }
-// ===== FIM TRACKING (declaração antecipada) =====
+// ===== FIM TRACKING =====
 
 auth.onAuthStateChanged(function(user){
   if(!user){

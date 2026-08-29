@@ -268,14 +268,7 @@ function solicitarCadastro(){
         setLoading('btn-cadastro',false);
         setMsg('msg-cadastro','✅ Solicitação enviada! Aguarde a aprovação do síndico. Você será avisado via WhatsApp quando aprovado.','ok');
         // Notificar admin via WhatsApp
-        var msg=encodeURIComponent('🏢 Nova solicitação de acesso ao Portal ASI!
-
-Nome: '+nome+'
-E-mail: '+email+'
-Unidade: '+unidade+'
-Tipo: '+tipo+'
-
-Acesse o portal com sua conta admin para aprovar.');
+        var msg=encodeURIComponent('🏢 Nova solicitação de acesso ao Portal ASI!\n\nNome: '+nome+'\nE-mail: '+email+'\nUnidade: '+unidade+'\nTipo: '+tipo+'\n\nAcesse o portal com sua conta admin para aprovar.');
         setTimeout(function(){window.open('https://wa.me/5519989360523?text='+msg);},500);
       });
     })

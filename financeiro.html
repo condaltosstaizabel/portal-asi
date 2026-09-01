@@ -89,6 +89,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <div class="sec">Saldos por conta — ultimo periodo</div>
     <div class="contas-grid" id="contasGrid"></div>
     <div class="sec">Receitas e despesas mensais</div>
+    <!-- FILTRO DE PERIODO -->
+    <div id="filtro-periodo-wrap" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.07em">Filtrar período</span>
+        <div style="display:flex;gap:6px">
+          <button onclick="selecionarTodosMeses(true)" style="font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--azul);cursor:pointer">Todos</button>
+          <button onclick="selecionarTodosMeses(false)" style="font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer">Nenhum</button>
+          <button onclick="selecionarUltimosMeses(3)" style="font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer">Últ. 3</button>
+          <button onclick="selecionarUltimosMeses(6)" style="font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--txt2);cursor:pointer">Últ. 6</button>
+        </div>
+      </div>
+      <div id="meses-checkboxes" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
     <div class="card">
       <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;font-size:12px">
         <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#2d7a3a;display:inline-block"></span>Receitas</span>
@@ -458,6 +471,86 @@ function fmt(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,m
 function fmtK(v){return Math.abs(v)>=1000?'R$ '+(v/1000).toFixed(1)+'k':'R$ '+Math.round(v);}
 function mc(l,v,cls,s){return '<div class="mc"><div class="mc-lbl">'+l+'</div><div class="mc-val '+cls+'">'+v+'</div>'+(s?'<div class="mc-sub">'+s+'</div>':'')+'</div>';}
 
+var mesesSelecionados=[];
+
+function renderCheckboxesMeses(meses){
+  var el=document.getElementById('meses-checkboxes');
+  if(!el) return;
+  // Inicializar com todos selecionados
+  if(mesesSelecionados.length===0) mesesSelecionados=meses.slice();
+  el.innerHTML=meses.map(function(m){
+    var on=mesesSelecionados.indexOf(m)>=0;
+    return '<label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 10px;border-radius:99px;border:1px solid '+(on?'var(--azul)':'var(--border)')+';background:'+(on?'var(--azul)':'transparent')+';color:'+(on?'#fff':'var(--txt2)')+';cursor:pointer">'+
+      '<input type="checkbox" style="display:none" '+(on?'checked':'')+' onchange="toggleMes(\'' +m+ '\',this)">'+m+'</label>';
+  }).join('');
+}
+
+function toggleMes(mes,cb){
+  if(cb.checked){
+    if(mesesSelecionados.indexOf(mes)<0) mesesSelecionados.push(mes);
+  } else {
+    mesesSelecionados=mesesSelecionados.filter(function(m){return m!==mes;});
+  }
+  var d=merge();
+  if(d){
+    renderCheckboxesMeses(d.meses);
+    renderFiltrado(d);
+  }
+}
+
+function selecionarTodosMeses(todos){
+  var d=merge();
+  if(!d) return;
+  mesesSelecionados=todos?d.meses.slice():[];
+  renderCheckboxesMeses(d.meses);
+  renderFiltrado(d);
+}
+
+function selecionarUltimosMeses(n){
+  var d=merge();
+  if(!d) return;
+  mesesSelecionados=d.meses.slice(-n);
+  renderCheckboxesMeses(d.meses);
+  renderFiltrado(d);
+}
+
+function mergeFiltrado(d){
+  if(!d||!mesesSelecionados.length) return d;
+  var idx=d.meses.reduce(function(acc,m,i){if(mesesSelecionados.indexOf(m)>=0)acc.push(i);return acc;},[]);
+  var meses=idx.map(function(i){return d.meses[i];});
+  var rec=idx.map(function(i){return d.receitas[i];});
+  var desp=idx.map(function(i){return d.despesas[i];});
+  var sald=idx.map(function(i){return d.saldos[i];});
+  // Recalcular itens filtrados
+  var itens=d.itens.map(function(it){
+    var vals=[],mes=[];
+    mesesSelecionados.forEach(function(m){
+      var vi=it.meses.indexOf(m);
+      if(vi>=0){vals.push(it.vals[vi]);mes.push(m);}
+    });
+    var total=vals.reduce(function(a,b){return a+b;},0);
+    return Object.assign({},it,{meses:mes,vals:vals,total:total});
+  }).filter(function(it){return it.total>0;});
+  // Recalcular catTotais
+  var catT={terceiros:0,tarifas:0,preventiva:0,conservacao:0,admin:0,bancarias:0};
+  itens.forEach(function(it){catT[it.cat]=(catT[it.cat]||0)+it.total;});
+  return Object.assign({},d,{meses:meses,receitas:rec,despesas:desp,saldos:sald,itens:itens,catTotais:catT});
+}
+
+function renderFiltrado(d){
+  var df=mergeFiltrado(d);
+  if(!df) return;
+  // Atualizar gráfico
+  if(chartSaldo) chartSaldo.destroy();
+  chartSaldo=new Chart(document.getElementById('chartSaldo'),{type:'bar',data:{labels:df.meses,datasets:[{label:'Receitas',data:df.receitas,backgroundColor:'rgba(45,122,58,0.6)',order:2},{label:'Despesas',data:df.despesas,backgroundColor:'rgba(192,57,43,0.6)',order:2},{label:'Saldo',data:df.saldos,backgroundColor:'rgba(26,58,92,0.85)',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmtK(c.raw);}}}},scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}}});
+  // Atualizar Top 10
+  var sorted=df.itens.slice().sort(function(a,b){return b.total-a.total;});
+  var el=document.getElementById('top10'),mx=sorted[0]?sorted[0].total:1;
+  el.innerHTML=sorted.slice(0,10).map(function(item,i){var cor=catCores[item.cat];return '<div class="item-row"><div style="width:20px;font-size:12px;font-weight:700;color:var(--txt3)">'+(i+1)+'</div><div class="item-name">'+item.nome+'<div style="font-size:10px;color:var(--txt3)">'+catNomes[item.cat]+'</div></div><div style="flex:1;margin:0 12px"><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round(item.total/mx*100)+'%;background:'+cor+'"></div></div></div><div class="item-total">'+fmt(item.total)+'</div></div>';}).join('');
+  // Atualizar lista de itens
+  renderItens(df);
+}
+
 function renderTudo(){
   var d=merge(),tem=d&&d.meses.length>0;
   document.getElementById('estadoVazio').style.display=tem?'none':'block';
@@ -492,6 +585,7 @@ function renderTudo(){
   if(chartSaldo)chartSaldo.destroy();
   chartSaldo=new Chart(document.getElementById('chartSaldo'),{type:'bar',data:{labels:d.meses,datasets:[{label:'Receitas',data:d.receitas,backgroundColor:'rgba(45,122,58,0.6)',order:2},{label:'Despesas',data:d.despesas,backgroundColor:'rgba(192,57,43,0.6)',order:2},{label:'Saldo',data:d.saldos,backgroundColor:'rgba(26,58,92,0.85)',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmtK(c.raw);}}}},scales:{y:{ticks:{callback:function(v){return fmtK(v);}},grid:{color:'rgba(0,0,0,.04)'}},x:{grid:{display:false}}}}});
   renderItens(d);
+  renderCheckboxesMeses(d.meses);
   var sorted=d.itens.slice().sort(function(a,b){return b.total-a.total;});
   var el=document.getElementById('top10'),mx=sorted[0]?sorted[0].total:1;
   el.innerHTML=sorted.slice(0,10).map(function(item,i){var cor=catCores[item.cat];return '<div class="item-row"><div style="width:20px;font-size:12px;font-weight:700;color:var(--txt3)">'+(i+1)+'</div><div class="item-name">'+item.nome+'<div style="font-size:10px;color:var(--txt3)">'+catNomes[item.cat]+'</div></div><div style="flex:1;margin:0 12px"><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round(item.total/mx*100)+'%;background:'+cor+'"></div></div></div><div class="item-total">'+fmt(item.total)+'</div></div>';}).join('');
